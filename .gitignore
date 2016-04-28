@@ -1,0 +1,25 @@
+# Gradle build artifacts
+build
+adapters/build
+example/build
+
+# Gradle cache
+.gradle
+
+# Gradle local properties
+local.properties
+
+# Android Studio
+.idea
+*.iml
+
+# DS_Store
+.DS_Store
+*/.DS_Store
+
+# Backup files
+*.bak
+*~
+
+# Navigation Editor
+.navigation
