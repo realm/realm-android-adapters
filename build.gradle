@@ -1,0 +1,40 @@
+apply plugin: 'ch.netzwerg.release'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'                    // Android Build tools
+        classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'         // Manage Android SDK dependencies
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'    // Allows you to install AAR's locally
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1'   // ???
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'      // Bintray/OJO integration
+        classpath 'com.novoda:gradle-android-command-plugin:1.5.0'          // ADB commands from Gradle (monkey)
+        classpath 'io.realm:realm-gradle-plugin:0.90.0-SNAPSHOT'            // Realm base library
+    }
+}
+
+allprojects {
+    group = 'io.realm'
+    version = file("${rootDir}/version.txt").text.trim();
+    repositories {
+        jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
+    }
+}
+
+// Configure ch.netzwerg.release plugin
+// See https://github.com/netzwerg/gradle-release-plugin
+task build {}
+release {
+    push = false
+    versionSuffix = '-SNAPSHOT'
+    tagPrefix = 'v'
+}
