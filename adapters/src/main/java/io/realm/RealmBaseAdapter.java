@@ -28,8 +28,7 @@ import android.widget.BaseAdapter;
  * appropriate.
  * <p>
  * The RealmAdapter will stop receiving updates if the Realm instance providing the {@link io.realm.RealmResults} is
- * closed. Trying to access read objects, will at this point also result in a
- * {@link io.realm.exceptions.RealmException}.
+ * closed. Trying to access Realm objects will at this point also result in a {@code IllegalStateException}.
  */
 public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter {
 
@@ -84,7 +83,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     /**
      * Returns how many items are in the data set.
      *
-     * @return count of items.
+     * @return the number of items.
      */
     @Override
     public int getCount() {
@@ -95,30 +94,32 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     }
 
     /**
-     * Returns the item associated with the specified position.
+     * Get the data item associated with the specified position in the data set.
      *
-     * @param i index of item whose data we want.
-     * @return the item at the specified position.
+     * @param position Position of the item whose data we want within the adapter's
+     * data set.
+     * @return The data at the specified position.
      */
     @Override
-    public T getItem(int i) {
+    public T getItem(int position) {
         if (adapterData == null) {
             return null;
         }
-        return adapterData.get(i);
+        return adapterData.get(position);
     }
 
     /**
-     * Returns the current ID for an item. Note that item IDs are not stable so you cannot rely on the item ID being the
-     * same after {@link #notifyDataSetChanged()} or {@link #updateData(OrderedRealmCollection)} has been called.
+     * Get the row id associated with the specified position in the list. Note that item IDs are not stable so you
+     * cannot rely on the item ID being the same after {@link #notifyDataSetChanged()} or
+     * {@link #updateData(OrderedRealmCollection)} has been called.
      *
-     * @param i index of item in the adapter.
-     * @return current item ID.
+     * @param position The position of the item within the adapter's data set whose row id we want.
+     * @return The id of the item at the specified position.
      */
     @Override
-    public long getItemId(int i) {
+    public long getItemId(int position) {
         // TODO: find better solution once we have unique IDs
-        return i;
+        return position;
     }
 
     /**
@@ -127,7 +128,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      * Note that RealmResults and RealmLists are "live" views, so they will automatically be updated to reflect the
      * latest changes. This will also trigger {@code notifyDataSetChanged()} to be called on the adapter.
      *
-     * This method is therefor only useful if you want to display data based on a new query without replacing the
+     * This method is therefore only useful if you want to display data based on a new query without replacing the
      * adapter.
      *
      * @param data the new {@link OrderedRealmCollection} to display.
