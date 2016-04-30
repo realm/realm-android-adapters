@@ -1,0 +1,96 @@
+/*
+ * Copyright 2016 Realm Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.realm.examples.adapters;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.examples.adapters.adapter.MyListAdapter;
+import io.realm.examples.adapters.model.TimeStamp;
+
+public class MainActivity extends Activity {
+
+    private Realm realm;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        Realm.deleteRealm(realmConfig); // Resets the Realm between app starts
+        realm = Realm.getInstance(realmConfig);
+
+        // RealmResults are "live" views, that are automatically kept up to date, even when changes happen
+        // on a background thread. The RealmBaseAdapter will automatically keep track of changes and will
+        // automatically refresh when a change is detected.
+        RealmResults<TimeStamp> timeStamps = realm.where(TimeStamp.class).findAll();
+        final MyListAdapter adapter = new MyListAdapter(this, timeStamps);
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final String timestamp = adapter.getItem(i).getTimeStamp();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(TimeStamp.class).equalTo("timeStamp", timestamp).findAll().deleteAllFromRealm();
+                    }
+                });
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            final String timestamp = Long.toString(System.currentTimeMillis());
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
+                }
+            });
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
