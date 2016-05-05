@@ -1,13 +1,11 @@
 apply plugin: 'ch.netzwerg.release'
 project.ext.sdkVersion = 23
 project.ext.buildTools = '23.0.0'
+project.ext.realmVersion = '0.90.0'
 
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'                    // Android Build tools
@@ -26,9 +24,6 @@ allprojects {
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
-        maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-        }
     }
 }
 
