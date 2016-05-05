@@ -59,7 +59,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     private void addListener(OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
-            realmResults.addChangeListener(listener);
+            realmResults.realm.handlerController.addChangeListenerAsWeakReference(listener);
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
             realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
@@ -71,7 +71,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     private void removeListener(OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
-            realmResults.removeChangeListener(listener);
+            realmResults.realm.handlerController.removeWeakChangeListener(listener);
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
             realmList.realm.handlerController.removeWeakChangeListener(listener);
