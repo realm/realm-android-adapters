@@ -15,11 +15,10 @@ android {
         project.archivesBaseName = "android-adapters"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-    }
+}
+
+configurations {
+    javadoc
 }
 
 dependencies {
@@ -28,16 +27,16 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'junit:junit:4.12'
-}
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    // TODO Hacking it for now. Try to make this work only from the javadoc task
+    javadoc "io.realm:realm-android-library:${rootProject.realmVersion}"
+    javadoc "io.realm:realm-annotations:${rootProject.realmVersion}"
 }
 
 task javadoc(type: Javadoc) {
-    source android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    source = android.sourceSets.main.java.srcDirs
+    classpath += configurations.javadoc
+
     options {
         title = "Realm Android Adapters ${project.version}"
         memberLevel = JavadocMemberLevel.PUBLIC
@@ -48,6 +47,11 @@ task javadoc(type: Javadoc) {
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -125,4 +129,15 @@ artifactory {
             publishIvy = false
         }
     }
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// See https://github.com/chrisbanes/gradle-mvn-push/pull/13
+afterEvaluate {
+    javadoc.classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
 }
