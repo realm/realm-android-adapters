@@ -27,19 +27,19 @@ import io.realm.annotations.PrimaryKey;
 public class AllJavaTypes extends RealmObject {
 
     public static final String CLASS_NAME = "AllJavaTypes";
-    public static String FIELD_IGNORED = "fieldIgnored";
-    public static String FIELD_STRING = "fieldString";
-    public static String FIELD_SHORT = "fieldShort";
-    public static String FIELD_INT = "fieldInt";
-    public static String FIELD_LONG = "fieldLong";
-    public static String FIELD_BYTE = "fieldByte";
-    public static String FIELD_FLOAT = "fieldFloat";
-    public static String FIELD_DOUBLE = "fieldDouble";
-    public static String FIELD_BOOLEAN = "fieldBoolean";
-    public static String FIELD_DATE = "fieldDate";
-    public static String FIELD_BINARY = "fieldBinary";
-    public static String FIELD_OBJECT = "fieldObject";
-    public static String FIELD_LIST = "fieldList";
+    public static final String FIELD_IGNORED = "fieldIgnored";
+    public static final String FIELD_STRING = "fieldString";
+    public static final String FIELD_SHORT = "fieldShort";
+    public static final String FIELD_INT = "fieldInt";
+    public static final String FIELD_LONG = "fieldLong";
+    public static final String FIELD_BYTE = "fieldByte";
+    public static final String FIELD_FLOAT = "fieldFloat";
+    public static final String FIELD_DOUBLE = "fieldDouble";
+    public static final String FIELD_BOOLEAN = "fieldBoolean";
+    public static final String FIELD_DATE = "fieldDate";
+    public static final String FIELD_BINARY = "fieldBinary";
+    public static final String FIELD_OBJECT = "fieldObject";
+    public static final String FIELD_LIST = "fieldList";
 
     @Ignore private String fieldIgnored;
     @Index private String fieldString;
