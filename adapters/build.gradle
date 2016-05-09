@@ -3,6 +3,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'checkstyle'
 apply plugin: 'realm-android'
 
 android {
@@ -31,6 +34,60 @@ dependencies {
     // TODO Hacking it for now. Try to make this work only from the javadoc task
     javadoc "io.realm:realm-android-library:${rootProject.realmVersion}"
     javadoc "io.realm:realm-annotations:${rootProject.realmVersion}"
+}
+
+task findbugs(type: FindBugs) {
+    dependsOn assembleDebug
+    group = 'Verification'
+
+    ignoreFailures = false
+    effort = "default"
+    reportLevel = "medium"
+    excludeFilter = file("${projectDir}/../config/findbugs/findbugs-filter.xml")
+    classes = files("${projectDir}/build/intermediates/classes")
+    source = fileTree('src/main/java/')
+    classpath = files()
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml {
+            destination "$project.buildDir/findbugs/findbugs-output.xml"
+        }
+        html {
+            destination "$project.buildDir/findbugs/findbugs-output.html"
+        }
+    }
+}
+
+task pmd(type: Pmd) {
+    group = 'Verification'
+    print "${projectDir}"
+    source = fileTree('src/main/java')
+    ruleSetFiles = files("${projectDir}/../config/pmd/ruleset.xml")
+    ruleSets = [] // This needs to be here to remove the default checks
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+task checkstyle(type: Checkstyle) {
+    group = 'Test'
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+
+    def configProps = ['proj.module.dir': projectDir.absolutePath]
+    configProperties configProps
+
+    configFile = file("${projectDir}/../config/checkstyle/checkstyle.xml")
+
+    // empty classpath
+    classpath = files()
 }
 
 task javadoc(type: Javadoc) {

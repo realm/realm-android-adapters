@@ -224,9 +224,4 @@ public class RealmBaseAdapterTests {
         assertEquals(TEST_DATA_SIZE, realmAdapter.getCount());
     }
 
-    @Test
-    public void failFast() {
-        assertTrue(true);
-    }
-
 }
