@@ -94,10 +94,10 @@ public abstract class RealmBaseRecyclerAdapter<T extends RealmObject, VH extends
 
     /**
      * Returns the item associated with the specified position.
-     * Can return null if provided Realm instance by {@link OrderedRealmCollection} is closed.
+     * Can return {@code null} if provided Realm instance by {@link OrderedRealmCollection} is closed.
      *
      * @param index index of the item.
-     * @return the item at the specified position, null if adapter data is not valid.
+     * @return the item at the specified position, {@code null} if adapter data is not valid.
      */
     public T getItem(int index) {
         return isDataValid() ? adapterData.get(index) : null;
@@ -133,26 +133,24 @@ public abstract class RealmBaseRecyclerAdapter<T extends RealmObject, VH extends
     }
 
     private void addListener(OrderedRealmCollection<T> data) {
-        BaseRealm realm = getRealm(data);
-        if (realm != null && !realm.isClosed()) {
-            realm.addListener(listener);
+        if (data instanceof RealmResults) {
+            RealmResults realmResults = (RealmResults) data;
+            realmResults.addChangeListener(listener);
+        } else if (data instanceof RealmList) {
+            RealmList realmList = (RealmList) data;
+            realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
+        } else {
+            throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }
     }
 
     private void removeListener(OrderedRealmCollection<T> data) {
-        BaseRealm realm = getRealm(data);
-        if (realm != null && !realm.isClosed()) {
-            realm.removeChangeListener(listener);
-        }
-    }
-
-    private BaseRealm getRealm(OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
-            RealmResults<T> realmResults = (RealmResults<T>) data;
-            return realmResults.realm;
+            RealmResults realmResults = (RealmResults) data;
+            realmResults.removeChangeListener(listener);
         } else if (data instanceof RealmList) {
-            RealmList<T> realmList = (RealmList<T>) data;
-            return realmList.realm;
+            RealmList realmList = (RealmList) data;
+            realmList.realm.handlerController.removeWeakChangeListener(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }
