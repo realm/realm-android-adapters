@@ -1,3 +1,10 @@
+## 1.1.0
+
+### Bug fixes
+
+* Removed `appcompat-v7` from the library dependencies list.
+
+
 ## 1.0.1
 
 ### Bug fixes
