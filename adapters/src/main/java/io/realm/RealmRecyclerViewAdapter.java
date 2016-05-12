@@ -34,7 +34,7 @@ import android.view.LayoutInflater;
  * @param <T> type of {@link RealmObject} stored in the adapter.
  * @param <VH> type of RecyclerView.ViewHolder used in the adapter.
  */
-public abstract class RealmBaseRecyclerAdapter<T extends RealmObject, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected final LayoutInflater inflater;
     protected final Context context;
@@ -42,7 +42,7 @@ public abstract class RealmBaseRecyclerAdapter<T extends RealmObject, VH extends
     private final RealmChangeListener<BaseRealm> listener;
     private OrderedRealmCollection<T> adapterData;
 
-    public RealmBaseRecyclerAdapter(Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
+    public RealmRecyclerViewAdapter(Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
         if (context == null) {
             throw new IllegalArgumentException("Context can not be null");
         }
