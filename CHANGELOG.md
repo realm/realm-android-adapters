@@ -1,4 +1,11 @@
-## 1.10
+## 1.2.0
+
+### Enhancements
+
+* Removed `appcompat-v7` from the library dependencies list.
+
+
+## 1.1.0
 
 ### Enhancements
 
@@ -11,7 +18,7 @@
 ### Credits
 
 * Paweł Surówka (@thesurix) for adding the `RealmRecyclerViewAdapter`.
-* Mitchell Tilbrook (@marukami) for cleaning up the `AndroidManifest.xml`.`
+* Mitchell Tilbrook (@marukami) for cleaning up `AndroidManifest.xml`.`
 
 
 ## 1.0.1
