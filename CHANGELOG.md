@@ -10,7 +10,7 @@
 
 ### Credits
 
-* @thesurix for adding the `RealmRecyclerViewAdapter`.
+* Paweł Surówka (@thesurix) for adding the `RealmRecyclerViewAdapter`.
 * Mitchell Tilbrook (@marukami) for cleaning up the `AndroidManifest.xml`.`
 
 
