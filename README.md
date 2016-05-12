@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.realm:android-adapters:1.0.1'
+    compile 'io.realm:android-adapters:1.2.0'
 }
 ```
 
