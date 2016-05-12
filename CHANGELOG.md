@@ -1,3 +1,19 @@
+## 1.10
+
+### Enhancements
+
+* `RealmRecyclerViewAdapter`, a new adapter base class for `RecyclerView`s.
+
+### Bug fixes
+
+* Removed `allowBackup` and `supportsRtl` from the Android manifest file.
+
+### Credits
+
+* @thesurix for adding the `RealmRecyclerViewAdapter`.
+* Mitchell Tilbrook (@marukami) for cleaning up the `AndroidManifest.xml`.`
+
+
 ## 1.0.1
 
 ### Bug fixes

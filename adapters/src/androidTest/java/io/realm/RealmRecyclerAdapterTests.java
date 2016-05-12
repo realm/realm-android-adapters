@@ -29,7 +29,7 @@ import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.FrameLayout;
 
-import io.realm.adapter.RealmRecyclerAdapter;
+import io.realm.adapter.RecyclerViewTestAdapter;
 import io.realm.entity.AllJavaTypes;
 import io.realm.entity.UnsupportedCollection;
 
@@ -75,7 +75,7 @@ public class RealmRecyclerAdapterTests {
     public void constructor_testRecyclerAdapterParameterExceptions() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         try {
-            new RealmRecyclerAdapter(null, resultList, AUTOMATIC_UPDATE);
+            new RecyclerViewTestAdapter(null, resultList, AUTOMATIC_UPDATE);
             fail("Should throw exception if context is null");
         } catch (IllegalArgumentException ignore) {
         }
@@ -85,7 +85,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void clear() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         realm.beginTransaction();
         resultList.deleteAllFromRealm();
         realm.commitTransaction();
@@ -99,7 +99,7 @@ public class RealmRecyclerAdapterTests {
     public void updateData_realmResultInAdapter() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         resultList.sort(AllJavaTypes.FIELD_STRING);
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, false);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, false);
         assertEquals(resultList.first().getFieldString(), realmAdapter.getData().first().getFieldString());
         assertEquals(resultList.size(), realmAdapter.getData().size());
 
@@ -119,7 +119,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void updateData_realmUnsupportedCollectionInAdapter() {
         try {
-            RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, null, AUTOMATIC_UPDATE);
+            RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
             realmAdapter.updateData(new UnsupportedCollection<AllJavaTypes>());
             fail("Should throw exception if there is unsupported collection");
         } catch (IllegalArgumentException ignore) {
@@ -130,7 +130,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemCount_emptyRealmResult() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).equalTo(AllJavaTypes.FIELD_STRING, "Not there").findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         assertEquals(0, resultList.size());
         assertEquals(0, realmAdapter.getData().size());
         assertEquals(0, realmAdapter.getItemCount());
@@ -140,7 +140,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItem_testGettingData() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
 
         assertEquals(resultList.first().getFieldString(), realmAdapter.getItem(0).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getData().size());
@@ -150,7 +150,7 @@ public class RealmRecyclerAdapterTests {
     @Test
     @UiThreadTest
     public void getItem_testGettingNullData() {
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, null, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
         assertNull(realmAdapter.getItem(0));
     }
 
@@ -158,7 +158,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemId_testGetItemId() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         for (int i = 0; i < resultList.size(); i++) {
             assertEquals(i, realmAdapter.getItemId(i));
         }
@@ -168,14 +168,14 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemCount_testGetCount() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         assertEquals(TEST_DATA_SIZE, realmAdapter.getItemCount());
     }
 
     @Test
     @UiThreadTest
     public void getItemCount_testNullResults() {
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, null, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
         assertEquals(0, realmAdapter.getItemCount());
     }
 
@@ -183,7 +183,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemCount_testNotValidResults() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
 
         realm.close();
         assertEquals(0, realmAdapter.getItemCount());
@@ -193,7 +193,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemCount_testNonNullToNullResults() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         realmAdapter.updateData(null);
 
         assertEquals(0, realmAdapter.getItemCount());
@@ -203,7 +203,7 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void getItemCount_testNullToNonNullResults() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, null, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
         assertEquals(0, realmAdapter.getItemCount());
 
         realmAdapter.updateData(resultList);
@@ -214,9 +214,9 @@ public class RealmRecyclerAdapterTests {
     @UiThreadTest
     public void viewHolderTestForSimpleView() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        RealmRecyclerAdapter realmAdapter = new RealmRecyclerAdapter(context, resultList, AUTOMATIC_UPDATE);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
 
-        RealmRecyclerAdapter.ViewHolder holder = realmAdapter.onCreateViewHolder(new FrameLayout(context), 0);
+        RecyclerViewTestAdapter.ViewHolder holder = realmAdapter.onCreateViewHolder(new FrameLayout(context), 0);
         assertNotNull(holder.textView);
 
         realmAdapter.onBindViewHolder(holder, 0);
