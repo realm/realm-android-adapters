@@ -22,11 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import io.realm.RealmBaseRecyclerAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.entity.AllJavaTypes;
 
-public class RealmRecyclerAdapter extends RealmBaseRecyclerAdapter<AllJavaTypes, RealmRecyclerAdapter.ViewHolder> {
+public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTypes, RecyclerViewTestAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
@@ -37,7 +37,7 @@ public class RealmRecyclerAdapter extends RealmBaseRecyclerAdapter<AllJavaTypes,
         }
     }
 
-    public RealmRecyclerAdapter(final Context context, final RealmResults<AllJavaTypes> realmResults, final boolean automaticUpdate) {
+    public RecyclerViewTestAdapter(final Context context, final RealmResults<AllJavaTypes> realmResults, final boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate);
     }
 

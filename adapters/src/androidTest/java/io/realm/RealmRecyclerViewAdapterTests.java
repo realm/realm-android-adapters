@@ -39,7 +39,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class RealmBaseAdapterTests {
+public class RealmRecyclerViewAdapterTests {
     @Rule
     public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
