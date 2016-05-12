@@ -3,6 +3,7 @@
 ### Enhancements
 
 * `RealmRecyclerViewAdapter`, a new adapter base class for `RecyclerView`s.
+* Removed `appcompat-v7` from the library dependencies list.
 
 ### Bug fixes
 
@@ -11,7 +12,7 @@
 ### Credits
 
 * Paweł Surówka (@thesurix) for adding the `RealmRecyclerViewAdapter`.
-* Mitchell Tilbrook (@marukami) for cleaning up the `AndroidManifest.xml`.`
+* Mitchell Tilbrook (@marukami) for cleaning up `AndroidManifest.xml`.`
 
 
 ## 1.0.1

@@ -25,7 +25,6 @@ configurations {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
 
     androidTestCompile 'com.android.support.test:runner:0.4.1'
