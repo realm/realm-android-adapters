@@ -1,9 +1,15 @@
-## 1.10
+## 1.2.0
+
+### Enhancements
+
+* Removed `appcompat-v7` from the library dependencies list.
+
+
+## 1.1.0
 
 ### Enhancements
 
 * `RealmRecyclerViewAdapter`, a new adapter base class for `RecyclerView`s.
-* Removed `appcompat-v7` from the library dependencies list.
 
 ### Bug fixes
 
