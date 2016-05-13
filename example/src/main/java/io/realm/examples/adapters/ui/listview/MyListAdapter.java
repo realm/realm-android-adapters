@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.realm.examples.adapters.adapter;
+package io.realm.examples.adapters.ui.listview;
 
 import android.content.Context;
 import android.view.View;

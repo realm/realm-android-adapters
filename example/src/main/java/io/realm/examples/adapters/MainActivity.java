@@ -17,80 +17,50 @@
 package io.realm.examples.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.Button;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.examples.adapters.adapter.MyListAdapter;
-import io.realm.examples.adapters.model.TimeStamp;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class MainActivity extends Activity {
+import io.realm.examples.adapters.ui.listview.ListViewExampleActivity;
+import io.realm.examples.adapters.ui.recyclerview.RecyclerViewExampleActivity;
 
-    private Realm realm;
+public class MainActivity extends AppCompatActivity {
+
+    private ViewGroup container;
+    private final TreeMap<String, Class<? extends Activity>> buttons = new TreeMap<String, Class<? extends Activity>>() {{
+        put("ListView", ListViewExampleActivity.class);
+        put("RecyclerView", RecyclerViewExampleActivity.class);
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
-        Realm.deleteRealm(realmConfig); // Resets the Realm between app starts
-        realm = Realm.getInstance(realmConfig);
-
-        // RealmResults are "live" views, that are automatically kept up to date, even when changes happen
-        // on a background thread. The RealmBaseAdapter will automatically keep track of changes and will
-        // automatically refresh when a change is detected.
-        RealmResults<TimeStamp> timeStamps = realm.where(TimeStamp.class).findAll();
-        final MyListAdapter adapter = new MyListAdapter(this, timeStamps);
-
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(adapter);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final String timestamp = adapter.getItem(i).getTimeStamp();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(TimeStamp.class).equalTo("timeStamp", timestamp).findAll().deleteAllFromRealm();
-                    }
-                });
-                return true;
-            }
-        });
+        container = (ViewGroup) findViewById(R.id.list);
+        setupButtons();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_options, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_add) {
-            final String timestamp = Long.toString(System.currentTimeMillis());
-            realm.executeTransactionAsync(new Realm.Transaction() {
+    private void setupButtons() {
+        for (final Map.Entry<String, Class<? extends Activity>> entry : buttons.entrySet()) {
+            Button button = new Button(this);
+            button.setText(entry.getKey());
+            button.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void execute(Realm realm) {
-                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
+                public void onClick(View v) {
+                    startActivity(entry.getValue());
                 }
             });
-            return true;
+            container.addView(button);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void startActivity(Class<? extends Activity> activityClass) {
+        startActivity(new Intent(this, activityClass));
     }
 }

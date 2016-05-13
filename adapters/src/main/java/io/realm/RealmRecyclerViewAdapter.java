@@ -39,7 +39,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends
     protected final LayoutInflater inflater;
     protected final Context context;
     private final boolean hasAutoUpdates;
-    private final RealmChangeListener<BaseRealm> listener;
+    private final RealmChangeListener listener;
     private OrderedRealmCollection<T> adapterData;
 
     public RealmRecyclerViewAdapter(Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
@@ -51,9 +51,13 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends
         this.adapterData = data;
         this.inflater = LayoutInflater.from(context);
         this.hasAutoUpdates = autoUpdate;
-        this.listener = hasAutoUpdates ? new RealmChangeListener<BaseRealm>() {
+
+        // Right now don't use generics, since we need maintain two different
+        // types of listeners until RealmList is properly supported.
+        // See https://github.com/realm/realm-java/issues/989
+        this.listener = hasAutoUpdates ? new RealmChangeListener() {
             @Override
-            public void onChange(BaseRealm results) {
+            public void onChange(Object results) {
                 notifyDataSetChanged();
             }
         } : null;
@@ -135,9 +139,11 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends
     private void addListener(OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
+            //noinspection unchecked
             realmResults.addChangeListener(listener);
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
+            //noinspection unchecked
             realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
@@ -150,6 +156,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends
             realmResults.removeChangeListener(listener);
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
+            //noinspection unchecked
             realmList.realm.handlerController.removeWeakChangeListener(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());

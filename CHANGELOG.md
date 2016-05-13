@@ -1,3 +1,10 @@
+## 1.2.1
+
+### Bug fixes
+
+* Fixed crash when auto-updating RealmResults (#25).
+
+
 ## 1.2.0
 
 ### Enhancements
