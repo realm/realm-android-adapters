@@ -1,14 +1,3 @@
-package io.realm.examples.adapters.ui;
-
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-
 /*
  * Copyright (C) 2014 The Android Open Source Project
  *
@@ -24,6 +13,18 @@ import android.view.View;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.realm.examples.adapters.ui;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{
