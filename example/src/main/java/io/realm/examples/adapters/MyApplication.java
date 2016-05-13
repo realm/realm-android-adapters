@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.realm.examples.adapters.model;
 
-import io.realm.RealmObject;
+package io.realm.examples.adapters;
 
-public class TimeStamp extends RealmObject {
+import android.app.Application;
 
-    public static final String TIMESTAMP = "timeStamp";
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
-    private String timeStamp;
+public class MyApplication extends Application {
 
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.
+        Realm.setDefaultConfiguration(realmConfig);
     }
 }
