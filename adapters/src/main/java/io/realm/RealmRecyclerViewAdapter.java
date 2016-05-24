@@ -31,10 +31,10 @@ import android.view.LayoutInflater;
  * The RealmAdapter will stop receiving updates if the Realm instance providing the {@link OrderedRealmCollection} is
  * closed.
  *
- * @param <T> type of {@link RealmObject} stored in the adapter.
+ * @param <T> type of {@link RealmModel} stored in the adapter.
  * @param <VH> type of RecyclerView.ViewHolder used in the adapter.
  */
-public abstract class RealmRecyclerViewAdapter<T extends RealmObject, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected final LayoutInflater inflater;
     protected final Context context;
