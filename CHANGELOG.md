@@ -4,6 +4,7 @@
 
 * `RealmRecyclerViewAdapter` uses RealmModel instead of RealmObject (#29).
 
+
 ## 1.2.1
 
 ### Bug fixes
