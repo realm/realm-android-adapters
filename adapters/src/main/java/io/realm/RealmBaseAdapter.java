@@ -140,7 +140,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      *
      * @param data the new {@link OrderedRealmCollection} to display.
      */
-    public void updateData(OrderedRealmCollection<T> data) {
+    public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (listener != null) {
             if (adapterData != null) {
                 removeListener(adapterData);
