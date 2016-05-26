@@ -17,7 +17,6 @@
 package io.realm;
 
 import android.content.Context;
-import android.support.annotation.CheckResult;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
@@ -89,7 +88,6 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      * @return the number of items.
      */
     @Override
-    @CheckResult
     public int getCount() {
         if (adapterData == null) {
             return 0;
@@ -105,7 +103,6 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      * @return The data at the specified position.
      */
     @Override
-    @CheckResult
     @Nullable
     public T getItem(int position) {
         if (adapterData == null) {
@@ -123,7 +120,6 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      * @return The id of the item at the specified position.
      */
     @Override
-    @CheckResult
     public long getItemId(int position) {
         // TODO: find better solution once we have unique IDs
         return position;

@@ -17,7 +17,6 @@
 package io.realm;
 
 import android.content.Context;
-import android.support.annotation.CheckResult;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,13 +88,11 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      * @return current item ID.
      */
     @Override
-    @CheckResult
     public long getItemId(final int index) {
         return index;
     }
 
     @Override
-    @CheckResult
     public int getItemCount() {
         return isDataValid() ? adapterData.size() : 0;
     }
@@ -107,7 +104,6 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      * @param index index of the item.
      * @return the item at the specified position, {@code null} if adapter data is not valid.
      */
-    @CheckResult
     @Nullable
     public T getItem(int index) {
         return isDataValid() ? adapterData.get(index) : null;
@@ -118,7 +114,6 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      *
      * @return adapter data.
      */
-    @CheckResult
     public OrderedRealmCollection<T> getData() {
         return adapterData;
     }
