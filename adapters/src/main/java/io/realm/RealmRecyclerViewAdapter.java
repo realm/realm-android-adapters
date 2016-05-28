@@ -17,6 +17,7 @@
 package io.realm;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,7 +44,8 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
     private final RealmChangeListener listener;
     private OrderedRealmCollection<T> adapterData;
 
-    public RealmRecyclerViewAdapter(Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
+    public RealmRecyclerViewAdapter(@NonNull Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
+        //noinspection ConstantConditions
         if (context == null) {
             throw new IllegalArgumentException("Context can not be null");
         }
