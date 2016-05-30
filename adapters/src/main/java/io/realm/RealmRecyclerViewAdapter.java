@@ -39,12 +39,14 @@ import android.view.LayoutInflater;
 public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected final LayoutInflater inflater;
+    @NonNull
     protected final Context context;
     private final boolean hasAutoUpdates;
     private final RealmChangeListener listener;
+    @Nullable
     private OrderedRealmCollection<T> adapterData;
 
-    public RealmRecyclerViewAdapter(@NonNull Context context, OrderedRealmCollection<T> data, boolean autoUpdate) {
+    public RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
         //noinspection ConstantConditions
         if (context == null) {
             throw new IllegalArgumentException("Context can not be null");
@@ -70,6 +72,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
     public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         if (hasAutoUpdates && isDataValid()) {
+            //noinspection ConstantConditions
             addListener(adapterData);
         }
     }
@@ -78,6 +81,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
     public void onDetachedFromRecyclerView(final RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         if (hasAutoUpdates && isDataValid()) {
+            //noinspection ConstantConditions
             removeListener(adapterData);
         }
     }
@@ -96,6 +100,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
 
     @Override
     public int getItemCount() {
+        //noinspection ConstantConditions
         return isDataValid() ? adapterData.size() : 0;
     }
 
@@ -108,6 +113,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      */
     @Nullable
     public T getItem(int index) {
+        //noinspection ConstantConditions
         return isDataValid() ? adapterData.get(index) : null;
     }
 
@@ -116,6 +122,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      *
      * @return adapter data.
      */
+    @Nullable
     public OrderedRealmCollection<T> getData() {
         return adapterData;
     }
@@ -126,7 +133,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      *
      * @param data the new {@link OrderedRealmCollection} to display.
      */
-    public void updateData(OrderedRealmCollection<T> data) {
+    public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (hasAutoUpdates) {
             if (adapterData != null) {
                 removeListener(adapterData);
@@ -140,7 +147,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
         notifyDataSetChanged();
     }
 
-    private void addListener(OrderedRealmCollection<T> data) {
+    private void addListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
             //noinspection unchecked
@@ -154,7 +161,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
         }
     }
 
-    private void removeListener(OrderedRealmCollection<T> data) {
+    private void removeListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
             realmResults.removeChangeListener(listener);

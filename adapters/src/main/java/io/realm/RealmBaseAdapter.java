@@ -37,6 +37,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     protected LayoutInflater inflater;
     @Nullable
     protected OrderedRealmCollection<T> adapterData;
+    @NonNull
     protected Context context;
     private final RealmChangeListener listener;
 
@@ -60,7 +61,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
         }
     }
 
-    private void addListener(OrderedRealmCollection<T> data) {
+    private void addListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
             realmResults.realm.handlerController.addChangeListenerAsWeakReference(listener);
@@ -72,7 +73,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
         }
     }
 
-    private void removeListener(OrderedRealmCollection<T> data) {
+    private void removeListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
             RealmResults realmResults = (RealmResults) data;
             realmResults.realm.handlerController.removeWeakChangeListener(listener);
