@@ -1,3 +1,14 @@
+## 1.3.0
+
+### Enhancements
+
+* Added Android Support Annotations for all public adapter methods.
+
+### Credits
+
+* Lars Grefer (@larsgrefer) for adding the support annotations.
+
+
 ## 1.2.2
 
 ### Bug fixes
