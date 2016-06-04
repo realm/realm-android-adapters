@@ -17,6 +17,8 @@
 package io.realm.examples.adapters.ui.listview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import io.realm.examples.adapters.model.TimeStamp;
 public class ListViewExampleActivity extends AppCompatActivity {
 
     private Realm realm;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final String timestamp = adapter.getItem(i).getTimeStamp();
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         realm.where(TimeStamp.class).equalTo("timeStamp", timestamp).findAll().deleteAllFromRealm();
@@ -61,7 +64,37 @@ public class ListViewExampleActivity extends AppCompatActivity {
                 return true;
             }
         });
+        handler = new Handler(Looper.myLooper());
+        handler.postDelayed(runnable, 100);
     }
+
+    long count = 0;
+
+    private void addTimeStamp() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (count % 2 == 0) {
+                    final String timestamp = Long.toString(System.currentTimeMillis());
+                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
+                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
+                } else {
+                    RealmResults<TimeStamp> results = realm.where(TimeStamp.class).findAll();
+                    results.last().deleteFromRealm();
+                }
+                count ++;
+            }
+        });
+    }
+
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            addTimeStamp();
+            handler.postDelayed(runnable, 100);
+        }
+    };
 
     @Override
     protected void onDestroy() {
@@ -80,7 +113,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_add) {
             final String timestamp = Long.toString(System.currentTimeMillis());
-            realm.executeTransactionAsync(new Realm.Transaction() {
+            realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
