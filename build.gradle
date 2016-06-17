@@ -1,6 +1,6 @@
 apply plugin: 'ch.netzwerg.release'
 project.ext.sdkVersion = 23
-project.ext.buildTools = '23.0.0'
+project.ext.buildTools = '23.0.3'
 project.ext.realmVersion = '1.0.1'
 
 buildscript {
