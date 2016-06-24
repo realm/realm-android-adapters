@@ -101,6 +101,9 @@ task javadoc(type: Javadoc) {
         encoding = 'UTF-8'
         charSet = 'UTF-8'
         locale = 'en_US'
+
+        links "http://docs.oracle.com/javase/7/docs/api/"
+        linksOffline "https://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
