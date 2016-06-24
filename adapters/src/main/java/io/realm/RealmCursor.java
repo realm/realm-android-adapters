@@ -227,13 +227,15 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public int getColumnIndexOrThrow(@NonNull String columnName) throws IllegalArgumentException {
-        if (data == null)
+        if (data == null) {
             throw new IllegalStateException("data is null");
+        }
 
         int columnIndex = (int) data.getTable().getColumnIndex(columnName);
 
-        if (columnIndex == TableOrView.NO_MATCH)
+        if (columnIndex == TableOrView.NO_MATCH) {
             throw new IllegalArgumentException("column not found");
+        }
 
         return columnIndex;
 
@@ -293,8 +295,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         Row currentRow = getCurrentRow();
         RealmFieldType columnType = currentRow.getColumnType(columnIndex);
 
-        if (currentRow.isNull(columnIndex))
+        if (currentRow.isNull(columnIndex)) {
             return null;
+        }
 
         switch (columnType) {
             case BINARY:
@@ -310,8 +313,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         Row currentRow = getCurrentRow();
         RealmFieldType columnType = currentRow.getColumnType(columnIndex);
 
-        if (currentRow.isNull(columnIndex))
+        if (currentRow.isNull(columnIndex)) {
             return null;
+        }
 
         switch (columnType) {
             case STRING:
@@ -375,8 +379,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         switch (columnType) {
             case INTEGER:
                 long aLong = currentRow.getLong(columnIndex);
-                if (aLong > Integer.MIN_VALUE && aLong < Integer.MAX_VALUE)
+                if (aLong > Integer.MIN_VALUE && aLong < Integer.MAX_VALUE) {
                     return (int) aLong;
+                }
             default:
                 throw canNotConvert(currentRow, columnIndex, "int");
         }
@@ -407,8 +412,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
                 return currentRow.getFloat(columnIndex);
             case DOUBLE:
                 double aDouble = currentRow.getDouble(columnIndex);
-                if (aDouble > Float.MIN_VALUE && aDouble < Float.MAX_VALUE)
+                if (aDouble > Float.MIN_VALUE && aDouble < Float.MAX_VALUE) {
                     return (float) aDouble;
+                }
             default:
                 throw canNotConvert(currentRow, columnIndex, "float");
         }
