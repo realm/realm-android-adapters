@@ -391,13 +391,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         RealmFieldType columnType = currentRow.getColumnType(columnIndex);
 
         switch (columnType) {
+            case BOOLEAN:
+                return currentRow.getBoolean(columnIndex) ? (short) 1 : (short) 0;
             case INTEGER:
                 long aLong = currentRow.getLong(columnIndex);
                 if (aLong > Short.MIN_VALUE && aLong < Short.MAX_VALUE) {
                     return (short) aLong;
                 }
-            case BOOLEAN:
-                return currentRow.getBoolean(columnIndex) ? (short) 1 : (short) 0;
             default:
                 throw canNotConvert(currentRow, columnIndex, "short");
         }
@@ -410,13 +410,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         RealmFieldType columnType = currentRow.getColumnType(columnIndex);
 
         switch (columnType) {
+            case BOOLEAN:
+                return currentRow.getBoolean(columnIndex) ? 1 : 0;
             case INTEGER:
                 long aLong = currentRow.getLong(columnIndex);
                 if (aLong > Integer.MIN_VALUE && aLong < Integer.MAX_VALUE) {
                     return (int) aLong;
                 }
-            case BOOLEAN:
-                return currentRow.getBoolean(columnIndex) ? 1 : 0;
             default:
                 throw canNotConvert(currentRow, columnIndex, "int");
         }
