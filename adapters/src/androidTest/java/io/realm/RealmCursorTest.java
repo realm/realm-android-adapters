@@ -24,13 +24,25 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
-import android.test.AndroidTestCase;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.realm.entity.AllJavaTypes;
 
-public class RealmCursorTest extends AndroidTestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+@RunWith(AndroidJUnit4.class)
+public class RealmCursorTest {
 
     private static final int SIZE = 10;
     public static final int NOT_FOUND = -1;
@@ -42,10 +54,9 @@ public class RealmCursorTest extends AndroidTestCase {
         STRING, SHORT, INT, LONG, FLOAT, DOUBLE, BLOB;
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(getContext()).modules(new RealmTestModule()).build();
+    @Before
+    public void setUp() throws Exception {
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(InstrumentationRegistry.getContext()).modules(new RealmTestModule()).build();
         Realm.deleteRealm(realmConfig);
         realm = Realm.getInstance(realmConfig);
 
@@ -61,19 +72,20 @@ public class RealmCursorTest extends AndroidTestCase {
         cursor = new RealmCursor<>(realm.where(AllJavaTypes.class).findAll());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         if (realm != null) {
             realm.close();
         }
     }
 
-    public void testGetCount() {
+    @Test
+    public void getCount() {
         assertEquals(AllJavaTypes.COL_COUNT, cursor.getColumnCount());
     }
 
-    public void testGetPosition() {
+    @Test
+    public void getPosition() {
         assertEquals(-1, cursor.getPosition());
         cursor.moveToFirst();
         assertEquals(0, cursor.getPosition());
@@ -81,11 +93,13 @@ public class RealmCursorTest extends AndroidTestCase {
         assertEquals(SIZE - 1, cursor.getPosition());
     }
 
-    public void testMoveOffsetValid() {
+    @Test
+    public void moveOffset_valid() {
         assertTrue(cursor.move(SIZE / 2));
     }
 
-    public void testMoveOffsetInvalid() {
+    @Test
+    public void moveOffset_invalid() {
         cursor.moveToFirst();
         assertFalse(cursor.move(SIZE * 2));
         assertFalse(cursor.move(SIZE * -2));
@@ -93,19 +107,22 @@ public class RealmCursorTest extends AndroidTestCase {
         assertFalse(cursor.move(SIZE + 2));
     }
 
-    public void testMoveToPositionCapAtStart() {
+    @Test
+    public void moveToPosition_capAtStart() {
         cursor.move(SIZE / 2);
         assertFalse(cursor.move(-SIZE));
         assertTrue(cursor.isBeforeFirst());
     }
 
-    public void testMoveToPositionCapAtEnd() {
+    @Test
+    public void moveToPosition_capAtEnd() {
         cursor.move(SIZE / 2);
         assertFalse(cursor.move(SIZE));
         assertTrue(cursor.isAfterLast());
     }
 
-    public void testMoveToPositionEmptyCursor() {
+    @Test
+    public void moveToPosition_emptyCursor() {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -116,127 +133,147 @@ public class RealmCursorTest extends AndroidTestCase {
         assertEquals(0, cursor.getPosition());
     }
 
-    public void testMoveToPosition() {
+    @Test
+    public void moveToPosition() {
         assertTrue(cursor.moveToPosition(SIZE / 2));
         assertEquals(SIZE / 2, cursor.getPosition());
     }
 
-    public void testMoveToFirst() {
+    @Test
+    public void moveToFirst() {
         assertTrue(cursor.moveToFirst());
         assertEquals(0, cursor.getPosition());
     }
 
-    public void testMoveToLast() {
+    @Test
+    public void moveToLast() {
         assertTrue(cursor.moveToLast());
         assertEquals(SIZE - 1, cursor.getPosition());
     }
 
-    public void testMoveToNext() {
+    @Test
+    public void moveToNext() {
         cursor.moveToFirst();
         assertTrue(cursor.moveToNext());
         assertEquals(1, cursor.getPosition());
     }
 
-    public void testMoveToPrevious() {
+    @Test
+    public void moveToPrevious() {
         cursor.moveToLast();
         assertTrue(cursor.moveToPrevious());
         assertEquals(SIZE - 2, cursor.getPosition());
     }
 
-    public void testIsFirstYes() {
+    @Test
+    public void isFirst_yes() {
         cursor.moveToFirst();
         assertTrue(cursor.isFirst());
     }
 
-    public void testIsFirstNo() {
+    @Test
+    public void isFirst_no() {
         cursor.moveToPosition(1);
         assertFalse(cursor.isFirst());
         cursor.move(SIZE * -2);
         assertFalse(cursor.isFirst());
     }
 
-    public void testIsLastYes() {
+    @Test
+    public void isLast_yes() {
         cursor.moveToLast();
         assertTrue(cursor.isLast());
     }
 
-    public void testIsLastNo() {
+    @Test
+    public void isLast_no() {
         cursor.moveToPosition(1);
         assertFalse(cursor.isLast());
         cursor.move(SIZE * 2);
         assertFalse(cursor.isLast());
     }
 
-    public void testBeforeFirstYes() {
+    @Test
+    public void beforeFirst_yes() {
         assertTrue(cursor.isBeforeFirst());
     }
 
-    public void testBeforeFirstNo() {
+    @Test
+    public void beforeFirst_no() {
         cursor.moveToFirst();
         assertFalse(cursor.isBeforeFirst());
     }
 
-    public void testIsAfterLastYes() {
+    @Test
+    public void isAfterLast_yes() {
         cursor.moveToLast();
         cursor.moveToNext();
         assertTrue(cursor.isAfterLast());
     }
 
-    public void testIsAfterLastNo() {
+    @Test
+    public void isAfterLast_no() {
         cursor.moveToLast();
         assertFalse(cursor.isAfterLast());
     }
 
-    public void testGetColumnIndexIdColumnNotFound() {
+    @Test
+    public void getColumnIndex_idColumn_notFound() {
         assertEquals(NOT_FOUND, cursor.getColumnIndex("_id"));
     }
 
-    public void testGetColumnIndexLinkedObjet() {
+    @Test
+    public void getColumnIndex_linkedObject() {
         assertEquals(-1, cursor.getColumnIndex("columnRealmObject.name"));
     }
 
-    public void testGetColumnIndex() {
+    @Test
+    public void getColumnIndex() {
         assertEquals(7, cursor.getColumnIndex("fieldBoolean"));
     }
 
-    public void testGetColumnIndexNotFound() {
+    @Test
+    public void getColumnIndex_notFound() {
         assertEquals(-1, cursor.getColumnIndex("foo"));
     }
 
-    public void testGetColumnIndexOrThrow() {
+    @Test
+    public void getColumnIndexOrThrow() {
         assertEquals(0, cursor.getColumnIndexOrThrow("fieldString"));
     }
 
-    public void testGetColumnIndexOrThrowNotFoundThrows() {
-        try {
-            cursor.getColumnIndexOrThrow("foo");
-            fail();
-        } catch (IllegalArgumentException expected) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void getColumnIndexOrThrow_notFoundThrows() {
+        cursor.getColumnIndexOrThrow("foo");
     }
 
-    public void testGetColumnNameInvalidIndexThrows() {
+    @Test
+    public void getColumnName_invalidIndexThrows() {
         try { cursor.getColumnName(-1);                 fail(); } catch (IndexOutOfBoundsException expected) {}
         try { cursor.getColumnName(AllJavaTypes.COL_COUNT); fail(); } catch (IndexOutOfBoundsException expected) {}
     }
 
-    public void testGetColumnName() {
+    @Test
+    public void getColumnName() {
         assertEquals("fieldShort", cursor.getColumnName(1));
     }
 
-    public void testGetColumnNames() {
+    @Test
+    public void getColumnNames() {
         String[] names = cursor.getColumnNames();
         assertEquals(AllJavaTypes.COL_COUNT, names.length);
         assertEquals("fieldString", names[0]);
         assertEquals("fieldList", names[11]);
     }
 
-    public void testGetColumnCount() {
+    @Test
+    public void getColumnCount() {
         assertEquals(AllJavaTypes.COL_COUNT, cursor.getColumnCount());
     }
 
     // Test that all get<type> method throw IndexOutOfBounds properly
-    public void testGetXXXInvalidIndexThrows() {
+    @Test
+    public void getXXX_invalidIndexThrows() {
         cursor.moveToFirst();
         int[] indexes = new int[] {-1, AllJavaTypes.COL_COUNT};
         for (CursorGetter cursorGetter : CursorGetter.values()) {
@@ -260,7 +297,8 @@ public class RealmCursorTest extends AndroidTestCase {
     }
 
     // Test that all getters fail when the cursor is closed
-    public void testGetXXXFailWhenCursorClosed() {
+    @Test
+    public void getXXX_failWhenCursorClosed() {
         cursor.close();
         for (CursorGetter cursorGetter : CursorGetter.values()) {
             try {
@@ -292,7 +330,8 @@ public class RealmCursorTest extends AndroidTestCase {
     }
 
     // Test that all getters fail when the cursor is out of bounds
-    public void testGetXXXFailWhenIfOutOfBounds() {
+    @Test
+    public void getXXX_failWhenIfOutOfBounds() {
         for (CursorGetter cursorGetter : CursorGetter.values()) {
             try {
                 callGetter(cursorGetter);
@@ -324,31 +363,27 @@ public class RealmCursorTest extends AndroidTestCase {
         }
     }
 
-    public void testGetString() {
+    @Test
+    public void getString() {
         cursor.moveToFirst();
         String str = cursor.getString(0);
         assertEquals("test data 0", str);
     }
 
-    public void testCopyStringToBufferInvalidIndexThrows() {
-        try {
-            cursor.moveToFirst();
-            cursor.copyStringToBuffer(-1, new CharArrayBuffer(10));
-            fail();
-        } catch (IndexOutOfBoundsException expected) {
-        }
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void copyStringToBuffer_invalidIndexThrows() {
+        cursor.moveToFirst();
+        cursor.copyStringToBuffer(-1, new CharArrayBuffer(10));
     }
 
-    public void testCopyStringToBufferNullBufferThrows() {
-        try {
-            cursor.moveToFirst();
-            cursor.copyStringToBuffer(0, null);
-            fail();
-        } catch (NullPointerException expected) {
-        }
+    @Test(expected = NullPointerException.class)
+    public void copyStringToBuffer_nullBufferThrows() {
+        cursor.moveToFirst();
+        cursor.copyStringToBuffer(0, null);
     }
 
-    public void testCopyStringToBuffer() {
+    @Test
+    public void copyStringToBuffer() {
         String expectedString = "test data 0";
         int expectedLength = expectedString.length();
         cursor.moveToFirst();
@@ -359,46 +394,48 @@ public class RealmCursorTest extends AndroidTestCase {
         assertEquals("test data 0", new String(buffer.data));
     }
 
-    public void testGetShort() {
+    @Test
+    public void getShort() {
         cursor.moveToFirst();
         short value = cursor.getShort(3);
         assertEquals(0, value);
     }
 
-    public void testGetInt() {
+    @Test
+    public void getInt() {
         cursor.moveToFirst();
         int value = cursor.getInt(3);
         assertEquals(0, value);
     }
 
-    public void testGetLong() {
+    @Test
+    public void getLong() {
         cursor.moveToFirst();
         long value = cursor.getLong(3);
         assertEquals(0, value);
     }
 
-    public void testGetFloat() {
+    @Test
+    public void getFloat() {
         cursor.moveToFirst();
         float value = cursor.getFloat(5);
-        assertEquals(1.234567f, value);
+        assertEquals(1.234567f, value, 0.0001f);
     }
 
-    public void testGetDouble() {
+    @Test
+    public void getDouble() {
         cursor.moveToFirst();
         double value = cursor.getDouble(6);
-        assertEquals(3.1415d, value);
+        assertEquals(3.1415d, value, 0.001);
     }
 
-    public void testGetTypeInvalidIndexThrows() {
-        try {
-            cursor.getType(-1);
-            fail();
-        } catch (IndexOutOfBoundsException expected) {
-        }
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void getType_invalidIndexThrows() {
+        cursor.getType(-1);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void testGetType() {
+    public void getType() {
         assertEquals(Cursor.FIELD_TYPE_STRING, cursor.getType(0));
         assertEquals(Cursor.FIELD_TYPE_INTEGER, cursor.getType(3));
         assertEquals(Cursor.FIELD_TYPE_FLOAT, cursor.getType(5));
@@ -409,33 +446,45 @@ public class RealmCursorTest extends AndroidTestCase {
         assertEquals(Cursor.FIELD_TYPE_NULL, cursor.getType(11));
     }
 
-    public void testUnsupportedMethods() {
-        cursor.moveToFirst();
-        try { cursor.deactivate();                      fail(); } catch (UnsupportedOperationException expected) {}
-        try { cursor.requery();                         fail(); } catch (UnsupportedOperationException expected) {}
-        try { cursor.setNotificationUri(null, null);    fail(); } catch (UnsupportedOperationException expected) {}
-        try { cursor.getNotificationUri();              fail(); } catch (UnsupportedOperationException expected) {}
+    @Test(expected = UnsupportedOperationException.class)
+    public void deactivate() {
+        cursor.deactivate();
     }
 
-    public void testClose() {
+    @Test(expected = UnsupportedOperationException.class)
+    public void requery() {
+        cursor.requery();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void setNotificationUri() {
+        cursor.setNotificationUri(null, null);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getNotificationUri() {
+        cursor.deactivate();
+    }
+
+    @Test
+    public void close() {
         cursor.close();
         assertTrue(cursor.isClosed());
     }
 
-    public void testIsNull() {
+    @Test
+    public void isNull() {
         cursor.moveToFirst();
         assertTrue(cursor.isNull(10));
     }
 
-    public void testRegisterDataSetObserverNullThrows() {
-        try {
-            cursor.registerDataSetObserver(null);
-            fail();
-        } catch (IllegalArgumentException expected) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void registerDataSetObserverNullThrows() {
+        cursor.registerDataSetObserver(null);
     }
 
-    public void testRegisterDataSetObserverClosed() {
+    @Test
+    public void registerDataSetObserver_closed() {
         final AtomicBoolean success = new AtomicBoolean(false);
         cursor.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -447,7 +496,8 @@ public class RealmCursorTest extends AndroidTestCase {
         assertTrue(success.get());
     }
 
-    public void testRegisterContentObserverRealmChanged() {
+    @Test
+    public void registerContentObserver_realmChanged() {
         RealmResults<AllJavaTypes> results = realm.where(AllJavaTypes.class).findAll();
         cursor = new RealmCursor<>(results);
         final AtomicBoolean success = new AtomicBoolean(false);
@@ -465,7 +515,8 @@ public class RealmCursorTest extends AndroidTestCase {
         assertTrue(success.get());
     }
 
-    public void testUnregisterContentObserver() {
+    @Test
+    public void unregisterContentObserver() {
         ContentObserver observer = new ContentObserver(null) {
             @Override
             public void onChange(boolean selfChange) {
@@ -479,15 +530,18 @@ public class RealmCursorTest extends AndroidTestCase {
         realm.commitTransaction();
     }
 
-    public void testGetWantsAllOnMoveCalls() {
+    @Test
+    public void getWantsAllOnMoveCalls() {
         assertFalse(cursor.getWantsAllOnMoveCalls());
     }
 
-    public void testGetExtras() {
+    @Test
+    public void getExtras() {
         assertEquals(Bundle.EMPTY, cursor.getExtras());
     }
 
-    public void testRespond() {
+    @Test
+    public void respond() {
         assertEquals(Bundle.EMPTY, cursor.respond(new Bundle()));
     }
 }
