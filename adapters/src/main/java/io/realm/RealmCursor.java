@@ -38,7 +38,7 @@ import io.realm.internal.TableOrView;
 
 public class RealmCursor<T extends RealmModel> implements Cursor {
 
-    @Nullable
+    @NonNull
     private RealmResults<T> data;
     @NonNull
     private final CursorRealmChangeListener changeListener;
@@ -52,40 +52,16 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @NonNull
     private Bundle extras = Bundle.EMPTY;
 
-    public RealmCursor(@Nullable RealmResults<T> data) {
+    public RealmCursor(@NonNull RealmResults<T> data) {
+        //noinspection ConstantConditions
+        if (data == null) {
+            throw new IllegalArgumentException("data is null");
+        }
         changeListener = new CursorRealmChangeListener();
         contentObservers = new ArrayList<>();
         dataSetObservers = new ArrayList<>();
-        setData(data);
-    }
 
-    public void setData(@Nullable RealmResults<T> newData) {
-        RealmResults<T> oldData = this.data;
-        this.data = newData;
-        closed = false;
-
-        if (oldData != null) {
-            oldData.removeChangeListener(changeListener);
-        }
-        if (newData != null && !contentObservers.isEmpty()) {
-            newData.addChangeListener(changeListener);
-        }
-
-        if (newData != null) {
-            synchronized (dataSetObservers) {
-                for (DataSetObserver dataSetObserver : dataSetObservers) {
-                    dataSetObserver.onChanged();
-                }
-            }
-        } else {
-            if (oldData != null) {
-                synchronized (dataSetObservers) {
-                    for (DataSetObserver dataSetObserver : dataSetObservers) {
-                        dataSetObserver.onInvalidated();
-                    }
-                }
-            }
-        }
+        this.data = data;
     }
 
     @NonNull
@@ -95,16 +71,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
 
     @NonNull
     private T getCurrentObject() throws IllegalStateException, CursorIndexOutOfBoundsException {
-        if (data != null && data.isValid()) {
-            try {
-                return data.get(getPosition());
-            } catch (IndexOutOfBoundsException e) {
-                CursorIndexOutOfBoundsException ce = new CursorIndexOutOfBoundsException(getPosition(), getCount());
-                ce.initCause(e);
-                throw ce;
-            }
-        } else {
-            throw new IllegalStateException("data is null");
+        checkClosed();
+        try {
+            return data.get(getPosition());
+        } catch (IndexOutOfBoundsException e) {
+            CursorIndexOutOfBoundsException ce = new CursorIndexOutOfBoundsException(getPosition(), getCount());
+            ce.initCause(e);
+            throw ce;
         }
     }
 
@@ -114,10 +87,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @Override
     public int getCount() {
         checkClosed();
-        if (data != null) {
-            return data.size();
-        }
-        return 0;
+        return data.size();
     }
 
     /**
@@ -156,8 +126,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     }
 
     private void checkClosed() {
-        if (closed)
+        if (closed) {
             throw new IllegalStateException("Cursor is closed");
+        }
     }
 
     /**
@@ -231,12 +202,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public int getColumnIndex(@NonNull String columnName) {
-        if (data != null) {
-            int columnIndex = (int) data.getTable().getColumnIndex(columnName);
-            return columnIndex == TableOrView.NO_MATCH ? -1 : columnIndex;
-        } else {
-            return -1;
-        }
+        checkClosed();
+        int columnIndex = (int) data.getTable().getColumnIndex(columnName);
+        return columnIndex == TableOrView.NO_MATCH ? -1 : columnIndex;
     }
 
     /**
@@ -245,9 +213,6 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @Override
     public int getColumnIndexOrThrow(@NonNull String columnName) throws IllegalArgumentException {
         checkClosed();
-        if (data == null) {
-            throw new IllegalStateException("data is null");
-        }
 
         int columnIndex = (int) data.getTable().getColumnIndex(columnName);
 
@@ -263,14 +228,10 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      * {@inheritDoc}
      */
     @Override
-    @Nullable
+    @NonNull
     public String getColumnName(int columnIndex) {
         checkClosed();
-        if (data != null) {
-            return data.getTable().getColumnName(columnIndex);
-        } else {
-            return null;
-        }
+        return data.getTable().getColumnName(columnIndex);
     }
 
     /**
@@ -283,9 +244,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         String[] columnNames = new String[getColumnCount()];
 
         for (int i = 0; i < columnNames.length; i++) {
-            if (data != null) {
-                columnNames[i] = data.getTable().getColumnName(i);
-            }
+            columnNames[i] = data.getTable().getColumnName(i);
         }
 
         return columnNames;
@@ -297,11 +256,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @Override
     public int getColumnCount() {
         checkClosed();
-        if (data != null) {
-            return (int) data.getTable().getColumnCount();
-        } else {
-            return 0;
-        }
+        return (int) data.getTable().getColumnCount();
     }
 
     private void checkValidColumnIndex(int columnIndex) {
@@ -481,13 +436,9 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public int getType(int columnIndex) {
+        checkClosed();
         checkValidColumnIndex(columnIndex);
-        RealmFieldType columnType;
-        if (data != null) {
-            columnType = data.getTable().getColumnType(columnIndex);
-        } else {
-            throw new IllegalStateException("data is null");
-        }
+        RealmFieldType columnType = data.getTable().getColumnType(columnIndex);
 
         switch (columnType) {
             case FLOAT:
@@ -539,8 +490,15 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public void close() {
-        setData(null);
         closed = true;
+        //noinspection ConstantConditions
+        data = null;
+        synchronized (dataSetObservers) {
+            for (DataSetObserver dataSetObserver : dataSetObservers) {
+                dataSetObserver.onInvalidated();
+            }
+            dataSetObservers.clear();
+        }
         synchronized (contentObservers) {
             contentObservers.clear();
         }
@@ -559,14 +517,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public void registerContentObserver(@NonNull ContentObserver observer) {
+        checkClosed();
         //noinspection ConstantConditions
         if (observer == null) {
             throw new IllegalArgumentException("observer is null");
         }
         synchronized (contentObservers) {
-            if (data != null) {
-                data.addChangeListener(changeListener);
-            }
+            data.addChangeListener(changeListener);
             if (!contentObservers.contains(observer))
                 contentObservers.add(observer);
         }
@@ -577,6 +534,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public void unregisterContentObserver(@NonNull ContentObserver observer) {
+        checkClosed();
         //noinspection ConstantConditions
         if (observer == null) {
             throw new IllegalArgumentException("observer is null");
@@ -591,11 +549,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public void registerDataSetObserver(@NonNull DataSetObserver observer) {
+        checkClosed();
         //noinspection ConstantConditions
         if (observer == null) {
             throw new IllegalArgumentException("observer is null");
         }
         synchronized (dataSetObservers) {
+            data.addChangeListener(changeListener);
             if (!dataSetObservers.contains(observer))
                 dataSetObservers.add(observer);
         }
@@ -606,6 +566,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public void unregisterDataSetObserver(@NonNull DataSetObserver observer) {
+        checkClosed();
         //noinspection ConstantConditions
         if (observer == null) {
             throw new IllegalArgumentException("observer is null");
@@ -680,6 +641,11 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
             synchronized (contentObservers) {
                 for (ContentObserver contentObserver : contentObservers) {
                     contentObserver.onChange(false);
+                }
+            }
+            synchronized (dataSetObservers) {
+                for (DataSetObserver dataSetObserver : dataSetObservers) {
+                    dataSetObserver.onChanged();
                 }
             }
         }
