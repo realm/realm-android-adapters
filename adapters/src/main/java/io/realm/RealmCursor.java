@@ -36,6 +36,19 @@ import io.realm.internal.RealmObjectProxy;
 import io.realm.internal.Row;
 import io.realm.internal.TableOrView;
 
+/**
+ * The {@link RealmCursor} class is a wrapper class for accessing a {@link RealmResults RealmResult}
+ * as {@link Cursor}
+ * <p>
+ * Current limitations:
+ * <ul>
+ *      <li>Can not be shared across Threads or Processes</li>
+ *      <li>Complex fields/columns (e.g. {@linkplain RealmList Lists}, {@linkplain RealmModel Objects}) can not be accessed</li>
+ * </ul>
+ *
+ * @see android.database.Cursor
+ * @see RealmResults
+ */
 public class RealmCursor<T extends RealmModel> implements Cursor {
 
     @NonNull
@@ -270,6 +283,18 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         return new IllegalArgumentException("Wrong type at columnIndex " + columnIndex, classCastException);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code byte[]}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#BINARY BINARY}</li>
+     * </ul>
+     */
     @Override
     @Nullable
     public byte[] getBlob(int columnIndex) {
@@ -289,6 +314,30 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@link String}</li>
+     *     <li>{@code short}, {@link Short}</li>
+     *     <li>{@code int}, {@link Integer}</li>
+     *     <li>{@code long}, {@link Long}</li>
+     *     <li>{@code float}, {@link Float}</li>
+     *     <li>{@code double}, {@link Double}</li>
+     *     <li>{@code boolean}, {@link Boolean}</li>
+     *     <li>{@code Date}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#STRING BINARY}</li>
+     *     <li>{@link RealmFieldType#INTEGER INTEGER}</li>
+     *     <li>{@link RealmFieldType#FLOAT FLOAT}</li>
+     *     <li>{@link RealmFieldType#DOUBLE DOUBLE}</li>
+     *     <li>{@link RealmFieldType#BOOLEAN BOOLEAN}</li>
+     *     <li>{@link RealmFieldType#DATE DATE}</li>
+     * </ul>
+     */
     @Override
     @Nullable
     public String getString(int columnIndex) {
@@ -339,6 +388,20 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         buffer.sizeCopied = string.length();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code short}, {@link Short}</li>
+     *     <li>{@code boolean}, {@link Boolean}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#INTEGER INTEGER}</li>
+     *     <li>{@link RealmFieldType#BOOLEAN BOOLEAN}</li>
+     * </ul>
+     */
     @Override
     public short getShort(int columnIndex) {
         Row currentRow = getCurrentRow();
@@ -358,6 +421,21 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code short}, {@link Short}</li>
+     *     <li>{@code int}, {@link Integer}</li>
+     *     <li>{@code boolean}, {@link Boolean}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#INTEGER INTEGER}</li>
+     *     <li>{@link RealmFieldType#BOOLEAN BOOLEAN}</li>
+     * </ul>
+     */
     @Override
     public int getInt(int columnIndex) {
         Row currentRow = getCurrentRow();
@@ -377,6 +455,24 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code short}, {@link Short}</li>
+     *     <li>{@code int}, {@link Integer}</li>
+     *     <li>{@code long}, {@link Long}</li>
+     *     <li>{@code boolean}, {@link Boolean}</li>
+     *     <li>{@code Date}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#INTEGER INTEGER}</li>
+     *     <li>{@link RealmFieldType#BOOLEAN BOOLEAN}</li>
+     *     <li>{@link RealmFieldType#DATE DATE}</li>
+     * </ul>
+     */
     @Override
     public long getLong(int columnIndex) {
         Row currentRow = getCurrentRow();
@@ -395,6 +491,18 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code float}, {@link Float}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#FLOAT FLOAT}</li>
+     * </ul>
+     */
     @Override
     public float getFloat(int columnIndex) {
         Row currentRow = getCurrentRow();
@@ -414,6 +522,20 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Supported model field types:
+     * <ul>
+     *     <li>{@code float}, {@link Float}</li>
+     *     <li>{@code double}, {@link Double}</li>
+     * </ul>
+     * Supported {@linkplain RealmFieldType Realm field types}:
+     * <ul>
+     *     <li>{@link RealmFieldType#FLOAT FLOAT}</li>
+     *     <li>{@link RealmFieldType#DOUBLE DOUBLE}</li>
+     * </ul>
+     */
     @Override
     public double getDouble(int columnIndex) {
         Row currentRow = getCurrentRow();
