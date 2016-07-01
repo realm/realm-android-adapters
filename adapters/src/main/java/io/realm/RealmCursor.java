@@ -31,10 +31,12 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import io.realm.internal.ColumnInfo;
 import io.realm.internal.RealmObjectProxy;
 import io.realm.internal.Row;
-import io.realm.internal.TableOrView;
 
 /**
  * The {@link RealmCursor} class is a wrapper class for accessing a {@link RealmResults RealmResult}
@@ -210,14 +212,24 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
         return count == 0 || position == count;
     }
 
+    @NonNull
+    protected ColumnInfo getColumnInfo() {
+        checkClosed();
+        return data.realm.schema.getColumnInfo(data.classSpec);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public int getColumnIndex(@NonNull String columnName) {
-        checkClosed();
-        int columnIndex = (int) data.getTable().getColumnIndex(columnName);
-        return columnIndex == TableOrView.NO_MATCH ? -1 : columnIndex;
+        Map<String, Long> indicesMap = getColumnInfo().getIndicesMap();
+
+        if (indicesMap.containsKey(columnName)) {
+            return indicesMap.get(columnName).intValue();
+        } else {
+            return -1;
+        }
     }
 
     /**
@@ -225,16 +237,13 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public int getColumnIndexOrThrow(@NonNull String columnName) throws IllegalArgumentException {
-        checkClosed();
+        Map<String, Long> indicesMap = getColumnInfo().getIndicesMap();
 
-        int columnIndex = (int) data.getTable().getColumnIndex(columnName);
-
-        if (columnIndex == TableOrView.NO_MATCH) {
+        if (indicesMap.containsKey(columnName)) {
+            return indicesMap.get(columnName).intValue();
+        } else {
             throw new IllegalArgumentException("column not found");
         }
-
-        return columnIndex;
-
     }
 
     /**
@@ -243,8 +252,11 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @Override
     @NonNull
     public String getColumnName(int columnIndex) {
-        checkClosed();
-        return data.getTable().getColumnName(columnIndex);
+        for (Map.Entry<String, Long> entry : getColumnInfo().getIndicesMap().entrySet()) {
+            if(entry.getValue().intValue() == columnIndex)
+                return entry.getKey();
+        }
+        throw new IndexOutOfBoundsException("Invalid columnIndex");
     }
 
     /**
@@ -253,14 +265,15 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
     @Override
     @NonNull
     public String[] getColumnNames() {
-        checkClosed();
-        String[] columnNames = new String[getColumnCount()];
+        Set<Map.Entry<String, Long>> entries = getColumnInfo().getIndicesMap().entrySet();
 
-        for (int i = 0; i < columnNames.length; i++) {
-            columnNames[i] = data.getTable().getColumnName(i);
+        String[] names = new String[entries.size()];
+
+        for (Map.Entry<String, Long> entry : entries) {
+            names[entry.getValue().intValue()] = entry.getKey();
         }
 
-        return columnNames;
+        return names;
     }
 
     /**
@@ -268,8 +281,7 @@ public class RealmCursor<T extends RealmModel> implements Cursor {
      */
     @Override
     public int getColumnCount() {
-        checkClosed();
-        return (int) data.getTable().getColumnCount();
+        return getColumnInfo().getIndicesMap().size();
     }
 
     private void checkValidColumnIndex(int columnIndex) {
