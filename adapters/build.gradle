@@ -20,20 +20,12 @@ android {
     }
 }
 
-configurations {
-    javadoc
-}
-
 dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
 
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'junit:junit:4.12'
-
-    // TODO Hacking it for now. Try to make this work only from the javadoc task
-    javadoc "io.realm:realm-android-library:${rootProject.realmVersion}"
-    javadoc "io.realm:realm-annotations:${rootProject.realmVersion}"
 }
 
 task findbugs(type: FindBugs) {
@@ -92,7 +84,6 @@ task checkstyle(type: Checkstyle) {
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    classpath += configurations.javadoc
 
     options {
         title = "Realm Android Adapters ${project.version}"
@@ -103,7 +94,8 @@ task javadoc(type: Javadoc) {
         locale = 'en_US'
 
         links "http://docs.oracle.com/javase/7/docs/api/"
-        linksOffline "https://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
+        links "https://realm.io/docs/java/${rootProject.realmVersion}/api/"
+        linksOffline "http://developer.android.com/reference/", "${project.android.sdkDirectory}/docs/reference"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
