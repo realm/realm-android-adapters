@@ -25,10 +25,13 @@ import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.annotation.UiThreadTest;
+import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -43,6 +46,9 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class RealmCursorTest {
+
+    @Rule
+    public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
     private static final int SIZE = 10;
     public static final int NOT_FOUND = -1;
@@ -484,6 +490,7 @@ public class RealmCursorTest {
     }
 
     @Test
+    @UiThreadTest
     public void registerDataSetObserver_closed() {
         final AtomicBoolean success = new AtomicBoolean(false);
         cursor.registerDataSetObserver(new DataSetObserver() {
@@ -497,6 +504,7 @@ public class RealmCursorTest {
     }
 
     @Test
+    @UiThreadTest
     public void registerContentObserver_realmChanged() {
         RealmResults<AllJavaTypes> results = realm.where(AllJavaTypes.class).findAll();
         cursor = new RealmCursor<>(results);
@@ -509,13 +517,21 @@ public class RealmCursorTest {
             }
         });
 
+        assertEquals(10, results.size());
+
         realm.beginTransaction();
         realm.createObject(AllJavaTypes.class, 42);
         realm.commitTransaction();
+
+        results.syncIfNeeded();
+        results.notifyChangeListeners(false);
+
+        assertEquals(11, results.size());
         assertTrue(success.get());
     }
 
     @Test
+    @UiThreadTest
     public void unregisterContentObserver() {
         ContentObserver observer = new ContentObserver(null) {
             @Override
