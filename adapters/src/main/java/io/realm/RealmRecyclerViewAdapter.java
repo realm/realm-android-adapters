@@ -111,6 +111,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      * @param index index of the item.
      * @return the item at the specified position, {@code null} if adapter data is not valid.
      */
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public T getItem(int index) {
         //noinspection ConstantConditions
@@ -133,6 +134,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
      *
      * @param data the new {@link OrderedRealmCollection} to display.
      */
+    @SuppressWarnings("WeakerAccess")
     public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (hasAutoUpdates) {
             if (adapterData != null) {

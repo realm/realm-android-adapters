@@ -21,15 +21,15 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
 
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'junit:junit:4.12'
 }
 
 task findbugs(type: FindBugs) {
-    dependsOn assembleDebug
+    dependsOn assemble
     group = 'Verification'
 
     ignoreFailures = false
