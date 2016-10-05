@@ -1,7 +1,7 @@
 apply plugin: 'ch.netzwerg.release'
 project.ext.sdkVersion = 23
 project.ext.buildTools = '23.0.0'
-project.ext.realmVersion = '1.0.1'
+project.ext.realmVersion = '2.0.0'
 
 buildscript {
     repositories {
@@ -15,7 +15,7 @@ buildscript {
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1'   // ???
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'      // Bintray/OJO integration
         classpath 'com.novoda:gradle-android-command-plugin:1.5.0'          // ADB commands from Gradle (monkey)
-        classpath 'io.realm:realm-gradle-plugin:1.0.1'                      // Realm base library
+        classpath 'io.realm:realm-gradle-plugin:2.0.0'                      // Realm base library
     }
 }
 
