@@ -1,6 +1,6 @@
 apply plugin: 'ch.netzwerg.release'
-project.ext.sdkVersion = 23
-project.ext.buildTools = '23.0.0'
+project.ext.sdkVersion = 24
+project.ext.buildTools = '24.0.0'
 project.ext.realmVersion = '1.0.1'
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:2.2.0'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'    // Allows you to install AAR's locally
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1'   // OJO integration
