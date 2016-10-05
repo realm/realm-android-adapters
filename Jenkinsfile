@@ -26,6 +26,11 @@ try {
         stage('Build & Test') {
           try {
             sh "chmod +x gradlew && ./gradlew javadoc check connectedCheck"
+            if (env.BRANCH_NAME == 'master') {
+              stage('Collect metrics') {
+                collectAarMetrics()
+              }
+            }
           } finally {
             storeJunitResults '**/TEST-*.xml'
             step([$class: 'LintPublisher'])
@@ -83,31 +88,19 @@ def storeJunitResults(String path) {
 }
 
 def collectAarMetrics() {
-  def flavors = ['base', 'objectServer']
-  for (def i = 0; i < flavors.size(); i++) {
-    def flavor = flavors[i]
-    sh """set -xe
-      cd realm/realm-library/build/outputs/aar
-      unzip realm-android-library-${flavor}-release.aar -d unzipped${flavor}
-      find \$ANDROID_HOME -name dx | sort -r | head -n 1 > dx
-      \$(cat dx) --dex --output=temp${flavor}.dex unzipped${flavor}/classes.jar
-      cat temp${flavor}.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 \"%d\"' > methods${flavor}
-    """
+  sh """set -xe
+    cd adapters/build/outputs/aar
+    unzip android-adapters-release.aar -d unzipped
+    find \$ANDROID_HOME -name dx | sort -r | head -n 1 > dx
+    \$(cat dx) --dex --output=temp.dex unzipped/classes.jar
+    cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 \"%d\"' > methods
+  """
 
-    def methods = readFile("realm/realm-library/build/outputs/aar/methods${flavor}")
-    sendMetrics('methods', methods, ['flavor':flavor])
+  def methods = readFile('realm/realm-library/build/outputs/aar/methods')
+  sendMetrics('adapters_methods', methods, [:])
 
-    def aarFile = findFiles(glob: "realm/realm-library/build/outputs/aar/realm-android-library-${flavor}-release.aar")[0]
-    sendMetrics('aar_size', aarFile.length as String, ['flavor':flavor])
-
-    def soFiles = findFiles(glob: "realm/realm-library/build/outputs/aar/unzipped${flavor}/jni/*/librealm-jni.so")
-    for (def j = 0; j < soFiles.size(); j++) {
-        def soFile = soFiles[j]
-        def abiName = soFile.path.tokenize('/')[-2]
-        def libSize = soFile.length as String
-        sendMetrics('abi_size', libSize, ['flavor':flavor, 'type':abiName])
-    }
-  }
+  def aarFile = findFiles(glob: 'adapters/build/outputs/aar/android-adapters-release.aar')[0]
+  sendMetrics('adapters_aar_size', aarFile.length as String, [:])
 }
 
 def gradle(String commands) {
