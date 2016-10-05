@@ -96,7 +96,7 @@ def collectAarMetrics() {
     cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 \"%d\"' > methods
   """
 
-  def methods = readFile('realm/realm-library/build/outputs/aar/methods')
+  def methods = readFile('adapters/build/outputs/aar/methods')
   sendMetrics('adapters_methods', methods, [:])
 
   def aarFile = findFiles(glob: 'adapters/build/outputs/aar/android-adapters-release.aar')[0]
