@@ -39,7 +39,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     protected OrderedRealmCollection<T> adapterData;
     @NonNull
     protected Context context;
-    private final RealmChangeListener listener;
+    private final RealmChangeListener<? extends BaseRealm> listener;
 
     public RealmBaseAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data) {
         //noinspection ConstantConditions
@@ -139,6 +139,7 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      *
      * @param data the new {@link OrderedRealmCollection} to display.
      */
+    @SuppressWarnings("WeakerAccess")
     public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (listener != null) {
             if (adapterData != null) {
