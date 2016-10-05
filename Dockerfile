@@ -48,9 +48,9 @@ RUN cd /opt && \
 # ↓ updates tools to at least 25.1.7, but that prints 'Nothing was installed' (so I don't check the outputs).
 RUN echo y | android update sdk --no-ui --all --filter tools > /dev/null
 RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter build-tools-23.0.0 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter build-tools-24.0.0 | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter android-23 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter android-24 | grep 'package installed'
 
 # Make the SDK universally readable
 RUN chmod -R a+rX ${ANDROID_HOME}
