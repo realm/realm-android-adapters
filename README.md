@@ -6,7 +6,8 @@ This repository holds adapters for combining Realm Java with Android UI componen
 
 Currently supported UI components are:
 
- * [ListView](https://developer.android.com/reference/android/widget/ListView.html), [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
+ * [ListView](https://developer.android.com/reference/android/widget/ListView.html)
+ * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
 
 ## Getting Started
 
