@@ -6,7 +6,6 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.sdkVersion
@@ -22,6 +21,7 @@ android {
 
 dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
+    provided "io.realm:realm-android-library:${realmVersion}"
 
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
