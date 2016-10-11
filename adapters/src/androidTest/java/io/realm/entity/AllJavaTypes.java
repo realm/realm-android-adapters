@@ -40,6 +40,7 @@ public class AllJavaTypes extends RealmObject {
     public static final String FIELD_BINARY = "fieldBinary";
     public static final String FIELD_OBJECT = "fieldObject";
     public static final String FIELD_LIST = "fieldList";
+    public static final int COL_COUNT = 12;
 
     @Ignore private String fieldIgnored;
     @Index private String fieldString;
