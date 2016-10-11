@@ -29,7 +29,9 @@ dependencies {
 }
 
 task findbugs(type: FindBugs) {
-    dependsOn assemble
+    project.afterEvaluate {
+        dependsOn assembleDebug
+    }
     group = 'Verification'
 
     ignoreFailures = false
