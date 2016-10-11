@@ -25,5 +25,6 @@ android {
 
 dependencies {
     compile project(':adapters')
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
 }

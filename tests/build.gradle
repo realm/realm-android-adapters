@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+apply plugin: 'checkstyle'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion rootProject.sdkVersion
+    buildToolsVersion rootProject.buildTools
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion rootProject.sdkVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    compile project(':adapters')
+
+    androidTestCompile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    androidTestCompile "io.realm:realm-android-library:${realmVersion}"
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'junit:junit:4.12'
+}
+
+task checkstyle(type: Checkstyle) {
+    group = 'Test'
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+
+    def configProps = ['proj.module.dir': projectDir.absolutePath]
+    configProperties configProps
+
+    configFile = file("${projectDir}/../config/checkstyle/checkstyle.xml")
+
+    // empty classpath
+    classpath = files()
+}
+

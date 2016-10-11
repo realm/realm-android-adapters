@@ -1,2 +1,3 @@
 include 'adapters'
+include 'tests'
 include 'example'
