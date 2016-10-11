@@ -255,4 +255,9 @@ public class UnsupportedCollection<E extends RealmObject> implements OrderedReal
     public boolean isValid() {
         return false;
     }
+
+    @Override
+    public boolean isManaged() {
+        return false;
+    }
 }
