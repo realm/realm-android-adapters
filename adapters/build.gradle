@@ -6,7 +6,6 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.sdkVersion
@@ -16,16 +15,12 @@ android {
         minSdkVersion 9
         targetSdkVersion rootProject.sdkVersion
         project.archivesBaseName = "android-adapters"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'junit:junit:4.12'
+    provided "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    provided "io.realm:realm-android-library:${realmVersion}"
 }
 
 task findbugs(type: FindBugs) {

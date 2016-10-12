@@ -25,7 +25,7 @@ try {
       buildEnv.inside("-e HOME=/tmp -e _JAVA_OPTIONS=-Duser.home=/tmp --privileged -v /dev/bus/usb:/dev/bus/usb -v ${env.HOME}/gradle-cache:/tmp/.gradle -v ${env.HOME}/.android:/tmp/.android -v ${env.HOME}/ccache:/tmp/.ccache") {
         stage('Build & Test') {
           try {
-            gradle 'javadoc check connectedCheck'
+            gradle 'assemble javadoc check connectedCheck'
             if (env.BRANCH_NAME == 'master') {
               stage('Collect metrics') {
                 collectAarMetrics()
