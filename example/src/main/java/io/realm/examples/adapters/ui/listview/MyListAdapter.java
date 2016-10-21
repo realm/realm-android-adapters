@@ -16,7 +16,6 @@
 
 package io.realm.examples.adapters.ui.listview;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -32,8 +31,8 @@ public class MyListAdapter extends RealmBaseAdapter<TimeStamp> implements ListAd
         TextView timestamp;
     }
 
-    public MyListAdapter(Context context, OrderedRealmCollection<TimeStamp> realmResults) {
-        super(context, realmResults);
+    public MyListAdapter(OrderedRealmCollection<TimeStamp> realmResults) {
+        super(realmResults);
     }
 
     @Override

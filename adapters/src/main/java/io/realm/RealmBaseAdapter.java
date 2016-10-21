@@ -37,10 +37,11 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     protected LayoutInflater inflater;
     @Nullable
     protected OrderedRealmCollection<T> adapterData;
-    @NonNull
+    @Nullable
     protected Context context;
     private final RealmChangeListener<? extends BaseRealm> listener;
 
+    @Deprecated
     public RealmBaseAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data) {
         //noinspection ConstantConditions
         if (context == null) {
@@ -49,6 +50,20 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
         this.context = context;
         this.adapterData = data;
         this.inflater = LayoutInflater.from(context);
+        this.listener = new RealmChangeListener<BaseRealm>() {
+            @Override
+            public void onChange(BaseRealm results) {
+                notifyDataSetChanged();
+            }
+        };
+
+        if (data != null) {
+            addListener(data);
+        }
+    }
+
+    public RealmBaseAdapter(@Nullable OrderedRealmCollection<T> data) {
+        this.adapterData = data;
         this.listener = new RealmChangeListener<BaseRealm>() {
             @Override
             public void onChange(BaseRealm results) {
