@@ -34,10 +34,12 @@ import android.widget.BaseAdapter;
  */
 public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter {
 
+    @Deprecated
     protected LayoutInflater inflater;
     @Nullable
     protected OrderedRealmCollection<T> adapterData;
     @Nullable
+    @Deprecated
     protected Context context;
     private final RealmChangeListener<? extends BaseRealm> listener;
 

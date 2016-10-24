@@ -16,6 +16,7 @@
 
 package io.realm.examples.adapters.ui.listview;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -39,7 +40,8 @@ public class MyListAdapter extends RealmBaseAdapter<TimeStamp> implements ListAd
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(android.R.layout.simple_list_item_1, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.timestamp = (TextView) convertView.findViewById(android.R.id.text1);
             convertView.setTag(viewHolder);
