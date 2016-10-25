@@ -42,7 +42,17 @@ public class UnsupportedCollection<E extends RealmObject> implements OrderedReal
     }
 
     @Override
+    public E first(E defaultValue) {
+        return null;
+    }
+
+    @Override
     public E last() {
+        return null;
+    }
+
+    @Override
+    public E last(E defaultValue) {
         return null;
     }
 
