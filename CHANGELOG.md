@@ -1,8 +1,9 @@
-## 1.3.1
+## 1.4.0
 
-### Bug fixes
+### Enhancements
 
 * Removed transitive dependency to realm-android-library in order to support realm-android-library-object-server.
+
 
 ## 1.3.0
 
