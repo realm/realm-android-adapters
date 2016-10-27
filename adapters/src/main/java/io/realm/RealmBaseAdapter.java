@@ -33,7 +33,7 @@ import android.widget.BaseAdapter;
  * closed. Trying to access Realm objects will at this point also result in a {@code IllegalStateException}.
  */
 public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter {
-
+    @Nullable
     @Deprecated
     protected LayoutInflater inflater;
     @Nullable
