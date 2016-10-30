@@ -1,3 +1,10 @@
+## 1.4.1
+
+## Deprecations
+
+* Deprecated the context and inflater references on both the `RealmBaseAdapter` and `RealmRecyclerViewAdapter`
+* Deprecated the constructors that take in context, as they are never used later.
+
 ## 1.4.0
 
 ### Enhancements

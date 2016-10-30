@@ -65,6 +65,9 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     }
 
     public RealmBaseAdapter(@Nullable OrderedRealmCollection<T> data) {
+        if (data != null && !data.isManaged())
+            throw new IllegalStateException("Only use this adapter with managed list, " +
+                    "for un-managed lists you can just use the BaseAdapter");
         this.adapterData = data;
         this.listener = new RealmChangeListener<BaseRealm>() {
             @Override
