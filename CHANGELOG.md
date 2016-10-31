@@ -2,7 +2,7 @@
 
 ### Deprecated
 
-* `RealmBaseAdapter(@Nonnull Context context, @Nullable OrderedRealmCollection<T> data)
+* `RealmBaseAdapter(@Nonnull Context context, @Nullable OrderedRealmCollection<T> data)`
 use `RealmBaseAdapter(@Nullable OrderedRealmCollection<T> data)` instead
 
 * `RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate)`
