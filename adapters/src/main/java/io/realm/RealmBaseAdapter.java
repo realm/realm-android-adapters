@@ -45,6 +45,9 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
 
     @Deprecated
     public RealmBaseAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data) {
+        if (data != null && !data.isManaged())
+            throw new IllegalStateException("Only use this adapter with managed list, " +
+                    "for un-managed lists you can just use the BaseAdapter");
         //noinspection ConstantConditions
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");

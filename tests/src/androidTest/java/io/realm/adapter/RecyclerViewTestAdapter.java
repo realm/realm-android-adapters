@@ -22,8 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
 import io.realm.entity.AllJavaTypes;
 
 public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTypes, RecyclerViewTestAdapter.ViewHolder> {
@@ -38,7 +38,7 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
     }
 
     // TODO: Remove context dependency.
-    public RecyclerViewTestAdapter(final Context context, final RealmResults<AllJavaTypes> realmResults, final boolean automaticUpdate) {
+    public RecyclerViewTestAdapter(final Context context, final OrderedRealmCollection<AllJavaTypes> realmResults, final boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate);
     }
 

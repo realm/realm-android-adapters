@@ -82,6 +82,17 @@ public class RealmRecyclerAdapterTests {
     }
 
     @Test
+    public void constructor_testRecyclerAdapterUnmanagedParameterExceptions() {
+        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
+        RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
+        try {
+            new RecyclerViewTestAdapter(context, unmanagedRealmList, true);
+            fail("Should throw exception if list is un-managed");
+        } catch (IllegalStateException ignore) {
+        }
+    }
+
+    @Test
     @UiThreadTest
     public void clear() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();

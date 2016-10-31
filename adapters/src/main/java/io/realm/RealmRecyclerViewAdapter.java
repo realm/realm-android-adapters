@@ -51,6 +51,9 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
 
     @Deprecated
     public RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
+        if (data != null && !data.isManaged())
+            throw new IllegalStateException("Only use this adapter with managed list, " +
+                    "for un-managed lists you can just use the BaseAdapter");
         //noinspection ConstantConditions
         if (context == null) {
             throw new IllegalArgumentException("Context can not be null");

@@ -35,7 +35,6 @@ import io.realm.entity.AllJavaTypes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
@@ -77,6 +76,17 @@ public class RealmRecyclerViewAdapterTests {
             new ListViewTestAdapter(null, resultList);
             fail("Should throw exception if context is null");
         } catch (IllegalArgumentException ignore) {
+        }
+    }
+
+    @Test
+    public void testAdapterUnmanagedParameterExceptions() {
+        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
+        RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
+        try {
+            new ListViewTestAdapter(context, unmanagedRealmList);
+            fail("Should throw exception if list is un-managed");
+        } catch (IllegalStateException ignore) {
         }
     }
 
