@@ -8,12 +8,12 @@ apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 
 android {
-    compileSdkVersion rootProject.sdkVersion
-    buildToolsVersion rootProject.buildTools
+    compileSdkVersion sdkVersion
+    buildToolsVersion buildTools
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion rootProject.sdkVersion
+        targetSdkVersion sdkVersion
         project.archivesBaseName = "android-adapters"
     }
 }
@@ -91,8 +91,8 @@ task javadoc(type: Javadoc) {
         locale = 'en_US'
 
         links "http://docs.oracle.com/javase/7/docs/api/"
-        links "https://realm.io/docs/java/${rootProject.realmVersion}/api/"
-        linksOffline "http://developer.android.com/reference/", "${project.android.sdkDirectory}/docs/reference"
+        links "https://realm.io/docs/java/${realmVersion}/api/"
+        linksOffline "http://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
