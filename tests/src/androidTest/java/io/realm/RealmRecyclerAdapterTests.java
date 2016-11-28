@@ -34,6 +34,7 @@ import io.realm.entity.AllJavaTypes;
 import io.realm.entity.UnsupportedCollection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
@@ -113,6 +114,26 @@ public class RealmRecyclerAdapterTests {
         RealmResults<AllJavaTypes> emptyResultList = realm.where(AllJavaTypes.class).equalTo(AllJavaTypes.FIELD_STRING, "Not there").findAll();
         realmAdapter.updateData(emptyResultList);
         assertEquals(emptyResultList.size(), realmAdapter.getData().size());
+    }
+
+    @Test
+    @UiThreadTest
+    public void updateData_replaceInvalidData() {
+        // test for https://github.com/realm/realm-android-adapters/issues/58
+        final RealmConfiguration configuration = realm.getConfiguration();
+
+        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAllSorted(AllJavaTypes.FIELD_STRING);
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, true);
+        realm.close(); // to make resultList invalid
+
+        // check precondition
+        assertFalse(resultList.isValid());
+
+        realm = Realm.getInstance(configuration);
+
+        // create another valid RealmResults and check if updateData does not throw an exception.
+        resultList = realm.where(AllJavaTypes.class).findAll();
+        realmAdapter.updateData(resultList);
     }
 
     @Test

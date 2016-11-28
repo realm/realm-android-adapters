@@ -1,3 +1,10 @@
+## 1.4.1
+
+### Bug fixes
+
+* Fixed crash of `RealmRecyclerViewAdapter#updateData()` when the `adapterData` in it was already invalid (#58).
+
+
 ## 1.4.0
 
 ### Enhancements
