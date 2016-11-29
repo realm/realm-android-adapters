@@ -1,4 +1,4 @@
-## 1.4.1
+## 1.5.0
 
 ### Deprecated
 
@@ -11,6 +11,14 @@ use `RealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean 
 ### Credits
 
 * Thanks to Bhargav Mogra (@bhargavms) for identifying the unnecessary dependency on context and cleaning up.
+
+
+## 1.4.1
+
+### Bug fixes
+
+* Fixed crash of `RealmRecyclerViewAdapter#updateData()` when the `adapterData` in it was already invalid (#58).
+
 
 ## 1.4.0
 
