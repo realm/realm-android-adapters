@@ -137,7 +137,8 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
     @SuppressWarnings("WeakerAccess")
     public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (hasAutoUpdates) {
-            if (adapterData != null) {
+            if (isDataValid()) {
+                //noinspection ConstantConditions
                 removeListener(adapterData);
             }
             if (data != null) {
