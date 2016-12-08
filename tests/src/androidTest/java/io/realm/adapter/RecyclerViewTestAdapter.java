@@ -39,12 +39,13 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
 
     // TODO: Remove context dependency.
     public RecyclerViewTestAdapter(final Context context, final OrderedRealmCollection<AllJavaTypes> realmResults, final boolean automaticUpdate) {
-        super(context, realmResults, automaticUpdate);
+        super(realmResults, automaticUpdate);
     }
 
+
     @Override
-    public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        View view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
+        View view = View.inflate(parent.getContext(),android.R.layout.simple_list_item_1, null);
         return new ViewHolder(view);
     }
 
