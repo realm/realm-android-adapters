@@ -32,11 +32,15 @@ import io.realm.examples.adapters.ui.recyclerview.RecyclerViewExampleActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final Map<String, Class<? extends Activity>> buttons;
+    static {
+        Map<String, Class<? extends Activity>> map = new TreeMap<String, Class<? extends Activity>>();
+        map.put("ListView", ListViewExampleActivity.class);
+        map.put("RecyclerView", RecyclerViewExampleActivity.class);
+        buttons = Collections.unmodifiableMap(map);
+    };
+
     private ViewGroup container;
-    private final TreeMap<String, Class<? extends Activity>> buttons = new TreeMap<String, Class<? extends Activity>>() {{
-        put("ListView", ListViewExampleActivity.class);
-        put("RecyclerView", RecyclerViewExampleActivity.class);
-    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
