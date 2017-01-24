@@ -48,6 +48,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        recycleView.setAdapter(null);
         realm.close();
     }
 
