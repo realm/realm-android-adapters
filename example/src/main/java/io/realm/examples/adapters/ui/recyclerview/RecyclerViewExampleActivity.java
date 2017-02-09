@@ -45,9 +45,15 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * It is good practice to null the reference from the view to the adapter when it is no longer needed.
+     * Because the <code>RealmRecyclerViewAdapter</code> registers itself as a <code>RealmResult.ChangeListener</code>
+     * the view may still be reachable if anybody is still holding a reference to the <code>RealmResult>.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        recyclerView.setAdapter(null);
         realm.close();
     }
 
