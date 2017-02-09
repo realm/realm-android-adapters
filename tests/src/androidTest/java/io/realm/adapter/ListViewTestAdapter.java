@@ -22,8 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
-import io.realm.RealmResults;
 import io.realm.entity.AllJavaTypes;
 
 public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implements ListAdapter {
@@ -32,7 +32,8 @@ public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implemen
         TextView textView;
     }
 
-    public ListViewTestAdapter(Context context, RealmResults<AllJavaTypes> realmResults) {
+    // TODO: Remove context dependency.
+    public ListViewTestAdapter(Context context, OrderedRealmCollection<AllJavaTypes> realmResults) {
         super(context, realmResults);
     }
 

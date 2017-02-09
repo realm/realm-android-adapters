@@ -80,6 +80,17 @@ public class RealmBaseAdapterTests {
     }
 
     @Test
+    public void testAdapterUnmanagedParameterExceptions() {
+        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
+        RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
+        try {
+            new ListViewTestAdapter(context, unmanagedRealmList);
+            fail("Should throw exception if list is un-managed");
+        } catch (IllegalStateException ignore) {
+        }
+    }
+
+    @Test
     @UiThreadTest
     public void testUpdateRealmResultInAdapter() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();

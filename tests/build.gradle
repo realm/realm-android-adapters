@@ -3,12 +3,12 @@ apply plugin: 'checkstyle'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion rootProject.sdkVersion
-    buildToolsVersion rootProject.buildTools
+    compileSdkVersion sdkVersion
+    buildToolsVersion buildTools
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion rootProject.sdkVersion
+        targetSdkVersion sdkVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }

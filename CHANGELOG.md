@@ -1,3 +1,18 @@
+## 1.5.0
+
+### Deprecated
+
+* `RealmBaseAdapter(@Nonnull Context context, @Nullable OrderedRealmCollection<T> data)`
+use `RealmBaseAdapter(@Nullable OrderedRealmCollection<T> data)` instead
+
+* `RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate)`
+use `RealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean autoUpdate)` instead.
+
+### Credits
+
+* Thanks to Bhargav Mogra (@bhargavms) for identifying the unnecessary dependency on context and cleaning up.
+
+
 ## 1.4.1
 
 ### Bug fixes

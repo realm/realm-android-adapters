@@ -44,7 +44,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
         // on a background thread. The RealmBaseAdapter will automatically keep track of changes and will
         // automatically refresh when a change is detected.
         RealmResults<TimeStamp> timeStamps = realm.where(TimeStamp.class).findAll();
-        final MyListAdapter adapter = new MyListAdapter(this, timeStamps);
+        final MyListAdapter adapter = new MyListAdapter(timeStamps);
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);

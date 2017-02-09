@@ -38,15 +38,22 @@ import android.view.LayoutInflater;
  */
 public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    protected final LayoutInflater inflater;
-    @NonNull
-    protected final Context context;
+    @Nullable
+    @Deprecated
+    protected LayoutInflater inflater;
+    @Nullable
+    @Deprecated
+    protected Context context;
     private final boolean hasAutoUpdates;
     private final RealmChangeListener listener;
     @Nullable
     private OrderedRealmCollection<T> adapterData;
 
+    @Deprecated
     public RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
+        if (data != null && !data.isManaged())
+            throw new IllegalStateException("Only use this adapter with managed list, " +
+                    "for un-managed lists you can just use the BaseAdapter");
         //noinspection ConstantConditions
         if (context == null) {
             throw new IllegalArgumentException("Context can not be null");
@@ -55,6 +62,24 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
         this.context = context;
         this.adapterData = data;
         this.inflater = LayoutInflater.from(context);
+        this.hasAutoUpdates = autoUpdate;
+
+        // Right now don't use generics, since we need maintain two different
+        // types of listeners until RealmList is properly supported.
+        // See https://github.com/realm/realm-java/issues/989
+        this.listener = hasAutoUpdates ? new RealmChangeListener() {
+            @Override
+            public void onChange(Object results) {
+                notifyDataSetChanged();
+            }
+        } : null;
+    }
+
+    public RealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
+        if (data != null && !data.isManaged())
+            throw new IllegalStateException("Only use this adapter with managed RealmCollection, " +
+                    "for un-managed lists you can just use the BaseRecyclerViewAdapter");
+        this.adapterData = data;
         this.hasAutoUpdates = autoUpdate;
 
         // Right now don't use generics, since we need maintain two different

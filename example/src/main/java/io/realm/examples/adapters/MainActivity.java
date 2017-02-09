@@ -33,10 +33,6 @@ import io.realm.examples.adapters.ui.recyclerview.RecyclerViewExampleActivity;
 public class MainActivity extends AppCompatActivity {
 
     private ViewGroup container;
-    private final TreeMap<String, Class<? extends Activity>> buttons = new TreeMap<String, Class<? extends Activity>>() {{
-        put("ListView", ListViewExampleActivity.class);
-        put("RecyclerView", RecyclerViewExampleActivity.class);
-    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +41,25 @@ public class MainActivity extends AppCompatActivity {
         container = (ViewGroup) findViewById(R.id.list);
         setupButtons();
     }
-
+    
     private void setupButtons() {
-        for (final Map.Entry<String, Class<? extends Activity>> entry : buttons.entrySet()) {
-            Button button = new Button(this);
-            button.setText(entry.getKey());
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(entry.getValue());
-                }
-            });
-            container.addView(button);
-        }
+        setupButton("ListView", ListViewExampleActivity.class);
+        setupButton("RecyclerView", RecyclerViewExampleActivity.class);
     }
 
-    private void startActivity(Class<? extends Activity> activityClass) {
+    private void setupButton(String label, final Class<? extends Activity> activityClass) {
+        Button button = new Button(this);
+        button.setText(label);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(activityClass);
+            }
+        });
+        container.addView(button);
+    }
+    
+    /*package*/ void startActivity(Class<? extends Activity> activityClass) {
         startActivity(new Intent(this, activityClass));
     }
 }
