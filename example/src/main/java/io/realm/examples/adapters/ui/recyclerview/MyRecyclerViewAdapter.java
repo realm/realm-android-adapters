@@ -36,18 +36,19 @@ public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TimeStamp, M
         this.activity = activity;
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row, parent, false);
-        return new MyViewHolder(itemView);
-    }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         TimeStamp obj = getData().get(position);
         holder.data = obj;
         holder.title.setText(obj.getTimeStamp());
+    }
+
+    @Override
+    public MyViewHolder getViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row, parent, false);
+        return new MyViewHolder(itemView);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
