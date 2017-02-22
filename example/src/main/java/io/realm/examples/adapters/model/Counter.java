@@ -15,19 +15,30 @@
  */
 package io.realm.examples.adapters.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import io.realm.RealmObject;
 
-public class TimeStamp extends RealmObject {
+public class Counter extends RealmObject {
+    public static final String FIELD_COUNT = "count";
 
-    public static final String TIMESTAMP = "timeStamp";
+    private static AtomicInteger integerCounter = new AtomicInteger(0);
 
-    private String timeStamp;
+    private int count;
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public int getCount() {
+        return count;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getCountString() {
+        return Integer.toString(count);
+    }
+
+    public void setAndIncrease() {
+        this.count = integerCounter.getAndIncrement();
     }
 }

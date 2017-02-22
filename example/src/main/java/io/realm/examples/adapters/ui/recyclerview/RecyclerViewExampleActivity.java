@@ -23,11 +23,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
+
+import java.util.Random;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.TimeStamp;
+import io.realm.examples.adapters.model.Counter;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
 
 public class RecyclerViewExampleActivity extends AppCompatActivity {
@@ -67,13 +69,11 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            final String timestamp = Long.toString(System.currentTimeMillis());
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
-                }
-            });
+            addItem();
+            return true;
+        }
+        if (id == R.id.action_random) {
+            randomEditItem();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -81,17 +81,55 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyRecyclerViewAdapter(this, realm.where(TimeStamp.class).findAllAsync()));
+        recyclerView.setAdapter(new MyRecyclerViewAdapter(
+                this, realm.where(Counter.class).findAllSortedAsync(Counter.FIELD_COUNT)));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
-    public void deleteItem(TimeStamp item) {
-        final String id = item.getTimeStamp();
+    // Randomly duplicate/delete/create some objets in the Realm.
+    private void randomEditItem() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(TimeStamp.class).equalTo(TimeStamp.TIMESTAMP, id)
+                Random rand = new Random();
+                RealmResults<Counter> results = realm.where(Counter.class).findAllSorted(Counter.FIELD_COUNT);
+
+                // Duplicate some existing entries.
+                int countToDup = results.size() > 3 ? 3 : results.size();
+                for (int i = 0; i < countToDup; i++) {
+                    int id = results.get(rand.nextInt((results.size()))).getCount();
+                    realm.createObject(Counter.class).setCount(id);
+                }
+
+                int countToDelete = results.size() > 3 ? 3 : results.size();
+                for (int i = 0; i < countToDelete; i++) {
+                    results.get(rand.nextInt((results.size()))).deleteFromRealm();
+                }
+
+                int countToCreate = 3;
+                for (int i = 0; i < countToCreate; i++) {
+                    realm.createObject(Counter.class).setAndIncrease();
+                }
+            }
+        });
+    }
+
+    private void addItem() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createObject(Counter.class).setAndIncrease();
+            }
+        });
+    }
+
+    public void deleteItem(Counter item) {
+        final int id = Integer.valueOf(item.getCountString());
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Counter.class).equalTo(Counter.FIELD_COUNT, id)
                         .findAll()
                         .deleteAllFromRealm();
             }

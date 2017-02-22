@@ -17,6 +17,7 @@
 package io.realm.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -32,9 +33,12 @@ public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implemen
         TextView textView;
     }
 
+    private LayoutInflater inflater;
+
     // TODO: Remove context dependency.
     public ListViewTestAdapter(Context context, OrderedRealmCollection<AllJavaTypes> realmResults) {
-        super(context, realmResults);
+        super(realmResults);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -49,8 +53,10 @@ public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implemen
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        AllJavaTypes item = adapterData.get(position);
-        viewHolder.textView.setText(item.getFieldString());
+        if (adapterData != null) {
+            AllJavaTypes item = adapterData.get(position);
+            viewHolder.textView.setText(item.getFieldString());
+        }
         return convertView;
     }
 }
