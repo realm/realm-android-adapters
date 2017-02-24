@@ -51,17 +51,23 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
                 }
                 // For deletions, the adapter has to be notified in reverse order.
                 OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+
+                if (deletions.length == 1 && insertions.length == 1 && modifications.length == 0) {
+                    notifyItemMoved(deletions[0].startIndex, insertions[0].startIndex);
+                    return;
+                }
+
                 for (int i = deletions.length - 1; i >= 0; i--) {
                     OrderedCollectionChangeSet.Range range = deletions[i];
                     notifyItemRangeRemoved(range.startIndex, range.length);
                 }
 
-                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
                 for (OrderedCollectionChangeSet.Range range : insertions) {
                     notifyItemRangeInserted(range.startIndex, range.length);
                 }
 
-                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
                 for (OrderedCollectionChangeSet.Range range : modifications) {
                     notifyItemRangeChanged(range.startIndex, range.length);
                 }

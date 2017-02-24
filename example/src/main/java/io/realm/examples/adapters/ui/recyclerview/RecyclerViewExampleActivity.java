@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,8 +29,10 @@ import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.annotations.PrimaryKey;
 import io.realm.examples.adapters.R;
 import io.realm.examples.adapters.model.Counter;
+import io.realm.examples.adapters.model.Parent;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
 
 public class RecyclerViewExampleActivity extends AppCompatActivity {
@@ -37,11 +40,36 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     private Realm realm;
     private RecyclerView recyclerView;
 
+    class MyTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
+
+        MyRecyclerViewAdapter adapter;
+        public MyTouchHelperCallback(MyRecyclerViewAdapter adapter) {
+            super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+            this.adapter = adapter;
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            adapter.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
         realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        if (realm.where(Parent.class).findFirst() == null) {
+            realm.createObject(Parent.class);
+        }
+        realm.commitTransaction();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setUpRecyclerView();
 
@@ -80,11 +108,16 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
+        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(
+                this, realm.where(Parent.class).findFirst().getCounters());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyRecyclerViewAdapter(
-                this, realm.where(Counter.class).findAllSortedAsync(Counter.FIELD_COUNT)));
+        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        ItemTouchHelper.Callback helperCallback = new MyTouchHelperCallback(adapter);
+        ItemTouchHelper helper = new ItemTouchHelper(helperCallback);
+        helper.attachToRecyclerView(recyclerView);
     }
 
     // Randomly duplicate/delete/create some objets in the Realm.
@@ -99,7 +132,9 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
                 int countToDup = results.size() > 3 ? 3 : results.size();
                 for (int i = 0; i < countToDup; i++) {
                     int id = results.get(rand.nextInt((results.size()))).getCount();
-                    realm.createObject(Counter.class).setCount(id);
+                    Counter counter = realm.createObject(Counter.class);
+                    counter.setCount(id);
+                    realm.where(Parent.class).findFirst().getCounters().add(counter);
                 }
 
                 int countToDelete = results.size() > 3 ? 3 : results.size();
@@ -109,7 +144,9 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
                 int countToCreate = 3;
                 for (int i = 0; i < countToCreate; i++) {
-                    realm.createObject(Counter.class).setAndIncrease();
+                    Counter counter = realm.createObject(Counter.class);
+                    counter.setAndIncrease();
+                    realm.where(Parent.class).findFirst().getCounters().add(counter);
                 }
             }
         });
@@ -119,7 +156,9 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.createObject(Counter.class).setAndIncrease();
+                Counter counter = realm.createObject(Counter.class);
+                counter.setAndIncrease();
+                realm.where(Parent.class).findFirst().getCounters().add(counter);
             }
         });
     }

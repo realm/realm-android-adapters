@@ -23,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.examples.adapters.R;
 import io.realm.examples.adapters.model.Counter;
@@ -50,20 +52,35 @@ public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyR
         holder.title.setText(obj.getCountString());
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public void swap(int firstPos, int secondPos) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmList<Counter> list = (RealmList<Counter>) getData();
+        Counter counter1 = list.get(firstPos);
+        Counter counter2 = list.get(secondPos);
+        realm.beginTransaction();
+        list.set(firstPos, counter2);
+        list.set(secondPos, counter1);
+        realm.commitTransaction();
+        realm.beginTransaction();
+        realm.cancelTransaction();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder /* implements View.OnLongClickListener */{
         public TextView title;
         public Counter data;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.textview);
-            view.setOnLongClickListener(this);
+            //view.setOnLongClickListener(this);
         }
 
+        /*
         @Override
         public boolean onLongClick(View v) {
             activity.deleteItem(data);
             return true;
         }
+        */
     }
 }
