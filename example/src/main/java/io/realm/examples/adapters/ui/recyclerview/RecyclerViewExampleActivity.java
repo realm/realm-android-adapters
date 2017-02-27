@@ -68,15 +68,19 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_add) {
-            addItem();
-            return true;
+        switch(id) {
+            case R.id.action_add:
+                addItem();
+                return true;
+            case R.id.action_random:
+                randomEditItem();
+                return true;
+            case R.id.action_delete_all:
+                deleteAllItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        if (id == R.id.action_random) {
-            randomEditItem();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setUpRecyclerView() {
@@ -87,7 +91,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
-    // Randomly duplicate/delete/create some objets in the Realm.
+    // Randomly duplicate/delete/create some objects in the Realm.
     private void randomEditItem() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -120,6 +124,15 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 realm.createObject(Counter.class).setAndIncrease();
+            }
+        });
+    }
+
+    private void deleteAllItems() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
             }
         });
     }
