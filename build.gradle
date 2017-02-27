@@ -10,7 +10,9 @@ buildscript {
 
     repositories {
         jcenter()
-        mavenLocal()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'                    // Android Build tools
@@ -28,7 +30,9 @@ allprojects {
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
-        mavenLocal()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
 }
 
