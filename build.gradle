@@ -5,7 +5,7 @@ buildscript {
         sdkVersion = 25
         buildTools = '25.0.0'
         realmVersion = '3.0.0-SNAPSHOT'
-        supportLibraryVersion = '25.1.1'
+        supportLibraryVersion = '25.2.0'
     }
 
     repositories {
@@ -23,6 +23,11 @@ buildscript {
         classpath 'com.novoda:gradle-android-command-plugin:1.5.0'          // ADB commands from Gradle (monkey)
         classpath "io.realm:realm-gradle-plugin:${realmVersion}"            // Realm base library
     }
+}
+
+// Don't cache SNAPSHOT (changing) dependencies.
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 allprojects {
