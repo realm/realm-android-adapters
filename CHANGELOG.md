@@ -7,7 +7,7 @@
 
 ### Enhancements
 
-* Added fine grained notification support for `RealmRecyclerViewAdapter` (need realm-java version >= `v3.0.3').
+* Added fine grained notification support to `RealmRecyclerViewAdapter` (requires Realm Java version >= v3.0.0).
 
 ## 1.5.0
 
