@@ -1,13 +1,19 @@
 ## 2.0.0 (YYYY-MM-DD)
 
+Works with Realm Java 3.x
+
 ### Breaking changes
 
 * Removed `RealmBaseAdapter(@Nonnull Context context, @Nullable OrderedRealmCollection<T> data)`.
 * Removed `RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate)`.
+* Removed `RealmBaseAdapter.inflater`.
+* Removed `RealmBaseAdapter.context`.
+* Removed `RealmRecyclerViewAdapter.inflater`.
+* Removed `RealmRecyclerViewAdapter.contex`.
 
 ### Enhancements
 
-* Added fine grained notification support to `RealmRecyclerViewAdapter` (requires Realm Java version >= v3.0.0).
+* Added fine grained notification support to `RealmRecyclerViewAdapter`.
 
 ## 1.5.0
 

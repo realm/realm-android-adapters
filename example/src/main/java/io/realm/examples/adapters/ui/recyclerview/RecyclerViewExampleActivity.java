@@ -12,8 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Adopted from  http://nemanjakovacevic.net/blog/english/2016/01/12/recyclerview-swipe-to-delete-no-3rd-party-lib-necessary/
  */
 package io.realm.examples.adapters.ui.recyclerview;
 
@@ -36,6 +34,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     private Realm realm;
     private RecyclerView recyclerView;
+    private Random rand = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,24 +95,23 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Random rand = new Random();
                 RealmResults<Counter> results = realm.where(Counter.class).findAllSorted(Counter.FIELD_COUNT);
+                int maxEdits = 3;
 
                 // Duplicate some existing entries.
-                int countToDup = results.size() > 3 ? 3 : results.size();
+                int countToDup = results.size() > maxEdits ? maxEdits : results.size();
                 for (int i = 0; i < countToDup; i++) {
-                    int id = results.get(rand.nextInt((results.size()))).getCount();
-                    realm.createObject(Counter.class).setCount(id);
+                    int nextValue = results.get(rand.nextInt((results.size()))).getCount();
+                    realm.createObject(Counter.class).setCount(nextValue);
                 }
 
-                int countToDelete = results.size() > 3 ? 3 : results.size();
+                int countToDelete = results.size() > maxEdits ? maxEdits : results.size();
                 for (int i = 0; i < countToDelete; i++) {
                     results.get(rand.nextInt((results.size()))).deleteFromRealm();
                 }
 
-                int countToCreate = 3;
-                for (int i = 0; i < countToCreate; i++) {
-                    realm.createObject(Counter.class).setAndIncrease();
+                for (int i = 0; i < maxEdits; i++) {
+                    realm.createObject(Counter.class).increment();
                 }
             }
         });
@@ -123,7 +121,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.createObject(Counter.class).setAndIncrease();
+                realm.createObject(Counter.class).increment();
             }
         });
     }

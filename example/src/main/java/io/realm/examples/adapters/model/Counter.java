@@ -22,7 +22,7 @@ import io.realm.RealmObject;
 public class Counter extends RealmObject {
     public static final String FIELD_COUNT = "count";
 
-    private static AtomicInteger integerCounter = new AtomicInteger(0);
+    private static AtomicInteger INTEGER_COUNTER = new AtomicInteger(0);
 
     private int count;
 
@@ -38,7 +38,7 @@ public class Counter extends RealmObject {
         return Integer.toString(count);
     }
 
-    public void setAndIncrease() {
-        this.count = integerCounter.getAndIncrement();
+    public void increment() {
+        this.count = INTEGER_COUNTER.getAndIncrement();
     }
 }

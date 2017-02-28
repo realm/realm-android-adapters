@@ -81,7 +81,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realm.createObject(Counter.class).setAndIncrease();
+                    realm.createObject(Counter.class).increment();
                 }
             });
             return true;

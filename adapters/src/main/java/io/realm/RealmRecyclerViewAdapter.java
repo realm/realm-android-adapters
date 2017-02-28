@@ -75,10 +75,6 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
                     "for un-managed lists you can just use the BaseRecyclerViewAdapter");
         this.adapterData = data;
         this.hasAutoUpdates = autoUpdate;
-
-        // Right now don't use generics, since we need maintain two different
-        // types of listeners until RealmList is properly supported.
-        // See https://github.com/realm/realm-java/issues/989
         this.listener = hasAutoUpdates ? createListener() : null;
     }
 
