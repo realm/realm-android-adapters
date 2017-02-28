@@ -16,10 +16,8 @@
 
 package io.realm;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 
 /**
@@ -34,47 +32,17 @@ import android.widget.BaseAdapter;
  */
 public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter {
     @Nullable
-    @Deprecated
-    protected LayoutInflater inflater;
-    @Nullable
     protected OrderedRealmCollection<T> adapterData;
-    @Nullable
-    @Deprecated
-    protected Context context;
-    private final RealmChangeListener<? extends BaseRealm> listener;
-
-    @Deprecated
-    public RealmBaseAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data) {
-        if (data != null && !data.isManaged())
-            throw new IllegalStateException("Only use this adapter with managed list, " +
-                    "for un-managed lists you can just use the BaseAdapter");
-        //noinspection ConstantConditions
-        if (context == null) {
-            throw new IllegalArgumentException("Context cannot be null");
-        }
-        this.context = context;
-        this.adapterData = data;
-        this.inflater = LayoutInflater.from(context);
-        this.listener = new RealmChangeListener<BaseRealm>() {
-            @Override
-            public void onChange(BaseRealm results) {
-                notifyDataSetChanged();
-            }
-        };
-
-        if (data != null) {
-            addListener(data);
-        }
-    }
+    private final RealmChangeListener<OrderedRealmCollection<T>> listener;
 
     public RealmBaseAdapter(@Nullable OrderedRealmCollection<T> data) {
         if (data != null && !data.isManaged())
             throw new IllegalStateException("Only use this adapter with managed list, " +
                     "for un-managed lists you can just use the BaseAdapter");
         this.adapterData = data;
-        this.listener = new RealmChangeListener<BaseRealm>() {
+        this.listener = new RealmChangeListener<OrderedRealmCollection<T>>() {
             @Override
-            public void onChange(BaseRealm results) {
+            public void onChange(OrderedRealmCollection<T> results) {
                 notifyDataSetChanged();
             }
         };
@@ -86,11 +54,13 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
 
     private void addListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
-            RealmResults realmResults = (RealmResults) data;
-            realmResults.realm.handlerController.addChangeListenerAsWeakReference(listener);
+            RealmResults<T> results = (RealmResults<T>) data;
+            //noinspection unchecked
+            results.addChangeListener((RealmChangeListener) listener);
         } else if (data instanceof RealmList) {
-            RealmList realmList = (RealmList) data;
-            realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
+            RealmList<T> list = (RealmList<T>) data;
+            //noinspection unchecked
+            list.addChangeListener((RealmChangeListener) listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }
@@ -98,11 +68,13 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
 
     private void removeListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
-            RealmResults realmResults = (RealmResults) data;
-            realmResults.realm.handlerController.removeWeakChangeListener(listener);
+            RealmResults<T> results = (RealmResults<T>) data;
+            //noinspection unchecked
+            results.removeChangeListener((RealmChangeListener) listener);
         } else if (data instanceof RealmList) {
-            RealmList realmList = (RealmList) data;
-            realmList.realm.handlerController.removeWeakChangeListener(listener);
+            RealmList<T> list = (RealmList<T>) data;
+            //noinspection unchecked
+            list.removeChangeListener((RealmChangeListener) listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }

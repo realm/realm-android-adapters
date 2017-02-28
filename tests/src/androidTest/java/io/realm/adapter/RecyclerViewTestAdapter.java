@@ -18,6 +18,7 @@ package io.realm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,15 +32,18 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
 
-        public ViewHolder(final View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(android.R.id.text1);
         }
     }
 
+    private LayoutInflater inflater;
+
     // TODO: Remove context dependency.
     public RecyclerViewTestAdapter(final Context context, final OrderedRealmCollection<AllJavaTypes> realmResults, final boolean automaticUpdate) {
-        super(context, realmResults, automaticUpdate);
+        super(realmResults, automaticUpdate);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -51,6 +55,8 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         AllJavaTypes item = getItem(position);
-        holder.textView.setText(item.getFieldString());
+        if (item != null) {
+            holder.textView.setText(item.getFieldString());
+        }
     }
 }

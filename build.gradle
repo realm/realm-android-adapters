@@ -4,15 +4,18 @@ buildscript {
     ext {
         sdkVersion = 25
         buildTools = '25.0.0'
-        realmVersion = '2.1.1'
-        supportLibraryVersion = '25.0.0'
+        realmVersion = '3.0.0-SNAPSHOT'
+        supportLibraryVersion = '25.2.0'
     }
 
     repositories {
         jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:2.2.3'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'    // Allows you to install AAR's locally
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1'   // OJO integration
@@ -22,11 +25,19 @@ buildscript {
     }
 }
 
+// Don't cache SNAPSHOT (changing) dependencies.
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 allprojects {
     group = 'io.realm'
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
 }
 

@@ -25,13 +25,13 @@ import android.widget.TextView;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.TimeStamp;
+import io.realm.examples.adapters.model.Counter;
 
-public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TimeStamp, MyRecyclerViewAdapter.MyViewHolder> {
+public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecyclerViewAdapter.MyViewHolder> {
 
     private final RecyclerViewExampleActivity activity;
 
-    public MyRecyclerViewAdapter(RecyclerViewExampleActivity activity, OrderedRealmCollection<TimeStamp> data) {
+    public MyRecyclerViewAdapter(RecyclerViewExampleActivity activity, OrderedRealmCollection<Counter> data) {
         super(data, true);
         this.activity = activity;
     }
@@ -45,14 +45,14 @@ public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TimeStamp, M
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        TimeStamp obj = getData().get(position);
+        Counter obj = getData().get(position);
         holder.data = obj;
-        holder.title.setText(obj.getTimeStamp());
+        holder.title.setText(obj.getCountString());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView title;
-        public TimeStamp data;
+        public Counter data;
 
         public MyViewHolder(View view) {
             super(view);

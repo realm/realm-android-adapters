@@ -70,16 +70,6 @@ public class RealmBaseAdapterTests {
     }
 
     @Test
-    public void testAdapterParameterExceptions() {
-        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
-        try {
-            new ListViewTestAdapter(null, resultList);
-            fail("Should throw exception if context is null");
-        } catch (IllegalArgumentException ignore) {
-        }
-    }
-
-    @Test
     public void testAdapterUnmanagedParameterExceptions() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
@@ -96,6 +86,7 @@ public class RealmBaseAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         resultList.sort(AllJavaTypes.FIELD_STRING);
         ListViewTestAdapter realmAdapter = new ListViewTestAdapter(context, resultList);
+        //noinspection ConstantConditions
         assertEquals(resultList.first().getFieldString(), realmAdapter.getItem(0).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getCount());
 
@@ -103,6 +94,7 @@ public class RealmBaseAdapterTests {
         AllJavaTypes allTypes = realm.createObject(AllJavaTypes.class, TEST_DATA_SIZE);
         allTypes.setFieldString("test data " + TEST_DATA_SIZE);
         realm.commitTransaction();
+        //noinspection ConstantConditions
         assertEquals(resultList.last().getFieldString(), realmAdapter.getItem(realmAdapter.getCount() - 1).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getCount());
 
@@ -146,12 +138,15 @@ public class RealmBaseAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         resultList.sort(AllJavaTypes.FIELD_STRING, Sort.DESCENDING);
         ListViewTestAdapter realmAdapter = new ListViewTestAdapter(context, resultList);
+        //noinspection ConstantConditions
         assertEquals(resultList.first().getFieldString(), realmAdapter.getItem(0).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getCount());
 
         resultList.sort(AllJavaTypes.FIELD_STRING);
 
+        //noinspection ConstantConditions
         assertEquals(resultList.last().getFieldString(), realmAdapter.getItem(resultList.size() - 1).getFieldString());
+        //noinspection ConstantConditions
         assertEquals(resultList.get(TEST_DATA_SIZE / 2).getFieldString(), realmAdapter.getItem(TEST_DATA_SIZE / 2).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getCount());
     }
@@ -170,8 +165,10 @@ public class RealmBaseAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         ListViewTestAdapter realmAdapter = new ListViewTestAdapter(context, resultList);
 
+        //noinspection ConstantConditions
         assertEquals(resultList.get(0).getFieldString(), realmAdapter.getItem(0).getFieldString());
         assertEquals(resultList.size(), realmAdapter.getCount());
+        //noinspection ConstantConditions
         assertEquals(resultList.last().getFieldString(), realmAdapter.getItem(resultList.size() - 1).getFieldString());
     }
 

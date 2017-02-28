@@ -17,7 +17,6 @@ dependencies {
     compile project(':adapters')
 
     androidTestCompile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    androidTestCompile "io.realm:realm-android-library:${realmVersion}"
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'junit:junit:4.12'

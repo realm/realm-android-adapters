@@ -16,63 +16,57 @@
 
 package io.realm;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 
 /**
  * The RealmBaseRecyclerAdapter class is an abstract utility class for binding RecyclerView UI elements to Realm data.
  * <p>
- * This adapter will automatically handle any updates to its data and call notifyDataSetChanged() as appropriate.
- * Currently there is no support for RecyclerView's data callback methods like notifyItemInserted(int), notifyItemRemoved(int),
- * notifyItemChanged(int) etc.
- * It means that, there is no possibility to use default data animations.
+ * This adapter will automatically handle any updates to its data and call {@code notifyDataSetChanged()},
+ * {@code notifyItemInserted()}, {@code notifyItemRemoved()} or {@code notifyItemRangeChanged(} as appropriate.
  * <p>
  * The RealmAdapter will stop receiving updates if the Realm instance providing the {@link OrderedRealmCollection} is
  * closed.
  *
  * @param <T> type of {@link RealmModel} stored in the adapter.
- * @param <VH> type of RecyclerView.ViewHolder used in the adapter.
+ * @param <S> type of RecyclerView.ViewHolder used in the adapter.
  */
-public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<S> {
 
-    @Nullable
-    @Deprecated
-    protected LayoutInflater inflater;
-    @Nullable
-    @Deprecated
-    protected Context context;
     private final boolean hasAutoUpdates;
-    private final RealmChangeListener listener;
+    private final OrderedRealmCollectionChangeListener listener;
     @Nullable
     private OrderedRealmCollection<T> adapterData;
 
-    @Deprecated
-    public RealmRecyclerViewAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
-        if (data != null && !data.isManaged())
-            throw new IllegalStateException("Only use this adapter with managed list, " +
-                    "for un-managed lists you can just use the BaseAdapter");
-        //noinspection ConstantConditions
-        if (context == null) {
-            throw new IllegalArgumentException("Context can not be null");
-        }
-
-        this.context = context;
-        this.adapterData = data;
-        this.inflater = LayoutInflater.from(context);
-        this.hasAutoUpdates = autoUpdate;
-
-        // Right now don't use generics, since we need maintain two different
-        // types of listeners until RealmList is properly supported.
-        // See https://github.com/realm/realm-java/issues/989
-        this.listener = hasAutoUpdates ? new RealmChangeListener() {
+    private OrderedRealmCollectionChangeListener createListener() {
+        return new OrderedRealmCollectionChangeListener() {
             @Override
-            public void onChange(Object results) {
-                notifyDataSetChanged();
+            public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                // null Changes means the async query returns the first time.
+                if (changeSet == null) {
+                    notifyDataSetChanged();
+                    return;
+                }
+                // For deletions, the adapter has to be notified in reverse order.
+                OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                for (int i = deletions.length - 1; i >= 0; i--) {
+                    OrderedCollectionChangeSet.Range range = deletions[i];
+                    notifyItemRangeRemoved(range.startIndex, range.length);
+                }
+
+                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                for (OrderedCollectionChangeSet.Range range : insertions) {
+                    notifyItemRangeInserted(range.startIndex, range.length);
+                }
+
+                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                for (OrderedCollectionChangeSet.Range range : modifications) {
+                    notifyItemRangeChanged(range.startIndex, range.length);
+                }
             }
-        } : null;
+        };
     }
 
     public RealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {
@@ -81,16 +75,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
                     "for un-managed lists you can just use the BaseRecyclerViewAdapter");
         this.adapterData = data;
         this.hasAutoUpdates = autoUpdate;
-
-        // Right now don't use generics, since we need maintain two different
-        // types of listeners until RealmList is properly supported.
-        // See https://github.com/realm/realm-java/issues/989
-        this.listener = hasAutoUpdates ? new RealmChangeListener() {
-            @Override
-            public void onChange(Object results) {
-                notifyDataSetChanged();
-            }
-        } : null;
+        this.listener = hasAutoUpdates ? createListener() : null;
     }
 
     @Override
@@ -177,13 +162,13 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
 
     private void addListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
-            RealmResults realmResults = (RealmResults) data;
+            RealmResults<T> results = (RealmResults<T>) data;
             //noinspection unchecked
-            realmResults.addChangeListener(listener);
+            results.addChangeListener(listener);
         } else if (data instanceof RealmList) {
-            RealmList realmList = (RealmList) data;
+            RealmList<T> list = (RealmList<T>) data;
             //noinspection unchecked
-            realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
+            list.addChangeListener(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }
@@ -191,12 +176,13 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
 
     private void removeListener(@NonNull OrderedRealmCollection<T> data) {
         if (data instanceof RealmResults) {
-            RealmResults realmResults = (RealmResults) data;
-            realmResults.removeChangeListener(listener);
-        } else if (data instanceof RealmList) {
-            RealmList realmList = (RealmList) data;
+            RealmResults<T> results = (RealmResults<T>) data;
             //noinspection unchecked
-            realmList.realm.handlerController.removeWeakChangeListener(listener);
+            results.removeChangeListener(listener);
+        } else if (data instanceof RealmList) {
+            RealmList<T> list = (RealmList<T>) data;
+            //noinspection unchecked
+            list.removeChangeListener(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Android Adapters</string>
-    <string name="add">Add</string>
+    <string name="add">Add Value</string>
     <string name="listview">List View</string>
     <string name="recyclerview">Recycler View</string>
+    <string name="add_random">Random Edits</string>
+    <string name="delete_all">Delete All</string>
 </resources>

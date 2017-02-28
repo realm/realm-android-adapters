@@ -12,8 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Adopted from  http://nemanjakovacevic.net/blog/english/2016/01/12/recyclerview-swipe-to-delete-no-3rd-party-lib-necessary/
  */
 package io.realm.examples.adapters.ui.recyclerview;
 
@@ -23,17 +21,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
+
+import java.util.Random;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.TimeStamp;
+import io.realm.examples.adapters.model.Counter;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
 
 public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     private Realm realm;
     private RecyclerView recyclerView;
+    private Random rand = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,32 +67,80 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_add) {
-            final String timestamp = Long.toString(System.currentTimeMillis());
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.createObject(TimeStamp.class).setTimeStamp(timestamp);
-                }
-            });
-            return true;
+        switch(id) {
+            case R.id.action_add:
+                addItem();
+                return true;
+            case R.id.action_random:
+                randomEditItem();
+                return true;
+            case R.id.action_delete_all:
+                deleteAllItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setUpRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyRecyclerViewAdapter(this, realm.where(TimeStamp.class).findAllAsync()));
+        recyclerView.setAdapter(new MyRecyclerViewAdapter(
+                this, realm.where(Counter.class).findAllSortedAsync(Counter.FIELD_COUNT)));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
-    public void deleteItem(TimeStamp item) {
-        final String id = item.getTimeStamp();
+    // Randomly duplicate/delete/create some objects in the Realm.
+    private void randomEditItem() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(TimeStamp.class).equalTo(TimeStamp.TIMESTAMP, id)
+                RealmResults<Counter> results = realm.where(Counter.class).findAllSorted(Counter.FIELD_COUNT);
+                int maxEdits = 3;
+
+                // Duplicate some existing entries.
+                int countToDup = results.size() > maxEdits ? maxEdits : results.size();
+                for (int i = 0; i < countToDup; i++) {
+                    int nextValue = results.get(rand.nextInt((results.size()))).getCount();
+                    realm.createObject(Counter.class).setCount(nextValue);
+                }
+
+                int countToDelete = results.size() > maxEdits ? maxEdits : results.size();
+                for (int i = 0; i < countToDelete; i++) {
+                    results.get(rand.nextInt((results.size()))).deleteFromRealm();
+                }
+
+                for (int i = 0; i < maxEdits; i++) {
+                    realm.createObject(Counter.class).increment();
+                }
+            }
+        });
+    }
+
+    private void addItem() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createObject(Counter.class).increment();
+            }
+        });
+    }
+
+    private void deleteAllItems() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        });
+    }
+
+    public void deleteItem(Counter item) {
+        final int id = Integer.valueOf(item.getCountString());
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Counter.class).equalTo(Counter.FIELD_COUNT, id)
                         .findAll()
                         .deleteAllFromRealm();
             }
