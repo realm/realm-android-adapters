@@ -17,13 +17,14 @@
 package io.realm.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
-import io.realm.RealmResults;
 import io.realm.entity.AllJavaTypes;
 
 public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implements ListAdapter {
@@ -32,8 +33,12 @@ public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implemen
         TextView textView;
     }
 
-    public ListViewTestAdapter(Context context, RealmResults<AllJavaTypes> realmResults) {
-        super(context, realmResults);
+    private LayoutInflater inflater;
+
+    // TODO: Remove context dependency.
+    public ListViewTestAdapter(Context context, OrderedRealmCollection<AllJavaTypes> realmResults) {
+        super(realmResults);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -48,8 +53,10 @@ public class ListViewTestAdapter extends RealmBaseAdapter<AllJavaTypes> implemen
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        AllJavaTypes item = adapterData.get(position);
-        viewHolder.textView.setText(item.getFieldString());
+        if (adapterData != null) {
+            AllJavaTypes item = adapterData.get(position);
+            viewHolder.textView.setText(item.getFieldString());
+        }
         return convertView;
     }
 }

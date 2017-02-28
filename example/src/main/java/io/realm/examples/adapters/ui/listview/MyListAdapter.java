@@ -16,7 +16,7 @@
 
 package io.realm.examples.adapters.ui.listview;
 
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -24,32 +24,35 @@ import android.widget.TextView;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
-import io.realm.examples.adapters.model.TimeStamp;
+import io.realm.examples.adapters.model.Counter;
 
-public class MyListAdapter extends RealmBaseAdapter<TimeStamp> implements ListAdapter {
+class MyListAdapter extends RealmBaseAdapter<Counter> implements ListAdapter {
 
     private static class ViewHolder {
-        TextView timestamp;
+        TextView countText;
     }
 
-    public MyListAdapter(Context context, OrderedRealmCollection<TimeStamp> realmResults) {
-        super(context, realmResults);
+    MyListAdapter(OrderedRealmCollection<Counter> realmResults) {
+        super(realmResults);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(android.R.layout.simple_list_item_1, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.timestamp = (TextView) convertView.findViewById(android.R.id.text1);
+            viewHolder.countText = (TextView) convertView.findViewById(android.R.id.text1);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TimeStamp item = adapterData.get(position);
-        viewHolder.timestamp.setText(item.getTimeStamp());
+        if (adapterData != null) {
+            Counter item = adapterData.get(position);
+            viewHolder.countText.setText(item.getCountString());
+        }
         return convertView;
     }
 }

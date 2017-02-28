@@ -1,22 +1,33 @@
 apply plugin: 'ch.netzwerg.release'
-project.ext.sdkVersion = 24
-project.ext.buildTools = '24.0.3'
-project.ext.realmVersion = '2.0.2'
-project.ext.supportLibraryVersion = '24.2.1'
 
 buildscript {
+    ext {
+        sdkVersion = 25
+        buildTools = '25.0.0'
+        realmVersion = '3.0.0-SNAPSHOT'
+        supportLibraryVersion = '25.2.0'
+    }
+
     repositories {
         jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:2.2.3'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'    // Allows you to install AAR's locally
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1'   // OJO integration
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'      // Bintray integration
         classpath 'com.novoda:gradle-android-command-plugin:1.5.0'          // ADB commands from Gradle (monkey)
-        classpath 'io.realm:realm-gradle-plugin:2.1.0'                      // Realm base library
+        classpath "io.realm:realm-gradle-plugin:${realmVersion}"            // Realm base library
     }
+}
+
+// Don't cache SNAPSHOT (changing) dependencies.
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 allprojects {
@@ -24,6 +35,9 @@ allprojects {
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
+        maven {
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
 }
 

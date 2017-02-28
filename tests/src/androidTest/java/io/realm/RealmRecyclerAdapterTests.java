@@ -31,7 +31,6 @@ import android.widget.FrameLayout;
 
 import io.realm.adapter.RecyclerViewTestAdapter;
 import io.realm.entity.AllJavaTypes;
-import io.realm.entity.UnsupportedCollection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -73,12 +72,13 @@ public class RealmRecyclerAdapterTests {
     }
 
     @Test
-    public void constructor_testRecyclerAdapterParameterExceptions() {
+    public void constructor_testRecyclerAdapterUnmanagedParameterExceptions() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
+        RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
         try {
-            new RecyclerViewTestAdapter(null, resultList, AUTOMATIC_UPDATE);
-            fail("Should throw exception if context is null");
-        } catch (IllegalArgumentException ignore) {
+            new RecyclerViewTestAdapter(context, unmanagedRealmList, true);
+            fail("Should throw exception if list is un-managed");
+        } catch (IllegalStateException ignore) {
         }
     }
 
@@ -101,6 +101,7 @@ public class RealmRecyclerAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         resultList.sort(AllJavaTypes.FIELD_STRING);
         RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, false);
+        //noinspection ConstantConditions
         assertEquals(resultList.first().getFieldString(), realmAdapter.getData().first().getFieldString());
         assertEquals(resultList.size(), realmAdapter.getData().size());
 
@@ -141,7 +142,9 @@ public class RealmRecyclerAdapterTests {
     public void updateData_realmUnsupportedCollectionInAdapter() {
         try {
             RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
-            realmAdapter.updateData(new UnsupportedCollection<AllJavaTypes>());
+            RealmResults<AllJavaTypes> results =
+                    realm.where(AllJavaTypes.class).findAllSorted(AllJavaTypes.FIELD_STRING);
+            realmAdapter.updateData(results.createSnapshot());
             fail("Should throw exception if there is unsupported collection");
         } catch (IllegalArgumentException ignore) {
         }
@@ -153,6 +156,7 @@ public class RealmRecyclerAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).equalTo(AllJavaTypes.FIELD_STRING, "Not there").findAll();
         RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
         assertEquals(0, resultList.size());
+        //noinspection ConstantConditions
         assertEquals(0, realmAdapter.getData().size());
         assertEquals(0, realmAdapter.getItemCount());
     }
@@ -163,8 +167,11 @@ public class RealmRecyclerAdapterTests {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, AUTOMATIC_UPDATE);
 
+        //noinspection ConstantConditions
         assertEquals(resultList.first().getFieldString(), realmAdapter.getItem(0).getFieldString());
+        //noinspection ConstantConditions
         assertEquals(resultList.size(), realmAdapter.getData().size());
+        //noinspection ConstantConditions
         assertEquals(resultList.last().getFieldString(), realmAdapter.getData().last().getFieldString());
     }
 

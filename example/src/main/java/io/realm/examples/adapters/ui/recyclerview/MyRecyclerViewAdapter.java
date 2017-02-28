@@ -17,6 +17,7 @@
 package io.realm.examples.adapters.ui.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,33 +25,34 @@ import android.widget.TextView;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.TimeStamp;
+import io.realm.examples.adapters.model.Counter;
 
-public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TimeStamp, MyRecyclerViewAdapter.MyViewHolder> {
+public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecyclerViewAdapter.MyViewHolder> {
 
     private final RecyclerViewExampleActivity activity;
 
-    public MyRecyclerViewAdapter(RecyclerViewExampleActivity activity, OrderedRealmCollection<TimeStamp> data) {
-        super(activity ,data, true);
+    public MyRecyclerViewAdapter(RecyclerViewExampleActivity activity, OrderedRealmCollection<Counter> data) {
+        super(data, true);
         this.activity = activity;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        TimeStamp obj = getData().get(position);
+        Counter obj = getData().get(position);
         holder.data = obj;
-        holder.title.setText(obj.getTimeStamp());
+        holder.title.setText(obj.getCountString());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView title;
-        public TimeStamp data;
+        public Counter data;
 
         public MyViewHolder(View view) {
             super(view);

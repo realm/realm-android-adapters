@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.realm:android-adapters:1.3.0'
+    compile 'io.realm:android-adapters:1.4.0'
 }
 ```
 
@@ -65,7 +65,7 @@ In case you don't want to use the pre-compiled version, you can build the librar
 Prerequisites:
 
  * Download/the [**JDK 7**](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) or [**JDK 8**](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) from Oracle and install it.
- * Download & install the Android SDK, **Android 6.0 (API 23)** (for example through Android Studio’s **Android SDK Manager**)
+ * Download & install the Android SDK, **Android 7.1 (API 25)** (for example through Android Studio’s **Android SDK Manager**)
 
 Once you have completed all the pre-requisites building Realm is done with a simple command
 
