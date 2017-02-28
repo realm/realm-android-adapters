@@ -1,6 +1,6 @@
-## 2.0.0 (YYYY-MM-DD)
+## 2.0.0 (2017-02-28)
 
-Works with Realm Java 3.x
+Works with Realm Java 3.x.
 
 ### Breaking changes
 
