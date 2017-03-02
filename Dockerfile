@@ -45,6 +45,9 @@ RUN cd /opt && \
 
 # Grab what's needed in the SDK
 # ↓ updates tools to at least 25.1.7, but that prints 'Nothing was installed' (so I don't check the outputs).
+RUN mkdir "${ANDROID_HOME}/licenses" && \
+    echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "${ANDROID_HOME}/licenses/android-sdk-license" && \
+    echo -en "\nd23d63a1f23e25e2c7a316e29eb60396e7924281" > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
 RUN echo y | android update sdk --no-ui --all --filter tools > /dev/null
 RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter build-tools-25.0.0 | grep 'package installed'
