@@ -1,0 +1,21 @@
+language: android
+
+sudo: false
+
+jdk:
+- oraclejdk7
+- openjdk7
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-23.0.0
+    - android-23
+    - extra
+
+cache:
+  directories:
+    - $HOME/.gradle
+
+script: ./gradlew build check --stacktrace
