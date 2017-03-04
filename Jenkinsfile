@@ -104,10 +104,13 @@ def collectAarMetrics() {
 }
 
 def gradle(String commands) {
+  // in order to skip auto NDK installation, delete generated local.properties file
   sh "rm -f local.properties"
   sh "chmod +x gradlew && ./gradlew ${commands} --stacktrace"
 }
 
 def gradle(String relativePath, String commands) {
+  // in order to skip auto NDK installation, delete generated local.properties file
+  sh "rm -f \"${relativePath}/local.properties\""
   sh "cd ${relativePath} && chmod +x gradlew && ./gradlew ${commands} --stacktrace"
 }
