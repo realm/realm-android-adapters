@@ -104,6 +104,7 @@ def collectAarMetrics() {
 }
 
 def gradle(String commands) {
+  sh "rm -f local.properties"
   sh "chmod +x gradlew && ./gradlew ${commands} --stacktrace"
 }
 
