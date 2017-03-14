@@ -6,11 +6,11 @@
         <item android:id="@+id/action_add"
               android:icon="@android:drawable/ic_menu_add"
               android:title="@string/add"
-              app:showAsAction="always"/>
+              app:showAsAction="ifRoom"/>
         <item android:id="@+id/action_start_delete_mode"
               android:icon="@android:drawable/ic_menu_delete"
               android:title="@string/start_delete"
-              app:showAsAction="always"/>
+              app:showAsAction="ifRoom"/>
         <item android:id="@+id/action_random"
               android:title="@string/add_random"
               app:showAsAction="ifRoom|withText"/>
