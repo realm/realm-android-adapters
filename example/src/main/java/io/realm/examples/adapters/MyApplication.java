@@ -20,6 +20,7 @@ import android.app.Application;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.examples.adapters.model.Parent;
 
 public class MyApplication extends Application {
 
@@ -30,5 +31,13 @@ public class MyApplication extends Application {
         RealmConfiguration realmConfig = new RealmConfiguration.Builder().build();
         Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.
         Realm.setDefaultConfiguration(realmConfig);
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createObject(Parent.class);
+            }
+        });
+        realm.close();
     }
 }

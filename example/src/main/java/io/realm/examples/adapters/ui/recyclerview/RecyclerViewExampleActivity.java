@@ -19,22 +19,44 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Random;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.Counter;
+import io.realm.examples.adapters.model.DataHelper;
+import io.realm.examples.adapters.model.Parent;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
 
 public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     private Realm realm;
     private RecyclerView recyclerView;
-    private Random rand = new Random();
+    private Menu menu;
+    private MyRecyclerViewAdapter adapter;
+
+    private class TouchHelperCallback extends ItemTouchHelper.SimpleCallback {
+
+        TouchHelperCallback() {
+            super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+            DataHelper.deleteItemAsync(realm, viewHolder.getItemId());
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +65,6 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setUpRecyclerView();
-
     }
 
     /*
@@ -60,7 +81,10 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.listview_options, menu);
+        menu.setGroupVisible(R.id.group_normal_mode, true);
+        menu.setGroupVisible(R.id.group_delete_mode, false);
         return true;
     }
 
@@ -69,13 +93,23 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch(id) {
             case R.id.action_add:
-                addItem();
+                DataHelper.addItemAsync(realm);
                 return true;
             case R.id.action_random:
-                randomEditItem();
+                DataHelper.randomAddItemAsync(realm);
                 return true;
-            case R.id.action_delete_all:
-                deleteAllItems();
+            case R.id.action_start_delete_mode:
+                adapter.toggleDeletionMode(true);
+                menu.setGroupVisible(R.id.group_normal_mode, false);
+                menu.setGroupVisible(R.id.group_delete_mode, true);
+                return true;
+            case R.id.action_end_delete_mode:
+                DataHelper.deleteItemsAsync(realm, adapter.getCountersToDelete());
+                // Fall through
+            case R.id.action_cancel_delete_mode:
+                adapter.toggleDeletionMode(false);
+                menu.setGroupVisible(R.id.group_normal_mode, true);
+                menu.setGroupVisible(R.id.group_delete_mode, false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -83,67 +117,15 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
+        adapter = new MyRecyclerViewAdapter(realm.where(Parent.class).findFirst().getCounterList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyRecyclerViewAdapter(
-                this, realm.where(Counter.class).findAllSortedAsync(Counter.FIELD_COUNT)));
+        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        TouchHelperCallback touchHelperCallback = new TouchHelperCallback();
+        ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    // Randomly duplicate/delete/create some objects in the Realm.
-    private void randomEditItem() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<Counter> results = realm.where(Counter.class).findAllSorted(Counter.FIELD_COUNT);
-                int maxEdits = 3;
-
-                // Duplicate some existing entries.
-                int countToDup = results.size() > maxEdits ? maxEdits : results.size();
-                for (int i = 0; i < countToDup; i++) {
-                    int nextValue = results.get(rand.nextInt((results.size()))).getCount();
-                    realm.createObject(Counter.class).setCount(nextValue);
-                }
-
-                int countToDelete = results.size() > maxEdits ? maxEdits : results.size();
-                for (int i = 0; i < countToDelete; i++) {
-                    results.get(rand.nextInt((results.size()))).deleteFromRealm();
-                }
-
-                for (int i = 0; i < maxEdits; i++) {
-                    realm.createObject(Counter.class).increment();
-                }
-            }
-        });
-    }
-
-    private void addItem() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.createObject(Counter.class).increment();
-            }
-        });
-    }
-
-    private void deleteAllItems() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.deleteAll();
-            }
-        });
-    }
-
-    public void deleteItem(Counter item) {
-        final int id = Integer.valueOf(item.getCountString());
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(Counter.class).equalTo(Counter.FIELD_COUNT, id)
-                        .findAll()
-                        .deleteAllFromRealm();
-            }
-        });
-    }
 }
