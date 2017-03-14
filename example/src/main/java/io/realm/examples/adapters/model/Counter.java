@@ -39,6 +39,7 @@ public class Counter extends RealmObject {
         return Integer.toString(count);
     }
 
+    //  create() & delete() needs to be called inside a transaction.
     static void create(Realm realm) {
         create(realm, false);
     }
