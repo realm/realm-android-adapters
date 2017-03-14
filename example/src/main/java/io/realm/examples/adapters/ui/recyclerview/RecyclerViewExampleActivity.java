@@ -24,7 +24,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.examples.adapters.R;
+import io.realm.examples.adapters.model.Counter;
 import io.realm.examples.adapters.model.DataHelper;
 import io.realm.examples.adapters.model.Parent;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
@@ -44,6 +46,31 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            final long sourceId = viewHolder.getItemId();
+            final long targetId = target.getItemId();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmList<Counter> counters = realm.where(Parent.class).findFirst().getCounterList();
+                    Counter source = null;
+                    Counter target = null;
+                    int sourcePos = -1;
+                    int targetPos = -1;
+                    for (int i = 0; i < counters.size(); i++) {
+                        if (sourceId == counters.get(i).getCount()) {
+                            sourcePos = i;
+                            source = counters.get(i);
+                        } else if (targetId == counters.get(i).getCount()) {
+                            targetPos = i;
+                            target = counters.get(i);
+                        }
+                    }
+                    if (source != null && target != null) {
+                        counters.set(targetPos, source);
+                        counters.set(sourcePos, target);
+                    }
+                }
+            });
             return true;
         }
 
