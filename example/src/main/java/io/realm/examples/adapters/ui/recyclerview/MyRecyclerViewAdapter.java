@@ -42,7 +42,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecycler
         setHasStableIds(true);
     }
 
-    void toggleDeletionMode(boolean enabled) {
+    void enableDeletionMode(boolean enabled) {
         inDeletionMode = enabled;
         if (!enabled) {
             countersToDelete.clear();
