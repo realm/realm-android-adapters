@@ -99,7 +99,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
                 DataHelper.randomAddItemAsync(realm);
                 return true;
             case R.id.action_start_delete_mode:
-                adapter.toggleDeletionMode(true);
+                adapter.enableDeletionMode(true);
                 menu.setGroupVisible(R.id.group_normal_mode, false);
                 menu.setGroupVisible(R.id.group_delete_mode, true);
                 return true;
@@ -107,7 +107,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
                 DataHelper.deleteItemsAsync(realm, adapter.getCountersToDelete());
                 // Fall through
             case R.id.action_cancel_delete_mode:
-                adapter.toggleDeletionMode(false);
+                adapter.enableDeletionMode(false);
                 menu.setGroupVisible(R.id.group_normal_mode, true);
                 menu.setGroupVisible(R.id.group_delete_mode, false);
                 return true;

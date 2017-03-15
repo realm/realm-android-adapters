@@ -46,7 +46,7 @@ class MyListAdapter extends RealmBaseAdapter<Counter> implements ListAdapter {
         super(realmResults);
     }
 
-    void toggleDeletionMode(boolean enabled) {
+    void enableDeletionMode(boolean enabled) {
         inDeletionMode = enabled;
         if (!enabled) {
             countersToDelete.clear();
