@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="owner" type="io.realm.examples.adapters.model.Owner" />
+        <variable name="dog" type="io.realm.examples.adapters.model.Dog" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="@string/owner_name"/>
+        <EditText
+            android:id="@+id/owner_name_text_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@{owner.name}"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="@string/dog_name"/>
+        <EditText
+            android:id="@+id/dog_name_text_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@{dog.name}"/>
+    </LinearLayout>
+</layout>

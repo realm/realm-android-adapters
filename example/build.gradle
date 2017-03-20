@@ -21,10 +21,15 @@ android {
     command {
         events 2000
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     compile project(':adapters')
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha5'
 }

@@ -16,6 +16,10 @@ android {
         targetSdkVersion sdkVersion
         project.archivesBaseName = "android-adapters"
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

@@ -4,15 +4,13 @@ buildscript {
     ext {
         sdkVersion = 25
         buildTools = '25.0.0'
-        realmVersion = '3.0.0'
+        realmVersion = '3.1.0-SNAPSHOT'
         supportLibraryVersion = '25.2.0'
     }
 
     repositories {
         jcenter()
-        maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-        }
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'                    // Android Build tools
@@ -35,9 +33,7 @@ allprojects {
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
-        maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-        }
+        mavenLocal()
     }
 }
 
