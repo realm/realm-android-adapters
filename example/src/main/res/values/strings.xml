@@ -7,4 +7,9 @@
     <string name="add_random">Random Add</string>
     <string name="start_delete">Start Deletion</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_owner_list">OwnerListActivity</string>
+    <string name="data_binding_example">Data Binding Example</string>
+    <string name="title_activity_owner_details">OwnerDetailsActivity</string>
+    <string name="owner_name">Owner Name:</string>
+    <string name="dog_name">Dog Name:</string>
 </resources>

@@ -65,4 +65,15 @@ public class DataHelper {
             }
         });
     }
+
+    public static void addOwnerAsync(Realm realm, final int count) {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (int i = 0; i < count; i++) {
+                    realm.copyToRealm(Owner.create());
+                }
+            }
+        });
+    }
 }

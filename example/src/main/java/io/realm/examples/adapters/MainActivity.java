@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import io.realm.examples.adapters.ui.databinding.OwnerListActivity;
 import io.realm.examples.adapters.ui.listview.ListViewExampleActivity;
 import io.realm.examples.adapters.ui.recyclerview.RecyclerViewExampleActivity;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupButton(R.id.button_listview, ListViewExampleActivity.class);
         setupButton(R.id.button_recyclerview, RecyclerViewExampleActivity.class);
+        setupButton(R.id.button_data_binding, OwnerListActivity.class);
     }
 
     void startActivity(Class<? extends Activity> activityClass) {

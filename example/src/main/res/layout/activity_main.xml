@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="@string/recyclerview"/>
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_data_binding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/data_binding_example"/>
+
+</LinearLayout>
