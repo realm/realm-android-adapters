@@ -1,5 +1,9 @@
 ## 2.1.0 (YYYY-MM-DD)
 
+### Enhancements
+
+* Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
+
 ## 2.0.0 (2017-02-28)
 
 Works with Realm Java 3.x.
