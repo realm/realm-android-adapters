@@ -35,6 +35,8 @@ import io.realm.entity.AllJavaTypes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
@@ -231,4 +233,17 @@ public class RealmBaseAdapterTests {
         assertEquals(TEST_DATA_SIZE, realmAdapter.getCount());
     }
 
+    @Test
+    @UiThreadTest
+    public void adapterIsEmptyAfterClose() {
+        RealmResults<AllJavaTypes> result = realm.where(AllJavaTypes.class).findAll();
+        ListViewTestAdapter realmAdapter = new ListViewTestAdapter(context, result);
+
+        realm.close();
+        assertTrue(realm.isClosed());
+        realm = null;
+
+        assertEquals(0, realmAdapter.getCount());
+        assertNull(realmAdapter.getItem(0));
+    }
 }
