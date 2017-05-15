@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    android:id="@+id/textview"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    />
+    android:layout_width="match_parent">
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_toLeftOf="@+id/checkBox" android:layout_toStartOf="@+id/checkBox"/>
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_alignBaseline="@+id/textview"
+        android:layout_alignBottom="@+id/textview" android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
+</RelativeLayout>
