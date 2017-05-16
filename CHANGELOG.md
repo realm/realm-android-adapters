@@ -1,3 +1,9 @@
+## 2.1.0 (YYYY-MM-DD)
+
+### Enhancements
+
+* Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
+
 ## 2.0.1 (YYYY-MM-DD)
 
 ### Bug fixes
