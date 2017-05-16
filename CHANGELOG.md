@@ -1,14 +1,12 @@
 ## 2.1.0 (YYYY-MM-DD)
 
-### Enhancements
-
-* Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
-
-## 2.0.1 (YYYY-MM-DD)
-
 ### Bug fixes
 
 * Now `RealmBaseAdapter` behaves as empty if the `adapterData` is not valid (#112).
+
+### Enhancements
+
+* Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
 
 ## 2.0.0 (2017-02-28)
 
