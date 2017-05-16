@@ -47,7 +47,8 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
             }
         };
 
-        if (data != null) {
+        if (isDataValid()) {
+            //noinspection ConstantConditions
             addListener(data);
         }
     }
@@ -87,10 +88,8 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
      */
     @Override
     public int getCount() {
-        if (adapterData == null) {
-            return 0;
-        }
-        return adapterData.size();
+        //noinspection ConstantConditions
+        return isDataValid() ? adapterData.size() : 0;
     }
 
     /**
@@ -103,10 +102,8 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     @Override
     @Nullable
     public T getItem(int position) {
-        if (adapterData == null) {
-            return null;
-        }
-        return adapterData.get(position);
+        //noinspection ConstantConditions
+        return isDataValid() ? adapterData.get(position) : null;
     }
 
     /**
@@ -137,15 +134,20 @@ public abstract class RealmBaseAdapter<T extends RealmModel> extends BaseAdapter
     @SuppressWarnings("WeakerAccess")
     public void updateData(@Nullable OrderedRealmCollection<T> data) {
         if (listener != null) {
-            if (adapterData != null) {
+            if (isDataValid()) {
+                //noinspection ConstantConditions
                 removeListener(adapterData);
             }
-            if (data != null) {
+            if (data != null && data.isValid()) {
                 addListener(data);
             }
         }
 
         this.adapterData = data;
         notifyDataSetChanged();
+    }
+
+    private boolean isDataValid() {
+        return adapterData != null && adapterData.isValid();
     }
 }

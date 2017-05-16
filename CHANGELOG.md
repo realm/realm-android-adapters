@@ -4,6 +4,12 @@
 
 * Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
 
+## 2.0.1 (YYYY-MM-DD)
+
+### Bug fixes
+
+* Now `RealmBaseAdapter` behaves as empty if the `adapterData` is not valid (#112).
+
 ## 2.0.0 (2017-02-28)
 
 Works with Realm Java 3.x.
