@@ -22,11 +22,11 @@ repositories {
 }
 
 dependencies {
-    compile 'io.realm:android-adapters:2.0.0'
+    compile 'io.realm:android-adapters:2.1.0'
 }
 ```
 
-This library is only compatible with Realm Java 0.90 and above.
+This library is only compatible with Realm Java 3.0.0 and above.
 
 ## Documentation
 
