@@ -23,8 +23,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Random;
+import java.util.concurrent.RejectedExecutionException;
+
 import io.realm.Realm;
 import io.realm.examples.adapters.R;
+import io.realm.examples.adapters.model.Counter;
 import io.realm.examples.adapters.model.DataHelper;
 import io.realm.examples.adapters.model.Parent;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
@@ -65,6 +69,66 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setUpRecyclerView();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    for (int i = 0; i < 3; i++) {
+                        Counter.create(realm, true);
+                    }
+                    realm.commitTransaction();
+                    /*
+                    try {
+                        DataHelper.randomAddItemAsync(realm);
+                    } catch (RejectedExecutionException ignored){
+                    }
+                    */
+                    realm.close();
+                    /*
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    */
+                }
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Realm realm = Realm.getDefaultInstance();
+                    Random rand = new Random();
+                    long count = realm.where(Counter.class).count();
+                    if (count == 0) {
+                        realm.close();
+                        return;
+                    }
+                    realm.beginTransaction();
+                    Counter.delete(realm, rand.nextInt((int) count));
+                    realm.commitTransaction();
+                    /*
+                    try {
+                        DataHelper.deleteItemAsync(realm, rand.nextInt((int) count));
+                    } catch (RejectedExecutionException ignored) {
+
+                    }*/
+                    realm.close();
+                    /*
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    */
+                }
+            }
+        }).start();
     }
 
     /*
