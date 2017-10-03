@@ -17,12 +17,15 @@
 package io.realm.examples.adapters;
 
 import android.app.Application;
+import android.content.Context;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.examples.adapters.model.Parent;
 
 public class MyApplication extends Application {
+
+    public static Context context;
 
     @Override
     public void onCreate() {
@@ -37,5 +40,7 @@ public class MyApplication extends Application {
                 .build();
         Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.
         Realm.setDefaultConfiguration(realmConfig);
+
+        context = this;
     }
 }

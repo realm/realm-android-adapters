@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_height="56dp"
     android:layout_width="match_parent">
     <TextView
         android:id="@+id/textview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/imageView"
+        android:layout_toStartOf="@+id/imageView"
         android:background="?android:attr/selectableItemBackground"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_toLeftOf="@+id/checkBox" android:layout_toStartOf="@+id/checkBox"/>
+        android:gravity="center_vertical" android:paddingLeft="16dp"
+        android:paddingRight="16dp" android:textSize="16sp" android:textStyle="bold"/>
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_alignBaseline="@+id/textview"
         android:layout_alignBottom="@+id/textview" android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
+    <io.realm.examples.adapters.ui.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true" android:layout_alignParentRight="true"
+        app:srcCompat="@mipmap/ic_launcher"/>
 </RelativeLayout>

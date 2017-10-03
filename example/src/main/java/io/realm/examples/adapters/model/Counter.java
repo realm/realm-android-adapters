@@ -44,7 +44,7 @@ public class Counter extends RealmObject {
         create(realm, false);
     }
 
-    static void create(Realm realm, boolean randomlyInsert) {
+    public static void create(Realm realm, boolean randomlyInsert) {
         Parent parent = realm.where(Parent.class).findFirst();
         RealmList<Counter> counters = parent.getCounterList();
         Counter counter = realm.createObject(Counter.class, increment());
@@ -56,7 +56,7 @@ public class Counter extends RealmObject {
         }
     }
 
-    static void delete(Realm realm, long id) {
+    public static void delete(Realm realm, long id) {
         Counter counter = realm.where(Counter.class).equalTo(FIELD_COUNT, id).findFirst();
         // Otherwise it has been deleted already.
         if (counter != null) {
