@@ -30,15 +30,19 @@ import java.util.Set;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.Counter;
+import io.realm.examples.adapters.model.Item;
 
-class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecyclerViewAdapter.MyViewHolder> {
+class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerViewAdapter.MyViewHolder> {
 
     private boolean inDeletionMode = false;
     private Set<Integer> countersToDelete = new HashSet<Integer>();
 
-    MyRecyclerViewAdapter(OrderedRealmCollection<Counter> data) {
+    MyRecyclerViewAdapter(OrderedRealmCollection<Item> data) {
         super(data, true);
+        // Only set this if the model class has a primary key that is also a integer or long.
+        // In that case, {@code getItemId(int)} must also be overridden to return the key.
+        // See https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Adapter.html#hasStableIds()
+        // See https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Adapter.html#getItemId(int)
         setHasStableIds(true);
     }
 
@@ -63,19 +67,19 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecycler
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final Counter obj = getItem(position);
+        final Item obj = getItem(position);
         holder.data = obj;
         //noinspection ConstantConditions
         holder.title.setText(obj.getCountString());
-        holder.deletedCheckBox.setChecked(countersToDelete.contains(obj.getCount()));
+        holder.deletedCheckBox.setChecked(countersToDelete.contains(obj.getId()));
         if (inDeletionMode) {
             holder.deletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        countersToDelete.add(obj.getCount());
+                        countersToDelete.add(obj.getId());
                     } else {
-                        countersToDelete.remove(obj.getCount());
+                        countersToDelete.remove(obj.getId());
                     }
                 }
             });
@@ -88,13 +92,13 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Counter, MyRecycler
     @Override
     public long getItemId(int index) {
         //noinspection ConstantConditions
-        return getItem(index).getCount();
+        return getItem(index).getId();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         CheckBox deletedCheckBox;
-        public Counter data;
+        public Item data;
 
         MyViewHolder(View view) {
             super(view);
