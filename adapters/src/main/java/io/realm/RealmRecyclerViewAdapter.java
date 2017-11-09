@@ -28,6 +28,9 @@ import android.support.v7.widget.RecyclerView;
  * <p>
  * The RealmAdapter will stop receiving updates if the Realm instance providing the {@link OrderedRealmCollection} is
  * closed.
+ * <p>
+ * If the adapter contains Realm model classes with a primary key that is either a {@code int} or {@code long}, override
+ * {@link #hasStableIds()} and {@link #getItemId(int)} as described by the Javadoc in those two methods.
  *
  * @param <T> type of {@link RealmModel} stored in the adapter.
  * @param <S> type of RecyclerView.ViewHolder used in the adapter.
@@ -119,18 +122,6 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
             //noinspection ConstantConditions
             removeListener(adapterData);
         }
-    }
-
-    /**
-     * Returns the current ID for an item. Note that item IDs are not stable so you cannot rely on the item ID being the
-     * same after notifyDataSetChanged() or {@link #updateData(OrderedRealmCollection)} has been called.
-     *
-     * @param index position of item in the adapter.
-     * @return current item ID.
-     */
-    @Override
-    public long getItemId(final int index) {
-        return index;
     }
 
     @Override
