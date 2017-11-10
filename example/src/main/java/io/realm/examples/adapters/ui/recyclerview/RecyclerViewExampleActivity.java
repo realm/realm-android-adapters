@@ -117,7 +117,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        adapter = new MyRecyclerViewAdapter(realm.where(Parent.class).findFirst().getCounterList());
+        adapter = new MyRecyclerViewAdapter(realm.where(Parent.class).findFirst().getItemList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);

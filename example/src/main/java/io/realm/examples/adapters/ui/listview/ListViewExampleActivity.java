@@ -27,7 +27,7 @@ import android.widget.ListView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.Counter;
+import io.realm.examples.adapters.model.Item;
 import io.realm.examples.adapters.model.DataHelper;
 
 public class ListViewExampleActivity extends AppCompatActivity {
@@ -45,7 +45,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
         // RealmResults are "live" views, that are automatically kept up to date, even when changes happen
         // on a background thread. The RealmBaseAdapter will automatically keep track of changes and will
         // automatically refresh when a change is detected.
-        RealmResults<Counter> counters = realm.where(Counter.class).findAllSorted(Counter.FIELD_COUNT);
+        RealmResults<Item> counters = realm.where(Item.class).findAllSorted(Item.FIELD_ID);
         adapter = new MyListAdapter(counters);
 
         ListView listView = (ListView) findViewById(R.id.listView);
@@ -53,16 +53,16 @@ public class ListViewExampleActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Counter counter = adapter.getItem(i);
+                Item counter = adapter.getItem(i);
                 if (counter == null) {
                     return true;
                 }
 
-                final int id = counter.getCount();
+                final int id = counter.getId();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(Counter.class).equalTo(Counter.FIELD_COUNT, id).findAll().deleteAllFromRealm();
+                        realm.where(Item.class).equalTo(Item.FIELD_ID, id).findAll().deleteAllFromRealm();
                     }
                 });
                 return true;

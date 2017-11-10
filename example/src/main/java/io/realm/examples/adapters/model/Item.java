@@ -23,20 +23,20 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Counter extends RealmObject {
-    public static final String FIELD_COUNT = "count";
+public class Item extends RealmObject {
+    public static final String FIELD_ID = "id";
 
     private static AtomicInteger INTEGER_COUNTER = new AtomicInteger(0);
 
     @PrimaryKey
-    private int count;
+    private int id;
 
-    public int getCount() {
-        return count;
+    public int getId() {
+        return id;
     }
 
     public String getCountString() {
-        return Integer.toString(count);
+        return Integer.toString(id);
     }
 
     //  create() & delete() needs to be called inside a transaction.
@@ -46,21 +46,21 @@ public class Counter extends RealmObject {
 
     static void create(Realm realm, boolean randomlyInsert) {
         Parent parent = realm.where(Parent.class).findFirst();
-        RealmList<Counter> counters = parent.getCounterList();
-        Counter counter = realm.createObject(Counter.class, increment());
-        if (randomlyInsert && counters.size() > 0) {
+        RealmList<Item> items = parent.getItemList();
+        Item counter = realm.createObject(Item.class, increment());
+        if (randomlyInsert && items.size() > 0) {
             Random rand = new Random();
-            counters.listIterator(rand.nextInt(counters.size())).add(counter);
+            items.listIterator(rand.nextInt(items.size())).add(counter);
         } else {
-            counters.add(counter);
+            items.add(counter);
         }
     }
 
     static void delete(Realm realm, long id) {
-        Counter counter = realm.where(Counter.class).equalTo(FIELD_COUNT, id).findFirst();
+        Item item = realm.where(Item.class).equalTo(FIELD_ID, id).findFirst();
         // Otherwise it has been deleted already.
-        if (counter != null) {
-            counter.deleteFromRealm();
+        if (item != null) {
+            item.deleteFromRealm();
         }
     }
 

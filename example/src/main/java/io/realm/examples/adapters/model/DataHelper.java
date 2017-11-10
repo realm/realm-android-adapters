@@ -28,7 +28,7 @@ public class DataHelper {
             @Override
             public void execute(Realm realm) {
                 for (int i = 0; i < 3; i++) {
-                    Counter.create(realm, true);
+                    Item.create(realm, true);
                 }
             }
         });
@@ -38,7 +38,7 @@ public class DataHelper {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Counter.create(realm);
+                Item.create(realm);
             }
         });
     }
@@ -47,7 +47,7 @@ public class DataHelper {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Counter.delete(realm, id);
+                Item.delete(realm, id);
             }
         });
     }
@@ -60,7 +60,7 @@ public class DataHelper {
             @Override
             public void execute(Realm realm) {
                 for (Integer id : idsToDelete) {
-                    Counter.delete(realm, id);
+                    Item.delete(realm, id);
                 }
             }
         });
