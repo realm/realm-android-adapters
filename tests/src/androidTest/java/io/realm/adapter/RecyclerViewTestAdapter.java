@@ -44,6 +44,7 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
     public RecyclerViewTestAdapter(final Context context, final OrderedRealmCollection<AllJavaTypes> realmResults, final boolean automaticUpdate) {
         super(realmResults, automaticUpdate);
         inflater = LayoutInflater.from(context);
+        setHasStableIds(true);
     }
 
     @Override
@@ -58,5 +59,10 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
         if (item != null) {
             holder.textView.setText(item.getFieldString());
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getData().get(position).getFieldLong();
     }
 }
