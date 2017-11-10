@@ -1,3 +1,16 @@
+## 2.2.0 (YYYY-MM-DD)
+
+### Breaking Changes
+
+### Enhancements
+
+### Bug Fixes
+
+### Internal
+
+### Credits
+
+
 ## 2.1.1 (2017-11-10)
 
 ### Bug fixes
