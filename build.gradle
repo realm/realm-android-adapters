@@ -9,6 +9,7 @@ buildscript {
     }
 
     repositories {
+        google()
         jcenter()
         maven {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
@@ -33,6 +34,7 @@ allprojects {
     group = 'io.realm'
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
+        google()
         jcenter()
         maven {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
