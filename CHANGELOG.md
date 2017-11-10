@@ -1,8 +1,9 @@
-## 2.1.1 (YYYY-MM-DD)
+## 2.1.1 (2017-11-10)
 
 ### Bug fixes
 
 * `getItemId(int)` returned the item index instead of `NO_ID` as the default implementation (#132).
+
 
 ## 2.1.0 (2017-05-16)
 
@@ -13,6 +14,7 @@
 ### Enhancements
 
 * Added `updateOnModification` to `RealmRecyclerViewAdapter` constructor (#107).
+
 
 ## 2.0.0 (2017-02-28)
 
@@ -30,6 +32,7 @@ Works with Realm Java 3.x.
 ### Enhancements
 
 * Added fine grained notification support to `RealmRecyclerViewAdapter`.
+
 
 ## 1.5.0
 
