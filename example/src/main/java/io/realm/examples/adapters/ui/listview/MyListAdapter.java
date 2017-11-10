@@ -30,9 +30,9 @@ import java.util.Set;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.Counter;
+import io.realm.examples.adapters.model.Item;
 
-class MyListAdapter extends RealmBaseAdapter<Counter> implements ListAdapter {
+class MyListAdapter extends RealmBaseAdapter<Item> implements ListAdapter {
 
     private static class ViewHolder {
         TextView countText;
@@ -42,7 +42,7 @@ class MyListAdapter extends RealmBaseAdapter<Counter> implements ListAdapter {
     private boolean inDeletionMode = false;
     private Set<Integer> countersToDelete = new HashSet<Integer>();
 
-    MyListAdapter(OrderedRealmCollection<Counter> realmResults) {
+    MyListAdapter(OrderedRealmCollection<Item> realmResults) {
         super(realmResults);
     }
 
@@ -73,19 +73,19 @@ class MyListAdapter extends RealmBaseAdapter<Counter> implements ListAdapter {
         }
 
         if (adapterData != null) {
-            final Counter item = adapterData.get(position);
+            final Item item = adapterData.get(position);
             viewHolder.countText.setText(item.getCountString());
             if (inDeletionMode) {
                 viewHolder.deleteCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        countersToDelete.add(item.getCount());
+                        countersToDelete.add(item.getId());
                     }
                 });
             } else {
                 viewHolder.deleteCheckBox.setOnCheckedChangeListener(null);
             }
-            viewHolder.deleteCheckBox.setChecked(countersToDelete.contains(item.getCount()));
+            viewHolder.deleteCheckBox.setChecked(countersToDelete.contains(item.getId()));
             viewHolder.deleteCheckBox.setVisibility(inDeletionMode ? View.VISIBLE : View.GONE);
         }
         return convertView;

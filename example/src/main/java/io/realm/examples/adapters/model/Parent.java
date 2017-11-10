@@ -21,9 +21,9 @@ import io.realm.RealmObject;
 
 public class Parent extends RealmObject {
     @SuppressWarnings("unused")
-    private RealmList<Counter> counterList;
+    private RealmList<Item> itemList;
 
-    public RealmList<Counter> getCounterList() {
-        return counterList;
+    public RealmList<Item> getItemList() {
+        return itemList;
     }
 }
