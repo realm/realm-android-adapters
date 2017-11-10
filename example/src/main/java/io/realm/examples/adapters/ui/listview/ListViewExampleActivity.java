@@ -45,7 +45,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
         // RealmResults are "live" views, that are automatically kept up to date, even when changes happen
         // on a background thread. The RealmBaseAdapter will automatically keep track of changes and will
         // automatically refresh when a change is detected.
-        RealmResults<Item> counters = realm.where(Item.class).findAllSorted(Item.FIELD_COUNT);
+        RealmResults<Item> counters = realm.where(Item.class).findAllSorted(Item.FIELD_ID);
         adapter = new MyListAdapter(counters);
 
         ListView listView = (ListView) findViewById(R.id.listView);
@@ -62,7 +62,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(Item.class).equalTo(Item.FIELD_COUNT, id).findAll().deleteAllFromRealm();
+                        realm.where(Item.class).equalTo(Item.FIELD_ID, id).findAll().deleteAllFromRealm();
                     }
                 });
                 return true;
