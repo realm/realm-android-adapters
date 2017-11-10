@@ -2,7 +2,7 @@
 
 ### Bug fixes
 
-* `getItemId(int)` returned the item index in stead of `NO_ID` as the default implementation (#132).
+* `getItemId(int)` returned the item index instead of `NO_ID` as the default implementation (#132).
 
 ## 2.1.0 (2017-05-16)
 
