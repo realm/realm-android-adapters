@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        tools:text="0"/>
+
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/count"
+        android:layout_toLeftOf="@id/count"
+        android:padding="10dp"
+        android:src="@android:drawable/arrow_down_float"/>
+
+    <ImageView
+        android:id="@+id/up"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/count"
+        android:layout_toRightOf="@id/count"
+        android:padding="10dp"
+        android:src="@android:drawable/arrow_up_float"/>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/count"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="save"/>
+
+</RelativeLayout>

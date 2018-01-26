@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="io.realm.examples.adapters"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="io.realm.examples.adapters">
 
     <application
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="io.realm.examples.adapters.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -23,6 +23,8 @@
         <activity
             android:name=".ui.recyclerview.RecyclerViewExampleActivity"
             android:label="RecyclerView Example"/>
+        <activity android:name=".DetailActivity">
+        </activity>
     </application>
 
 </manifest>
