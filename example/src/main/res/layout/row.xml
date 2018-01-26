@@ -6,64 +6,37 @@
     android:layout_height="56dp"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <RelativeLayout
-        android:id="@+id/container"
+    <TextView
+        android:id="@+id/textview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/checkBox"
         android:layout_toStartOf="@+id/checkBox"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:paddingRight="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="0"/>
 
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="0"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@android:drawable/arrow_down_float"/>
-
-            <TextView
-                android:id="@+id/count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="0"/>
-
-            <ImageView
-                android:id="@+id/up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@android:drawable/arrow_up_float"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:text="0"/>
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textview"
+        android:layout_alignBottom="@+id/textview"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>
