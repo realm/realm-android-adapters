@@ -15,6 +15,7 @@
  */
 package io.realm.examples.adapters.ui.recyclerview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,14 +23,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import io.realm.Realm;
+import io.realm.examples.adapters.DetailActivity;
 import io.realm.examples.adapters.R;
 import io.realm.examples.adapters.model.DataHelper;
+import io.realm.examples.adapters.model.Item;
 import io.realm.examples.adapters.model.Parent;
 import io.realm.examples.adapters.ui.DividerItemDecoration;
 
-public class RecyclerViewExampleActivity extends AppCompatActivity {
+public class RecyclerViewExampleActivity extends AppCompatActivity implements MyRecyclerViewAdapter.AdapterClick {
 
     private Realm realm;
     private RecyclerView recyclerView;
@@ -91,7 +95,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case R.id.action_add:
                 DataHelper.addItemAsync(realm);
                 return true;
@@ -117,7 +121,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        adapter = new MyRecyclerViewAdapter(realm.where(Parent.class).findFirst().getItemList());
+        adapter = new MyRecyclerViewAdapter(realm.where(Parent.class).findFirst().getItemList(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -128,4 +132,16 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
+    @Override
+    public void onItemClick(View v, int position) {
+        Item item = adapter.getItem(position);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.EXTRA_ITEM, item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongItemClick(View v, int position) {
+
+    }
 }

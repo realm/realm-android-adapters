@@ -16,6 +16,7 @@
 
 package io.realm.examples.adapters.ui.listview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -26,9 +27,10 @@ import android.widget.ListView;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.examples.adapters.DetailActivity;
 import io.realm.examples.adapters.R;
-import io.realm.examples.adapters.model.Item;
 import io.realm.examples.adapters.model.DataHelper;
+import io.realm.examples.adapters.model.Item;
 
 public class ListViewExampleActivity extends AppCompatActivity {
 
@@ -50,6 +52,15 @@ public class ListViewExampleActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Item item = adapter.getItem(i);
+                Intent intent = new Intent(ListViewExampleActivity.this, DetailActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_ITEM, item);
+                startActivity(intent);
+            }
+        });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {

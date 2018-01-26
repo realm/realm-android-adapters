@@ -37,13 +37,16 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
     private boolean inDeletionMode = false;
     private Set<Integer> countersToDelete = new HashSet<Integer>();
 
-    MyRecyclerViewAdapter(OrderedRealmCollection<Item> data) {
+    private AdapterClick adapterClick;
+
+    MyRecyclerViewAdapter(OrderedRealmCollection<Item> data, AdapterClick adapterClick) {
         super(data, true);
         // Only set this if the model class has a primary key that is also a integer or long.
         // In that case, {@code getItemId(int)} must also be overridden to return the key.
         // See https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Adapter.html#hasStableIds()
         // See https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Adapter.html#getItemId(int)
         setHasStableIds(true);
+        this.adapterClick = adapterClick;
     }
 
     void enableDeletionMode(boolean enabled) {
@@ -104,9 +107,21 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
 
         MyViewHolder(View view) {
             super(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapterClick.onItemClick(view, getAdapterPosition());
+                }
+            });
             title = (TextView) view.findViewById(R.id.textview);
             count = (TextView) view.findViewById(R.id.count);
             deletedCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
         }
+    }
+
+    public interface AdapterClick {
+        void onItemClick(View v, int position);
+
+        void onLongItemClick(View v, int position);
     }
 }

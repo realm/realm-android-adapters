@@ -15,6 +15,9 @@
  */
 package io.realm.examples.adapters.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,7 +26,7 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Item extends RealmObject {
+public class Item extends RealmObject implements Parcelable {
     public static final String FIELD_ID = "id";
 
     private static AtomicInteger INTEGER_COUNTER = new AtomicInteger(0);
@@ -47,6 +50,14 @@ public class Item extends RealmObject {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public void upCount(){
+        count++;
+    }
+
+    public void downCount(){
+        count--;
     }
 
     //  create() & delete() needs to be called inside a transaction.
@@ -78,4 +89,35 @@ public class Item extends RealmObject {
     private static int increment() {
         return INTEGER_COUNTER.getAndIncrement();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.count);
+    }
+
+    public Item() {
+    }
+
+    protected Item(Parcel in) {
+        this.id = in.readInt();
+        this.count = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel source) {
+            return new Item(source);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 }
