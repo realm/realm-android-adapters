@@ -71,6 +71,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
         holder.data = obj;
         //noinspection ConstantConditions
         holder.title.setText(obj.getCountString());
+        holder.count.setText(String.valueOf(obj.getCount()));
         holder.deletedCheckBox.setChecked(countersToDelete.contains(obj.getId()));
         if (inDeletionMode) {
             holder.deletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -97,12 +98,14 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        TextView count;
         CheckBox deletedCheckBox;
         public Item data;
 
         MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.textview);
+            count = (TextView) view.findViewById(R.id.count);
             deletedCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
         }
     }

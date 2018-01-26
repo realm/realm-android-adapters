@@ -36,6 +36,7 @@ class MyListAdapter extends RealmBaseAdapter<Item> implements ListAdapter {
 
     private static class ViewHolder {
         TextView countText;
+        TextView count;
         CheckBox deleteCheckBox;
     }
 
@@ -66,6 +67,7 @@ class MyListAdapter extends RealmBaseAdapter<Item> implements ListAdapter {
                     .inflate(R.layout.row, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.countText = (TextView) convertView.findViewById(R.id.textview);
+            viewHolder.count = (TextView) convertView.findViewById(R.id.count);
             viewHolder.deleteCheckBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             convertView.setTag(viewHolder);
         } else {
@@ -75,6 +77,7 @@ class MyListAdapter extends RealmBaseAdapter<Item> implements ListAdapter {
         if (adapterData != null) {
             final Item item = adapterData.get(position);
             viewHolder.countText.setText(item.getCountString());
+            viewHolder.count.setText(String.valueOf(item.getCount()));
             if (inDeletionMode) {
                 viewHolder.deleteCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override

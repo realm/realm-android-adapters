@@ -31,12 +31,22 @@ public class Item extends RealmObject {
     @PrimaryKey
     private int id;
 
+    private int count;
+
     public int getId() {
         return id;
     }
 
     public String getCountString() {
         return Integer.toString(id);
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     //  create() & delete() needs to be called inside a transaction.
@@ -48,6 +58,7 @@ public class Item extends RealmObject {
         Parent parent = realm.where(Parent.class).findFirst();
         RealmList<Item> items = parent.getItemList();
         Item counter = realm.createObject(Item.class, increment());
+        counter.setCount(0);
         if (randomlyInsert && items.size() > 0) {
             Random rand = new Random();
             items.listIterator(rand.nextInt(items.size())).add(counter);
