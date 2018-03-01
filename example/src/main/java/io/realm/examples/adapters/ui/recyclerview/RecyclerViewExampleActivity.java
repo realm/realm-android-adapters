@@ -121,7 +121,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new android.support.v7.widget.DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         TouchHelperCallback touchHelperCallback = new TouchHelperCallback();
         ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);

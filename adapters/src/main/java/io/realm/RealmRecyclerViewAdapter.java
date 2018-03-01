@@ -20,8 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
-import io.realm.log.RealmLog;
-
 /**
  * The RealmBaseRecyclerAdapter class is an abstract utility class for binding RecyclerView UI elements to Realm data.
  * <p>
@@ -52,7 +50,6 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
         return new OrderedRealmCollectionChangeListener() {
             @Override
             public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
-                RealmLog.error(changeSet.getState().toString());
                 if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
                     notifyDataSetChanged();
                     return;
