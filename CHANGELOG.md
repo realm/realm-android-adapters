@@ -1,3 +1,10 @@
+## 3.0.0 (YYYY-MM-DD)
+
+### Breaking Changes
+
+Only works with Realm Java 5.0.0+.
+
+
 ## 2.2.0 (YYYY-MM-DD)
 
 ### Breaking Changes

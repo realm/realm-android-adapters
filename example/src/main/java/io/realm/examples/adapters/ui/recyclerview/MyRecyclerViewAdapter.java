@@ -35,7 +35,7 @@ import io.realm.examples.adapters.model.Item;
 class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerViewAdapter.MyViewHolder> {
 
     private boolean inDeletionMode = false;
-    private Set<Integer> countersToDelete = new HashSet<Integer>();
+    private Set<Integer> countersToDelete = new HashSet<>();
 
     MyRecyclerViewAdapter(OrderedRealmCollection<Item> data) {
         super(data, true);
@@ -60,8 +60,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -69,17 +68,18 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Item obj = getItem(position);
         holder.data = obj;
+        final int itemId = obj.getId();
         //noinspection ConstantConditions
         holder.title.setText(obj.getCountString());
-        holder.deletedCheckBox.setChecked(countersToDelete.contains(obj.getId()));
+        holder.deletedCheckBox.setChecked(countersToDelete.contains(itemId));
         if (inDeletionMode) {
             holder.deletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        countersToDelete.add(obj.getId());
+                        countersToDelete.add(itemId);
                     } else {
-                        countersToDelete.remove(obj.getId());
+                        countersToDelete.remove(itemId);
                     }
                 }
             });
@@ -102,8 +102,8 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<Item, MyRecyclerVie
 
         MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.textview);
-            deletedCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
+            title = view.findViewById(R.id.textview);
+            deletedCheckBox = view.findViewById(R.id.checkBox);
         }
     }
 }
