@@ -24,7 +24,7 @@ import android.support.v7.widget.RecyclerView;
  * The RealmBaseRecyclerAdapter class is an abstract utility class for binding RecyclerView UI elements to Realm data.
  * <p>
  * This adapter will automatically handle any updates to its data and call {@code notifyDataSetChanged()},
- * {@code notifyItemInserted()}, {@code notifyItemRemoved()} or {@code notifyItemRangeChanged(} as appropriate.
+ * {@code notifyItemInserted()}, {@code notifyItemRemoved()} or {@code notifyItemRangeChanged()} as appropriate.
  * <p>
  * The RealmAdapter will stop receiving updates if the Realm instance providing the {@link OrderedRealmCollection} is
  * closed.
