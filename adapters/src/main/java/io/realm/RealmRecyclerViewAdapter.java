@@ -50,8 +50,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
         return new OrderedRealmCollectionChangeListener() {
             @Override
             public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
-                // null Changes means the async query returns the first time.
-                if (changeSet == null) {
+                if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
                     notifyDataSetChanged();
                     return;
                 }
