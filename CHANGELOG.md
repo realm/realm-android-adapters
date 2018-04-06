@@ -6,11 +6,11 @@ Only works with Realm Java 5.0.0+.
 
 ### Bug Fixes
 
-* `RealmRecyclerViewAdapter.getItem(index)` now returns `null` instead of crashing if footer/header views are added (#141)
+* `RealmRecyclerViewAdapter.getItem(index)` now returns `null` instead of crashing if index is out range, e.g. if footer views are added (#141)
 
 ### Credits
 
-* Thanks to @yasiralijaved for fixing Header and Footer view support in `RealmRecyclerViewAdapter`.
+* Thanks to @yasiralijaved for fixing Footer view support in `RealmRecyclerViewAdapter.getItem(index)`.
 
 
 ## 2.1.1 (2017-11-10)
