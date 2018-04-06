@@ -1,21 +1,16 @@
-## 3.0.0 (YYYY-MM-DD)
+## 3.0.0 (2018-04-06)
 
 ### Breaking Changes
 
 Only works with Realm Java 5.0.0+.
 
-
-## 2.2.0 (YYYY-MM-DD)
-
-### Breaking Changes
-
-### Enhancements
-
 ### Bug Fixes
 
-### Internal
+* `RealmRecyclerViewAdapter.getItem(index)` now returns `null` instead of crashing if footer/header views are added (#141)
 
 ### Credits
+
+* Thanks to @yasiralijaved for fixing Header and Footer view support in `RealmRecyclerViewAdapter`.
 
 
 ## 2.1.1 (2017-11-10)
