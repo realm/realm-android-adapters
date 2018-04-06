@@ -19,8 +19,8 @@ android {
 }
 
 dependencies {
-    provided "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    provided "io.realm:realm-android-library:${realmVersion}"
+    compileOnly "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    compileOnly "io.realm:realm-android-library:${realmVersion}"
 }
 
 task findbugs(type: FindBugs) {
@@ -40,10 +40,10 @@ task findbugs(type: FindBugs) {
         xml.enabled = false
         html.enabled = true
         xml {
-            destination "$project.buildDir/findbugs/findbugs-output.xml"
+            destination new File("$project.buildDir/findbugs/findbugs-output.xml")
         }
         html {
-            destination "$project.buildDir/findbugs/findbugs-output.html"
+            destination new File("$project.buildDir/findbugs/findbugs-output.html")
         }
     }
 }
