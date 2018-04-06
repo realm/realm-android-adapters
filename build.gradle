@@ -4,8 +4,8 @@ buildscript {
     ext {
         sdkVersion = 27
         buildTools = '27.0.0'
-        realmVersion = '4.1.1'
-        supportLibraryVersion = '25.2.0'
+        realmVersion = '5.0.0-SNAPSHOT'
+        supportLibraryVersion = '27.1.0'
     }
 
     repositories {
@@ -16,7 +16,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:3.0.1'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'    // Allows you to install AAR's locally
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4'   // OJO integration
