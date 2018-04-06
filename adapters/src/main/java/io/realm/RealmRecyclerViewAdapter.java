@@ -132,16 +132,26 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
     }
 
     /**
-     * Returns the item associated with the specified position.
-     * Can return {@code null} if provided Realm instance by {@link OrderedRealmCollection} is closed.
-     * Can return {@code null} if provided index is out of bound in adapterData (e.g: adding extra position in data to display footer view in recycler view)
+     * Returns the item in the underlying data associated with the specified position.
      *
-     * @param index index of the item.
-     * @return the item at the specified position, {@code null} if adapter data is not valid.
+     * This method will return {@code null} if the Realm instance has been closed or the index
+     * is outside the range of valid adapter data (which e.g. can happen if {@link #getItemCount()}
+     * is modified to account for header or footer views.
+     *
+     * Also, this method does not take into account any header views. If these are present, modify
+     * the {@code index} parameter accordingly first.
+     *
+     * @param index index of the item in the original collection backing this adapter.
+     * @return the item at the specified position or {@code null} if the position does not exists or
+     * the adapter data are no longer valid.
      */
     @SuppressWarnings("WeakerAccess")
     @Nullable
     public T getItem(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Only indexes >= 0 are allowed. Input was: " + index);
+        }
+
         // To avoid exception, return null if there are some extra positions that the
         // child adapter is adding in getItemCount (e.g: to display footer view in recycler view)
         if(adapterData != null && index >= adapterData.size()) return null;
