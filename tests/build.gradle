@@ -7,7 +7,7 @@ android {
     buildToolsVersion buildTools
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion sdkVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -17,8 +17,8 @@ dependencies {
     compile project(':adapters')
 
     androidTestCompile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test:runner:1.0.1'
+    androidTestCompile 'com.android.support.test:rules:1.0.1'
     androidTestCompile 'junit:junit:4.12'
 }
 

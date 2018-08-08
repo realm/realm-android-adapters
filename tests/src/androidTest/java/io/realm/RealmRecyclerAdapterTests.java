@@ -123,7 +123,7 @@ public class RealmRecyclerAdapterTests {
         // test for https://github.com/realm/realm-android-adapters/issues/58
         final RealmConfiguration configuration = realm.getConfiguration();
 
-        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAllSorted(AllJavaTypes.FIELD_STRING);
+        RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
         RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, resultList, true);
         realm.close(); // to make resultList invalid
 
@@ -143,7 +143,7 @@ public class RealmRecyclerAdapterTests {
         try {
             RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
             RealmResults<AllJavaTypes> results =
-                    realm.where(AllJavaTypes.class).findAllSorted(AllJavaTypes.FIELD_STRING);
+                    realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
             realmAdapter.updateData(results.createSnapshot());
             fail("Should throw exception if there is unsupported collection");
         } catch (IllegalArgumentException ignore) {

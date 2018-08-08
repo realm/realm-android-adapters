@@ -18,6 +18,7 @@ package io.realm.examples.adapters.ui.recyclerview;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -31,7 +32,6 @@ import io.realm.examples.adapters.R;
 import io.realm.examples.adapters.model.DataHelper;
 import io.realm.examples.adapters.model.Item;
 import io.realm.examples.adapters.model.Parent;
-import io.realm.examples.adapters.ui.DividerItemDecoration;
 
 public class RecyclerViewExampleActivity extends AppCompatActivity implements MyRecyclerViewAdapter.AdapterClick {
 
@@ -67,7 +67,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity implements My
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
         realm = Realm.getDefaultInstance();
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         setUpRecyclerView();
     }
 
@@ -125,7 +125,7 @@ public class RecyclerViewExampleActivity extends AppCompatActivity implements My
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         TouchHelperCallback touchHelperCallback = new TouchHelperCallback();
         ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
