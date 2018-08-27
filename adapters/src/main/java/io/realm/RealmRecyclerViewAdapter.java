@@ -81,6 +81,9 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
     /**
      * This is equivalent to {@code RealmRecyclerViewAdapter(data, autoUpdate, true)}.
      *
+     * @param data collection data to be used by this adapter.
+     * @param autoUpdate when it is {@code false}, the adapter won't be automatically updated when collection data
+     *                   changes.
      * @see #RealmRecyclerViewAdapter(OrderedRealmCollection, boolean, boolean)
      */
     public RealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean autoUpdate) {

@@ -14,12 +14,12 @@ android {
 }
 
 dependencies {
-    compile project(':adapters')
+    implementation project(':adapters')
 
-    androidTestCompile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
-    androidTestCompile 'junit:junit:4.12'
+    androidTestImplementation "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'junit:junit:4.12'
 }
 
 task checkstyle(type: Checkstyle) {
