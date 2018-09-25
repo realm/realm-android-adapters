@@ -3,7 +3,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion buildTools
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "io.realm.examples.adapters"
@@ -21,6 +21,6 @@ android {
 
 dependencies {
     implementation project(':adapters')
-    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    implementation "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

@@ -2,9 +2,9 @@ apply plugin: 'ch.netzwerg.release'
 
 buildscript {
     ext {
-        sdkVersion = 27
+        sdkVersion = 28
         buildTools = '27.0.3'
-        realmVersion = '5.4.2'
+        realmVersion = '5.5.0'
         supportLibraryVersion = '27.1.0'
     }
 
@@ -16,10 +16,10 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:3.2.0'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'    // Allows you to install AAR's locally
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4'   // OJO integration
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.7.1'   // OJO integration
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'      // Bintray integration
         classpath "io.realm:realm-gradle-plugin:${realmVersion}"            // Realm base library
     }
