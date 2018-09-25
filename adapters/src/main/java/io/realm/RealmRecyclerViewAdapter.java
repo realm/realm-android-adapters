@@ -58,12 +58,12 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
                 OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
                 for (int i = deletions.length - 1; i >= 0; i--) {
                     OrderedCollectionChangeSet.Range range = deletions[i];
-                    notifyItemRangeRemoved(range.startIndex, range.length);
+                    notifyItemRangeRemoved(range.startIndex + dataOffset(), range.length);
                 }
 
                 OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
                 for (OrderedCollectionChangeSet.Range range : insertions) {
-                    notifyItemRangeInserted(range.startIndex, range.length);
+                    notifyItemRangeInserted(range.startIndex + dataOffset(), range.length);
                 }
 
                 if (!updateOnModification) {
@@ -72,10 +72,18 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
 
                 OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
                 for (OrderedCollectionChangeSet.Range range : modifications) {
-                    notifyItemRangeChanged(range.startIndex, range.length);
+                    notifyItemRangeChanged(range.startIndex + dataOffset(), range.length);
                 }
             }
         };
+    }
+
+    /**
+     * This will offset notification index for realm model if view model differs
+     * @return The number of rows in recycleView before realm data
+     */
+    public int dataOffset() {
+        return 0;
     }
 
     /**
