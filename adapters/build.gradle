@@ -9,7 +9,7 @@ apply plugin: 'checkstyle'
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '28.0.2'
+    buildToolsVersion buildTools
 
     defaultConfig {
         minSdkVersion 9
@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
+    compileOnly "androidx.recyclerview:recyclerview:$androidXVersion"
     compileOnly "io.realm:realm-android-library:${realmVersion}"
 }
 
