@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compileOnly "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    compileOnly "androidx.recyclerview:recyclerview:${androidXVersion}"
     compileOnly "io.realm:realm-android-library:${realmVersion}"
 }
 

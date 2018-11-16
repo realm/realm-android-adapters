@@ -26,6 +26,6 @@ android {
 
 dependencies {
     implementation project(':adapters')
-    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    implementation "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    implementation "androidx.appcompat:appcompat:${androidXVersion}"
+    implementation "androidx.recyclerview:recyclerview:${androidXVersion}"
 }

@@ -2,10 +2,10 @@ apply plugin: 'ch.netzwerg.release'
 
 buildscript {
     ext {
-        sdkVersion = 27
-        buildTools = '27.0.3'
+        sdkVersion = 28
+        buildTools = '28.0.3'
         realmVersion = '5.8.0'
-        supportLibraryVersion = '27.1.0'
+        androidXVersion = '1.0.0'
     }
 
     repositories {

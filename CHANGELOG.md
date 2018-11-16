@@ -1,3 +1,10 @@
+## 4.0.0 (YYYY-MM-DD)
+
+## Breaking Changes
+
+* Upgraded dependecies to AndroidX.
+
+
 ## 3.1.0 (2018-11-16)
 
 ### Enhancements
