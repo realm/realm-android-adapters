@@ -1,3 +1,10 @@
+## 3.1.0 (2018-11-16)
+
+### Enhancements
+
+* Added `RealmRecyclerViewAdapter.dataOffset()` which adds support for header elements not managed by the Realm collection. Thank you @trr-amsiq. [#153](https://github.com/realm/realm-android-adapters/pull/153)
+
+
 ## 3.0.0 (2018-04-06)
 
 ### Breaking Changes

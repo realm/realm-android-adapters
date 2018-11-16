@@ -79,8 +79,12 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
     }
 
     /**
-     * This will offset notification index for realm model if view model differs
-     * @return The number of rows in recycleView before realm data
+     * Returns the number of header elements before the Realm collection elements. This is needed so
+     * all indexes reported by the {@link OrderedRealmCollectionChangeListener} can be adjusted
+     * correctly. Failing to override can cause the wrong elements to animate and lead to runtime
+     * exceptions.
+     *
+     * @return The number of header elements in the RecyclerView before the collection elements. Default is {@code 0}.
      */
     public int dataOffset() {
         return 0;
