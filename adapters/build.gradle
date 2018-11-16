@@ -16,6 +16,11 @@ android {
         targetSdkVersion sdkVersion
         project.archivesBaseName = "android-adapters"
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
