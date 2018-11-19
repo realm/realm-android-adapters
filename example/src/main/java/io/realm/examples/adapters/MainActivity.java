@@ -19,9 +19,9 @@ package io.realm.examples.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.realm.examples.adapters.ui.listview.ListViewExampleActivity;
 import io.realm.examples.adapters.ui.recyclerview.RecyclerViewExampleActivity;
 

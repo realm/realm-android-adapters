@@ -16,19 +16,17 @@
 
 package io.realm;
 
+import android.content.Context;
+import android.widget.FrameLayout;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.rule.UiThreadTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.widget.FrameLayout;
-
+import androidx.test.annotation.UiThreadTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import io.realm.adapter.RecyclerViewTestAdapter;
 import io.realm.entity.AllJavaTypes;
 
@@ -41,9 +39,6 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class RealmRecyclerAdapterTests {
 
-    @Rule
-    public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
-
     private Context context;
 
     private static final int TEST_DATA_SIZE = 47;
@@ -52,7 +47,8 @@ public class RealmRecyclerAdapterTests {
     private Realm realm;
 
     @Before
-    public void setUp() throws Exception {
+    @UiThreadTest
+    public void setUp() {
         context = InstrumentationRegistry.getInstrumentation().getContext();
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).modules(new RealmTestModule()).build();
         Realm.deleteRealm(realmConfig);
@@ -67,11 +63,13 @@ public class RealmRecyclerAdapterTests {
     }
 
     @After
-    public void tearDown() throws Exception {
+    @UiThreadTest
+    public void tearDown() {
         realm.close();
     }
 
     @Test
+    @UiThreadTest
     public void constructor_testRecyclerAdapterUnmanagedParameterExceptions() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));

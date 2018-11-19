@@ -17,13 +17,13 @@
 package io.realm.examples.adapters.ui.listview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.examples.adapters.R;
@@ -48,7 +48,7 @@ public class ListViewExampleActivity extends AppCompatActivity {
         RealmResults<Item> counters = realm.where(Item.class).sort(Item.FIELD_ID).findAll();
         adapter = new MyListAdapter(counters);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

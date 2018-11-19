@@ -17,12 +17,12 @@
 package io.realm.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.entity.AllJavaTypes;
@@ -34,7 +34,7 @@ public class RecyclerViewTestAdapter extends RealmRecyclerViewAdapter<AllJavaTyp
 
         ViewHolder(final View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(android.R.id.text1);
+            textView = itemView.findViewById(android.R.id.text1);
         }
     }
 

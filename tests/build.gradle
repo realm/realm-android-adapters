@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion sdkVersion
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -21,9 +21,9 @@ android {
 dependencies {
     implementation project(':adapters')
 
-    androidTestImplementation "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation "androidx.recyclerview:recyclerview:${androidXVersion}"
+    androidTestImplementation "androidx.test.ext:junit:1.0.0"
+    androidTestImplementation 'androidx.test:rules:1.1.0'
     androidTestImplementation 'junit:junit:4.12'
 }
 
