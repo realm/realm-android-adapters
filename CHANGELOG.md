@@ -1,4 +1,4 @@
-## 4.0.0 (YYYY-MM-DD)
+## 4.0.0 (2020-01-17)
 
 ## Breaking Changes
 
