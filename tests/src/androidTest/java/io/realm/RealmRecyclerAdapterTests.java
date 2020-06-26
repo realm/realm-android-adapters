@@ -68,16 +68,12 @@ public class RealmRecyclerAdapterTests {
         realm.close();
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     @UiThreadTest
     public void constructor_testRecyclerAdapterUnmanagedParameterExceptions() {
         RealmResults<AllJavaTypes> resultList = realm.where(AllJavaTypes.class).findAll();
         RealmList<AllJavaTypes> unmanagedRealmList = new RealmList<>(resultList.toArray(new AllJavaTypes[0]));
-        try {
-            new RecyclerViewTestAdapter(context, unmanagedRealmList, true);
-            fail("Should throw exception if list is un-managed");
-        } catch (IllegalStateException ignore) {
-        }
+        new RecyclerViewTestAdapter(context, unmanagedRealmList, true);
     }
 
     @Test
@@ -135,17 +131,14 @@ public class RealmRecyclerAdapterTests {
         realmAdapter.updateData(resultList);
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     @UiThreadTest
     public void updateData_realmUnsupportedCollectionInAdapter() {
-        try {
-            RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
-            RealmResults<AllJavaTypes> results =
-                    realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
-            realmAdapter.updateData(results.createSnapshot());
-            fail("Should throw exception if there is unsupported collection");
-        } catch (IllegalArgumentException ignore) {
-        }
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
+        RealmResults<AllJavaTypes> results =
+                realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
+        realmAdapter.updateData(results.createSnapshot());
+
     }
 
     @Test
