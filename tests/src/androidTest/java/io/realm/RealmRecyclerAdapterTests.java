@@ -131,17 +131,14 @@ public class RealmRecyclerAdapterTests {
         realmAdapter.updateData(resultList);
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     @UiThreadTest
     public void updateData_realmUnsupportedCollectionInAdapter() {
-        try {
-            RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
-            RealmResults<AllJavaTypes> results =
-                    realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
-            realmAdapter.updateData(results.createSnapshot());
-            fail("Should throw exception if there is unsupported collection");
-        } catch (IllegalArgumentException ignore) {
-        }
+        RecyclerViewTestAdapter realmAdapter = new RecyclerViewTestAdapter(context, null, AUTOMATIC_UPDATE);
+        RealmResults<AllJavaTypes> results =
+                realm.where(AllJavaTypes.class).sort(AllJavaTypes.FIELD_STRING).findAll();
+        realmAdapter.updateData(results.createSnapshot());
+
     }
 
     @Test
