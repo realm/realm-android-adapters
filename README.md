@@ -30,8 +30,8 @@ This library is only compatible with Realm Java 3.0.0 and above.
 
 ## Documentation
 
-Documentation for Realm can be found at [realm.io/docs/java](https://realm.io/docs/java).
-The API reference is located at [realm.io/docs/java/api](https://realm.io/docs/java/api).
+Documentation for Realm can be found at [docs.mongodb.com/realm/sdk/android/](https://docs.mongodb.com/realm/sdk/android/).
+The API reference is located at [docs.mongodb.com/realm-sdks/java/latest/](https://docs.mongodb.com/realm-sdks/java/latest/).
 
 ## Getting Help
 
