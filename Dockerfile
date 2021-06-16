@@ -52,9 +52,9 @@ RUN sdkmanager --update
 # Accept all licenses
 RUN yes y | sdkmanager --licenses
 RUN sdkmanager 'platform-tools'
-RUN sdkmanager 'build-tools;26.0.2'
+RUN sdkmanager 'build-tools;30.0.3'
 RUN sdkmanager 'extras;android;m2repository'
-RUN sdkmanager 'platforms;android-26'
+RUN sdkmanager 'platforms;android-30'
 
 # Make the SDK universally writable
 RUN chmod -R a+rwX ${ANDROID_HOME}

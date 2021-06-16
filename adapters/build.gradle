@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'findbugs'
+apply plugin: 'maven'
+apply plugin: 'com.github.spotbugs'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 
@@ -24,32 +21,30 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.recyclerview:recyclerview:${androidXVersion}"
+    compileOnly "androidx.appcompat:appcompat:1.3.0"
+    compileOnly "androidx.recyclerview:recyclerview:1.2.1"
     compileOnly "io.realm:realm-android-library:${realmVersion}"
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.1.2'
 }
 
-task findbugs(type: FindBugs) {
-    project.afterEvaluate {
-        dependsOn assembleDebug
-    }
-    group = 'Verification'
-
-    ignoreFailures = false
+// See https://spotbugs-gradle-plugin.netlify.app/com/github/spotbugs/snom/spotbugsextension
+spotbugs {
+    toolVersion.set('4.1.1')
+    ignoreFailures.set(false)
     effort = "default"
     reportLevel = "medium"
-    excludeFilter = file("${projectDir}/../config/findbugs/findbugs-filter.xml")
-    classes = files("${projectDir}/build/intermediates/classes")
-    source = fileTree('src/main/java/')
-    classpath = files()
+    excludeFilter.set(file("${rootDir}/config/findbugs/findbugs-filter.xml"))
+}
+
+// See https://spotbugs.readthedocs.io/en/latest/migration.html#findbugs-gradle-plugin
+task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
+    dependsOn 'assemble'
+    group = 'verification'
+    classes = fileTree("build/intermediates/javac/")
+
     reports {
         xml.enabled = false
         html.enabled = true
-        xml {
-            destination file("$project.buildDir/findbugs/findbugs-output.xml")
-        }
-        html {
-            destination file("$project.buildDir/findbugs/findbugs-output.html")
-        }
     }
 }
 
@@ -78,7 +73,7 @@ task checkstyle(type: Checkstyle) {
     def configProps = ['proj.module.dir': projectDir.absolutePath]
     configProperties configProps
 
-    configFile = file("${projectDir}/../config/checkstyle/checkstyle.xml")
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 
     // empty classpath
     classpath = files()
@@ -96,8 +91,8 @@ task javadoc(type: Javadoc) {
         locale = 'en_US'
 
         links "http://docs.oracle.com/javase/7/docs/api/"
-        links "https://realm.io/docs/java/${realmVersion}/api/"
-        linksOffline "http://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
+        links "https://docs.mongodb.com/realm-sdks/java/${realmVersion}/"
+        linksOffline "https://developer.android.com/reference/kotlin/androidx/packages", "${android.sdkDirectory}/docs/reference"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
@@ -113,78 +108,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-
-                // Add your description here
-                name 'android-adapters'
-                description 'Android UI adapters for Realm. Realm is a mobile database: a replacement for SQLite & ORMs.'
-                url 'http://realm.io'
-
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-                issueManagement {
-                    system 'github'
-                    url 'https://github.com/realm/realm-android-adapters/issues'
-                }
-                scm {
-                    url 'scm:https://github.com/realm/realm-java'
-                    connection 'scm:git@github.com:realm/realm-android-adapters.git'
-                    developerConnection 'scm:git@github.com:realm/realm-android-adapters.git'
-                }
-            }
-        }
-    }
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? bintrayUser : 'noUser'
-    key = project.hasProperty('bintrayKey') ? bintrayKey : 'noKey'
-
-    dryRun = false
-    publish = false
-
-    configurations = ['archives']
-
-    pkg {
-        repo = 'maven'
-        name = 'android-adapters'
-        desc = 'Realm Android Adapters'
-        websiteUrl = 'http://realm.io'
-        issueTrackerUrl = 'https://github.com/realm/realm-android-adapters/issues'
-        vcsUrl = 'https://github.com/realm/realm-android-adapters.git'
-        licenses = ['Apache-2.0']
-        labels = ['android', 'realm']
-        publicDownloadNumbers = false
-    }
-}
-
-artifactory {
-    contextUrl = 'https://oss.jfrog.org/artifactory'
-    publish {
-        repository {
-            repoKey = 'oss-snapshot-local'
-            username = project.hasProperty('bintrayUser') ? bintrayUser : 'noUser'
-            password = project.hasProperty('bintrayKey') ? bintrayKey : 'noKey'
-            maven = true
-        }
-        defaults {
-            publishConfigs('archives')
-            publishPom = true
-            publishIvy = false
-        }
-    }
-}
-
 artifacts {
     archives javadocJar
     archives sourcesJar
@@ -194,4 +117,25 @@ artifacts {
 afterEvaluate {
     javadoc.classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+}
+
+apply from: "${rootDir}/mavencentral-publications.gradle"
+
+publishing {
+    publications {
+        realmPublication(MavenPublication) {
+            groupId 'io.realm'
+            artifactId = 'android-adapters'
+            artifact (file("${rootDir}/adapters/build/outputs/aar/android-adapters-release.aar")) {
+                builtBy assemble
+            }
+            artifact sourcesJar
+            artifact javadocJar
+            populatePom(
+                    it,
+                    'android-adapters',
+                    'Android UI adapters for Realm. Realm is a mobile database: Make better apps, faster.'
+            )
+        }
+    }
 }

@@ -18,15 +18,15 @@ To add the adapters to your project, add the following to you app's dependencies
 
 ```
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile 'io.realm:android-adapters:3.1.0'
+    compile 'io.realm:android-adapters:4.1.0'
 }
 ```
 
-This library is only compatible with Realm Java 3.0.0 and above.
+This library is only compatible with Realm Java 5.0.0 and above.
 
 ## Documentation
 
@@ -81,8 +81,7 @@ That command will generate:
 
  * `./gradlew monkeyDebug` will run the monkey tests on the example project.
  * `./gradlew javadoc` will create the javadoc for the library.
- * `./gradlew artifactoryPublish` will upload a SNAPSHOT to OJO.
- * `./gradlew bintrayUpload` will upload a release to Bintray.
+ * `./gradlew publishToSonatype` will upload artifacts to Maven Central.
 
 ## Contributing
 

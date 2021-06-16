@@ -17,6 +17,46 @@
         <Field name="inflater" />
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
     </Match>
+    <Match>
+        <Class name="io.realm.RealmBaseAdapter" />
+        <Method name="getCount" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmBaseAdapter" />
+        <Method name="getItem" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmBaseAdapter" />
+        <Method name="updateData" />
+        <Bug pattern="NP_NULL_PARAM_DEREF" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmRecyclerViewAdapter" />
+        <Method name="onAttachedToRecyclerView" />
+        <Bug pattern="NP_NULL_PARAM_DEREF" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmRecyclerViewAdapter" />
+        <Method name="onDetachedFromRecyclerView" />
+        <Bug pattern="NP_NULL_PARAM_DEREF" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmRecyclerViewAdapter" />
+        <Method name="getItemCount" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmRecyclerViewAdapter" />
+        <Method name="getItem" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH" />
+    </Match>
+    <Match>
+        <Class name="io.realm.RealmRecyclerViewAdapter" />
+        <Method name="updateData" />
+        <Bug pattern="NP_NULL_PARAM_DEREF" />
+    </Match>
 
     <!-- Unit tests -->
     <Match>
@@ -25,3 +65,5 @@
     </Match>
 
 </FindBugsFilter>
+
+

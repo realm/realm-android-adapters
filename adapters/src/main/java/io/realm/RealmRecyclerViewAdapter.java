@@ -169,7 +169,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, S extends R
 
         // To avoid exception, return null if there are some extra positions that the
         // child adapter is adding in getItemCount (e.g: to display footer view in recycler view)
-        if(adapterData != null && index >= adapterData.size()) return null;
+        if (adapterData != null && index >= adapterData.size()) return null;
         //noinspection ConstantConditions
         return isDataValid() ? adapterData.get(index) : null;
     }
