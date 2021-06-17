@@ -116,7 +116,7 @@ artifacts {
 // See https://github.com/chrisbanes/gradle-mvn-push/pull/13
 afterEvaluate {
     javadoc.classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompileProvider.get().classpath
 }
 
 apply from: "${rootDir}/mavencentral-publications.gradle"
