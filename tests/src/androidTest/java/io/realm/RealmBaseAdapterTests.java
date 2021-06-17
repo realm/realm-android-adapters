@@ -43,13 +43,13 @@ public class RealmBaseAdapterTests {
 
     private final static int TEST_DATA_SIZE = 47;
 
-    private Context context;
+    private Context context = InstrumentationRegistry.getInstrumentation().getContext();
     private Realm realm;
 
     @Before
     @UiThreadTest
     public void setUp() {
-        context = InstrumentationRegistry.getInstrumentation().getContext();
+        Realm.init(context);
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).modules(new RealmTestModule()).build();
         Realm.deleteRealm(realmConfig);
         realm = Realm.getInstance(realmConfig);
