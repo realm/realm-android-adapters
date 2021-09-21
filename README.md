@@ -27,13 +27,13 @@ dependencies {
 }
 ```
 
-This library is only compatible with Realm Java 3.0.0 and above.
+This library is only compatible with `realm-java` (the Realm Android SDK) 3.0.0 and above.
 
 ## Documentation
 
 Documentation for Realm can be found at [docs.mongodb.com/realm/](https://docs.mongodb.com/realm/).
-The Realm SDK documentation can be found at [docs.mongodb.com/realm-sdks/java/latest/](https://docs.mongodb.com/realm-sdks/java/latest/).
-The API reference is located at [realm.io/docs/java/api](https://realm.io/docs/java/api).
+The Realm SDK documentation can be found at [docs.mongodb.com/realm/sdk/android/](https://docs.mongodb.com/realm/sdk/android/).
+The API reference is located at [docs.mongodb.com/realm-sdks/java/latest/](https://docs.mongodb.com/realm-sdks/java/latest/).
 
 ## Getting Help
 

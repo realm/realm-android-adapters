@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 
@@ -68,9 +67,9 @@ task javadoc(type: Javadoc) {
         charSet = 'UTF-8'
         locale = 'en_US'
 
-        links "https://docs.oracle.com/javase/11/docs/api/"
-        links "https://realm.io/docs/java/${realmVersion}/api/"
-        linksOffline "https://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
+        links "https://docs.oracle.com/en/java/javase/11/docs/api/"
+        links "https://docs.mongodb.com/realm-sdks/java/${realmVersion}/"
+        links "https://developer.android.com/reference/"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
@@ -84,28 +83,6 @@ task sourcesJar(type: Jar) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? bintrayUser : 'noUser'
-    key = project.hasProperty('bintrayKey') ? bintrayKey : 'noKey'
-
-    dryRun = false
-    publish = false
-
-    configurations = ['archives']
-
-    pkg {
-        repo = 'maven'
-        name = 'android-adapters'
-        desc = 'Realm Android Adapters'
-        websiteUrl = 'https://realm.io'
-        issueTrackerUrl = 'https://github.com/realm/realm-android-adapters/issues'
-        vcsUrl = 'https://github.com/realm/realm-android-adapters.git'
-        licenses = ['Apache-2.0']
-        labels = ['android', 'realm']
-        publicDownloadNumbers = false
-    }
 }
 
 artifactory {
@@ -136,20 +113,14 @@ afterEvaluate {
 
     publishing {
         publications {
-            // Creates a Maven publication called "release".
             release(MavenPublication) {
-                // Applies the component for the release build variant.
-                from components.release
+                //from components.release
 
-                // You can then customize attributes of the publication as shown below.
-                artifactId = 'android-adapters'
-                version = '4.0'
-            }
-            // Creates a Maven publication called “debug”.
-            debug(MavenPublication) {
-                // Applies the component for the debug build variant.
-                from components.debug
+                artifact sourcesJar
+                artifact javadocJar
+                artifact bundleReleaseAar
 
+                groupId "io.realm"
                 artifactId = 'android-adapters'
                 version = '4.0'
             }
