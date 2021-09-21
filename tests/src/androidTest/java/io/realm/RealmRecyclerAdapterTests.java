@@ -49,8 +49,9 @@ public class RealmRecyclerAdapterTests {
     @Before
     @UiThreadTest
     public void setUp() {
-        context = InstrumentationRegistry.getInstrumentation().getContext();
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).modules(new RealmTestModule()).build();
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Realm.init(context);
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).modules(new RealmTestModule()).inMemory().build();
         Realm.deleteRealm(realmConfig);
         realm = Realm.getInstance(realmConfig);
 
@@ -65,7 +66,9 @@ public class RealmRecyclerAdapterTests {
     @After
     @UiThreadTest
     public void tearDown() {
-        realm.close();
+        if (realm != null) {
+            realm.close();
+        }
     }
 
     @Test

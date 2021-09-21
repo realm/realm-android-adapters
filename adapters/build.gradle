@@ -1,9 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'findbugs'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 
@@ -12,45 +10,20 @@ android {
     buildToolsVersion buildTools
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 16
         targetSdkVersion sdkVersion
         project.archivesBaseName = "android-adapters"
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility 1.11
+        targetCompatibility 1.11
     }
 }
 
 dependencies {
     compileOnly "androidx.recyclerview:recyclerview:${androidXVersion}"
     compileOnly "io.realm:realm-android-library:${realmVersion}"
-}
-
-task findbugs(type: FindBugs) {
-    project.afterEvaluate {
-        dependsOn assembleDebug
-    }
-    group = 'Verification'
-
-    ignoreFailures = false
-    effort = "default"
-    reportLevel = "medium"
-    excludeFilter = file("${projectDir}/../config/findbugs/findbugs-filter.xml")
-    classes = files("${projectDir}/build/intermediates/classes")
-    source = fileTree('src/main/java/')
-    classpath = files()
-    reports {
-        xml.enabled = false
-        html.enabled = true
-        xml {
-            destination file("$project.buildDir/findbugs/findbugs-output.xml")
-        }
-        html {
-            destination file("$project.buildDir/findbugs/findbugs-output.html")
-        }
-    }
 }
 
 task pmd(type: Pmd) {
@@ -95,9 +68,9 @@ task javadoc(type: Javadoc) {
         charSet = 'UTF-8'
         locale = 'en_US'
 
-        links "http://docs.oracle.com/javase/7/docs/api/"
+        links "https://docs.oracle.com/javase/11/docs/api/"
         links "https://realm.io/docs/java/${realmVersion}/api/"
-        linksOffline "http://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
+        linksOffline "https://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference"
     }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
@@ -113,39 +86,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-
-                // Add your description here
-                name 'android-adapters'
-                description 'Android UI adapters for Realm. Realm is a mobile database: a replacement for SQLite & ORMs.'
-                url 'http://realm.io'
-
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-                issueManagement {
-                    system 'github'
-                    url 'https://github.com/realm/realm-android-adapters/issues'
-                }
-                scm {
-                    url 'scm:https://github.com/realm/realm-java'
-                    connection 'scm:git@github.com:realm/realm-android-adapters.git'
-                    developerConnection 'scm:git@github.com:realm/realm-android-adapters.git'
-                }
-            }
-        }
-    }
-}
-
 bintray {
     user = project.hasProperty('bintrayUser') ? bintrayUser : 'noUser'
     key = project.hasProperty('bintrayKey') ? bintrayKey : 'noKey'
@@ -159,7 +99,7 @@ bintray {
         repo = 'maven'
         name = 'android-adapters'
         desc = 'Realm Android Adapters'
-        websiteUrl = 'http://realm.io'
+        websiteUrl = 'https://realm.io'
         issueTrackerUrl = 'https://github.com/realm/realm-android-adapters/issues'
         vcsUrl = 'https://github.com/realm/realm-android-adapters.git'
         licenses = ['Apache-2.0']
@@ -190,8 +130,29 @@ artifacts {
     archives sourcesJar
 }
 
-// See https://github.com/chrisbanes/gradle-mvn-push/pull/13
 afterEvaluate {
     javadoc.classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+    javadoc.classpath += project.android.libraryVariants.toList().first().getJavaCompileProvider().get().classpath
+
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                artifactId = 'android-adapters'
+                version = '4.0'
+            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                artifactId = 'android-adapters'
+                version = '4.0'
+            }
+        }
+    }
 }

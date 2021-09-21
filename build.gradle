@@ -2,23 +2,22 @@ apply plugin: 'ch.netzwerg.release'
 
 buildscript {
     ext {
-        sdkVersion = 28
-        buildTools = '28.0.3'
-        realmVersion = '5.8.0'
-        androidXVersion = '1.0.0'
+        sdkVersion = 30
+        buildTools = '30.0.2'
+        realmVersion = '10.8.0'
+        androidXVersion = '1.2.1'
     }
 
     repositories {
         google()
         jcenter()
         maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:7.0.2'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'    // Allows you to install AAR's locally
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4'   // OJO integration
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'    // Bintray integration
         classpath "io.realm:realm-gradle-plugin:${realmVersion}"            // Realm base library
@@ -46,7 +45,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }
 
@@ -80,9 +79,5 @@ release {
     push = false
     versionSuffix = '-SNAPSHOT'
     tagPrefix = 'v'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
 }
 

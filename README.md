@@ -2,7 +2,7 @@
 
 Realm is a mobile database that runs directly inside phones, tablets or wearables.
 
-This repository holds adapters for combining Realm Java with Android UI components and framework classes.
+This repository holds adapters for combining the Realm Android SDK with Android UI components and framework classes.
 
 Currently supported UI components are:
 
@@ -11,18 +11,19 @@ Currently supported UI components are:
 
 ## Getting Started
 
-This library only works together with Realm Java. Please see the [detailed instructions in our docs](https://realm.io/docs/java/#installation)
-to add Realm to your project.
+This library only works together with the Realm Android SDK. Please see the
+[detailed instructions in our docs](https://docs.mongodb.com/realm/sdk/android/examples/adapters/)
+for using this library.
 
 To add the adapters to your project, add the following to you app's dependencies:
 
 ```
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile 'io.realm:android-adapters:3.1.0'
+    compile 'io.realm:android-adapters:4.0.0'
 }
 ```
 
@@ -30,7 +31,8 @@ This library is only compatible with Realm Java 3.0.0 and above.
 
 ## Documentation
 
-Documentation for Realm can be found at [realm.io/docs/java](https://realm.io/docs/java).
+Documentation for Realm can be found at [docs.mongodb.com/realm/](https://docs.mongodb.com/realm/).
+The Realm SDK documentation can be found at [docs.mongodb.com/realm-sdks/java/latest/](https://docs.mongodb.com/realm-sdks/java/latest/).
 The API reference is located at [realm.io/docs/java/api](https://realm.io/docs/java/api).
 
 ## Getting Help
@@ -64,10 +66,10 @@ In case you don't want to use the pre-compiled version, you can build the librar
 
 Prerequisites:
 
- * Download/the [**JDK 7**](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) or [**JDK 8**](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) from Oracle and install it.
+ * Download [**JDK 7**](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) or [**JDK 8**](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and install it.
  * Download & install the Android SDK, **Android 7.1 (API 25)** (for example through Android Studio’s **Android SDK Manager**)
 
-Once you have completed all the pre-requisites building Realm is done with a simple command
+Once you have completed all the pre-requisites building the adapter library is done with a single command:
 
 ```
 ./gradlew assemble
@@ -75,7 +77,7 @@ Once you have completed all the pre-requisites building Realm is done with a sim
 
 That command will generate:
 
- * an aar file for the adapter library in `adapters/build/outputs/aar/android-adapters-release.aar`
+ * an `aar` file for the adapter library (`adapters/build/outputs/aar/android-adapters-release.aar`)
 
 ### Other Commands
 

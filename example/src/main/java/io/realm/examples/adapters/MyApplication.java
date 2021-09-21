@@ -35,7 +35,7 @@ public class MyApplication extends Application {
                         realm.createObject(Parent.class);
                     }})
                 .build();
-        Realm.deleteRealm(realmConfig); // Delete Realm between app restarts.
+        Realm.deleteRealm(realmConfig); // Delete realm between app restarts.
         Realm.setDefaultConfiguration(realmConfig);
     }
 }
