@@ -83,7 +83,7 @@ That command will generate:
 
  * `./gradlew monkeyDebug` will run the monkey tests on the example project.
  * `./gradlew javadoc` will create the javadoc for the library.
- * `./gradlew artifactoryPublish` will upload a SNAPSHOT to OJO.
+ * `./gradlew publishToSonatype` will upload artifacts to Maven Central.
  * `./gradlew bintrayUpload` will upload a release to Bintray.
 
 ## Contributing
