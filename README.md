@@ -2,7 +2,7 @@
 
 Realm is a mobile database that runs directly inside phones, tablets or wearables.
 
-This repository holds adapters for combining [realm-java](https://github.com/realm/realm-java) (the Realm Android SDK) with Android UI components and framework classes.
+This repository holds adapters for combining [realm-java](https://github.com/realm/realm-java) (the Realm Java SDK for Android) with Android UI components and framework classes.
 
 Currently supported UI components are:
 
