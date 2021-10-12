@@ -2,26 +2,27 @@ apply plugin: 'ch.netzwerg.release'
 
 buildscript {
     ext {
-        sdkVersion = 28
-        buildTools = '28.0.3'
-        realmVersion = '5.8.0'
-        androidXVersion = '1.0.0'
+        sdkVersion = 30
+        buildTools = '30.0.3'
+        realmVersion = '10.6.0'
     }
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         maven {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'                    // Android Build tools
+        classpath 'com.android.tools.build:gradle:4.2.1'                    // Android Build tools
         classpath 'ch.netzwerg:gradle-release-plugin:1.2.0'                 // Manage Release tags / versioning
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'    // Allows you to install AAR's locally
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4'   // OJO integration
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'    // Bintray integration
+        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.7.1' // Spotbugs plugin
         classpath "io.realm:realm-gradle-plugin:${realmVersion}"            // Realm base library
+        classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'             // Sonatype release plugin
     }
 }
 
@@ -44,7 +45,7 @@ allprojects {
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
@@ -73,6 +74,8 @@ allprojects {
 
 }
 
+apply from: "${rootDir}/mavencentral-publish.gradle"
+
 // Configure ch.netzwerg.release plugin
 // See https://github.com/netzwerg/gradle-release-plugin
 task build {}
@@ -81,8 +84,3 @@ release {
     versionSuffix = '-SNAPSHOT'
     tagPrefix = 'v'
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
-}
-

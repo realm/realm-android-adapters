@@ -22,14 +22,13 @@ import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.annotation.UiThreadTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.UiThreadTestRule;
+
 import io.realm.adapter.ListViewTestAdapter;
 import io.realm.entity.AllJavaTypes;
 
@@ -44,13 +43,13 @@ public class RealmBaseAdapterTests {
 
     private final static int TEST_DATA_SIZE = 47;
 
-    private Context context;
+    private Context context = InstrumentationRegistry.getInstrumentation().getContext();
     private Realm realm;
 
     @Before
     @UiThreadTest
     public void setUp() {
-        context = InstrumentationRegistry.getInstrumentation().getContext();
+        Realm.init(context);
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).modules(new RealmTestModule()).build();
         Realm.deleteRealm(realmConfig);
         realm = Realm.getInstance(realmConfig);

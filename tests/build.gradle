@@ -7,7 +7,7 @@ android {
     buildToolsVersion buildTools
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion sdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,10 +21,10 @@ android {
 dependencies {
     implementation project(':adapters')
 
-    androidTestImplementation "androidx.recyclerview:recyclerview:${androidXVersion}"
-    androidTestImplementation "androidx.test.ext:junit:1.0.0"
-    androidTestImplementation 'androidx.test:rules:1.1.0'
-    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation "androidx.recyclerview:recyclerview:1.2.1"
+    androidTestImplementation "androidx.test.ext:junit:1.1.2"
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'junit:junit:4.13.2'
 }
 
 task checkstyle(type: Checkstyle) {

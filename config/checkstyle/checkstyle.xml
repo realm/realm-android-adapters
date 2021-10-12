@@ -37,7 +37,6 @@
     </module>
 
     <module name="TreeWalker">
-        <property name="cacheFile" value="bin/cachefile"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
