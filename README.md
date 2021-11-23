@@ -11,7 +11,7 @@ Currently supported UI components are:
 
 ## Getting Started
 
-This library only works together with Realm Java. Please see the [detailed instructions in our docs](https://realm.io/docs/java/#installation)
+This library only works together with Realm Java. Please see the [detailed instructions in our docs](https://docs.mongodb.com/realm/sdk/android/)
 to add Realm to your project.
 
 To add the adapters to your project, add the following to you app's dependencies:
@@ -30,29 +30,44 @@ This library is only compatible with Realm Java 3.0.0 and above.
 
 ## Documentation
 
-Documentation for Realm can be found at [realm.io/docs/java](https://realm.io/docs/java).
-The API reference is located at [realm.io/docs/java/api](https://realm.io/docs/java/api).
+Documentation for Realm can be found [here](https://docs.mongodb.com/realm/sdk/android/).
+See also the API reference for [Java](https://docs.mongodb.com/realm-sdks/java/latest/) and [Kotlin extensions](https://docs.mongodb.com/realm-sdks/java/latest/kotlin-extensions/).
 
 ## Getting Help
 
-- **Need help with your code?**: Look for previous questions on the [#realm tag](https://stackoverflow.com/questions/tagged/realm?sort=newest) — or [ask a new question](http://stackoverflow.com/questions/ask?tags=realm). We activtely monitor & answer questions on SO!
+- **Need help with your code?**: Look for previous questions on the [#realm tag](https://stackoverflow.com/questions/tagged/realm?sort=newest) — or [ask a new question](http://stackoverflow.com/questions/ask?tags=realm) or engage in our [Community Forum](https://www.mongodb.com/community/forums/c/realm/realm-sdks/58).
 - **Have a bug to report?** [Open an issue](https://github.com/realm/realm-android-adapters/issues/new). If possible, include the version of Realm, a full log, the Realm file, and a project that shows the issue.
 - **Have a feature request?** [Open an issue](https://github.com/realm/realm-android-adapters/issues/new). Tell us what the feature should do, and why you want the feature.
-- Sign up for our [**Community Newsletter**](http://eepurl.com/VEKCn) to get regular tips, learn about other use-cases and get alerted of blogposts and tutorials about Realm.
 
 ## Using Snapshots
 
-If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a **-SNAPSHOT** release of the current development version of Realm via Gradle, available on [OJO](http://oss.jfrog.org/oss-snapshot-local/io/realm/realm-android/)
+If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a **-SNAPSHOT** release of the current development version of Realm via Gradle, available on [Sonatype OSS](https://oss.sonatype.org/#nexus-search;quick~realm-android-adapters)
 
-```gradle
-repositories {
-    maven {
-        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+
+```
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath "io.realm:andriod-adapters:<version>-SNAPSHOT"
     }
 }
 
-dependencies {
-    compile 'io.realm:android-adapters:<version>'
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        jcenter()
+    }
 }
 ```
 
@@ -64,9 +79,9 @@ In case you don't want to use the pre-compiled version, you can build the librar
 
 Prerequisites:
 
- * Download/the [**JDK 7**](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) or [**JDK 8**](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) from Oracle and install it.
- * Download & install the Android SDK, **Android 7.1 (API 25)** (for example through Android Studio’s **Android SDK Manager**)
-
+ * Download [**JDK 8**](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) from Oracle and install it.
+ * Download & install the Android SDK **Build-Tools 29.0.3**, **Android Pie (API 29)** (for example through Android Studio’s **Android SDK Manager**).
+ 
 Once you have completed all the pre-requisites building Realm is done with a simple command
 
 ```
@@ -88,18 +103,12 @@ That command will generate:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more details!
 
-This project adheres to the [Contributor Covenant Code of Conduct](https://realm.io/conduct).
+This project adheres to the [MongoDB Code of Conduct](https://www.mongodb.com/community-code-of-conduct).
 By participating, you are expected to uphold this code. Please report
-unacceptable behavior to [info@realm.io](mailto:info@realm.io).
+unacceptable behavior to [community-conduct@mongodb.com](mailto:community-conduct@mongodb.com).
 
 ## License
 
 Realm Android Adapters is published under the Apache 2.0 license.
 
-## Feedback
-
-**_If you use Realm and are happy with it, all we ask is that you please consider sending out a tweet mentioning [@realm](http://twitter.com/realm), or email [help@realm.io](mailto:help@realm.io) to let us know about it!_**
-
-**_And if you don't like it, please let us know what you would like improved, so we can fix it!_**
-
-![analytics](https://ga-beacon.appspot.com/UA-50247013-2/realm-android-adapters/README?pixel)
+<img style="width: 0px; height: 0px;" src="https://3eaz4mshcd.execute-api.us-east-1.amazonaws.com/prod?s=https://github.com/realm/realm-android-adapters#README.md">
